@@ -16,9 +16,9 @@ import type {
 import { startMission } from "@/lib/data/actions";
 import { Practice } from "./practice";
 import { Icon } from "./icons";
-import { AICoach } from "./ai-coach";
-import { MotionControl } from "./motion-control";
-import { StreakDisplay } from "./streak";
+
+
+
 export function RefugeClient({
   cats,
   skills,
@@ -63,14 +63,14 @@ export function RefugeClient({
     step < 1
       ? "Una nueva aventura"
       : step < 3
-        ? "Siguiendo unas huellitas"
+        ? "Cada paso cuenta"
         : step < 5
-          ? "¡Ya encontramos a nuestro amigo!"
+          ? "Paso a paso"
           : step < 7
             ? "Preparando el comedor"
             : step < 10
-              ? "Preparando su nuevo hogar"
-              : "¡Rescate completado!";
+              ? "Unos pasos más"
+              : "¡Reto completado!";
   const begin = async () => {
     setBusy(true);
     setError("");
@@ -93,7 +93,7 @@ export function RefugeClient({
           <span className="brand-mark">
             <Icon name="paw" size={25} />
           </span>
-          refugio<span className="brand-dot">.</span>
+
         </Link>
         <div className="header-actions">
           <span
@@ -102,7 +102,7 @@ export function RefugeClient({
           >
             <Icon name="fire" size={22} />
             <b>{liveStreak.current}</b>
-            <span>{liveStreak.current === 1 ? "día" : "días"}</span>
+
           </span>
           <Link href="/tutor" className="admin-link">
             <Icon name="gear" size={17} />
@@ -112,21 +112,6 @@ export function RefugeClient({
       </header>
       <div className="game-content">
         <div className="world-column" inert={Boolean(session)}>
-          {!session && (
-            <div className="welcome">
-              <div>
-                <h1>
-                  ¡Hola, Laura!<span>Tu centro de rescate.</span>
-                </h1>
-                <p>Una pequeña aventura. Mucho por aprender.</p>
-              </div>
-              <span className="cat-count">
-                <Icon name="paw" />
-                {liveCats.length} {liveCats.length === 1 ? "gato" : "gatos"} en
-                casa
-              </span>
-            </div>
-          )}
           {session && (
             <div className="mission-track">
               <div>
@@ -144,14 +129,9 @@ export function RefugeClient({
               </div>
             </div>
           )}
-          <Shelter feedingUnlocked={dates.includes(today)} cats={liveCats} state={liveState} onCare={setLiveState} />
+          <Shelter today={today} lastCare={liveStreak.last_session_date} feedingUnlocked={dates.includes(today)} cats={liveCats} state={liveState} />
           {!session && (
             <>
-              <div className="room-caption">
-                <Icon name="heart" size={16} />
-                <span>Explora, juega y cuida a tus nuevos amigos.</span>
-                <MotionControl/>
-              </div>
               <nav className="world-tabs" aria-label="Explorar el refugio">
                 {(
                   [
@@ -198,7 +178,7 @@ export function RefugeClient({
                           <strong>{skill.name}</strong>
                           <span>
                             Nivel{" "}
-                            {mastery?.current_level ?? skill.base_difficulty} ·{" "}
+                            {(mastery?.current_level ?? skill.base_difficulty)-1} ·{" "}
                             {mastery?.attempts_total ?? 0} intentos
                           </span>
                           <progress
@@ -257,8 +237,7 @@ export function RefugeClient({
                 </div>
                 <h2>{topic?.name ?? "Prepara una aventura"}</h2>
                 <p>
-                  Hoy nos concentramos en un solo tema. Diez desafíos para
-                  rescatar a un nuevo amigo.
+                  {dates.includes(today) ? "Tus gatos ya recibieron su cuidado de hoy." : "Diez pasos para cuidar a tus gatos."}
                 </p>
                 <div className="mission-perks">
                   <span>
@@ -272,9 +251,9 @@ export function RefugeClient({
                 <button
                   className="primary"
                   onClick={() => void begin()}
-                  disabled={busy || queue.length === 0}
+                  disabled={busy || queue.length === 0 || dates.includes(today)}
                 >
-                  {busy ? "Preparando la aventura…" : "¡Empezar aventura!"}
+                  {busy ? "Preparando…" : dates.includes(today) ? "¡Reto de hoy completo!" : "Empezar reto"}
                   <Icon name="arrow" />
                 </button>
                 {error && (
@@ -286,18 +265,8 @@ export function RefugeClient({
                   <p>Activa una habilidad desde Admin para empezar.</p>
                 )}
               </section>
-              <AICoach />
-              <details className="learning-privacy"><summary>Tu práctica ayuda a Numa a acompañarte</summary><p>Guardamos tus respuestas, ayudas, tiempo activo y uso del refugio para ofrecerte mejores explicaciones. No grabamos pantallas ni teclas. Este refugio es compartido: el profe ve el uso del enlace, no una identidad verificada.</p></details>
-              <StreakDisplay streak={liveStreak} dates={dates} today={today} />
-              <div className="shelter-progress">
-                <Icon name="bowl" />
-                <p>
-                  <strong>{dates.includes(today) ? "¡Comedor abierto hoy!" : "Completa los 10 retos para abrir el comedor"}</strong>
-                  <span>
-                    Tu práctica se convierte en cuidado real para el refugio.
-                  </span>
-                </p>
-              </div>
+
+
             </>
           )}
         </div>

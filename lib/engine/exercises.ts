@@ -15,6 +15,7 @@ export function generate(
   return { equations, units, chemistry }[family](skillId, level, seed);
 }
 export function exerciseFor(skill: Skill, question: Question): Exercise {
+  if(skill.family === "equations")return equations(skill.id,question.level,question.seed,skill.classTopic);
   if (skill.family !== "custom")
     return generate(skill.family, skill.id, question.level, question.seed);
   const bank = skill.questions ?? [];

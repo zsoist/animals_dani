@@ -116,6 +116,9 @@ export async function loadPractice() {
 }
 export async function createSession() {
   const { db, userId } = await studentClient();
+  const completed=await db.from("sessions").select("id").eq("user_id",userId).eq("date",dayKey()).eq("completed",true).limit(1);
+  if(completed.error)throw new Error("No pudimos comprobar el reto de hoy.");
+  if(completed.data.length)throw new Error("El reto de hoy ya está completo. Volvemos mañana.");
   const { data, error } = await db
     .from("sessions")
     .insert({ user_id: userId, total_count: 10, date: dayKey() })
@@ -155,7 +158,7 @@ export async function finishSession(sessionId:string,_correctCount:number,durati
   const {db}=await studentClient();
   const saved=await db.rpc("finish_mission_atomic",{p_session:sessionId,p_is_test:process.env.NODE_ENV!=="production" || await isTutorPreview(),p_duration:Math.max(0,Math.min(7200000,Math.round(durationMs)||0))});
   if(saved.error)throw new Error("Aún no se confirmó el rescate. Reintenta; conservamos lo que ya guardaste.");
-  return saved.data as {streak:Streak;cat:ShelterCat|null};
+  return saved.data as {streak:Streak;cat:ShelterCat|null;reward:string|null;state:ShelterState};
 }
 export async function getTutorSummary() {
   const db = await database();
@@ -198,38 +201,4 @@ export async function getTutorSummary() {
     streaks: streaks.data,
     userId: profiles.data.id,
   };
-}
-
-export async function careForShelter(action: "play" | "clean" | "feed") {
-  const { db, userId } = await studentClient();
-  if(action === "feed") {
-    const completed = await db.from("sessions").select("id").eq("user_id",userId).eq("date",dayKey()).eq("completed",true).limit(1);
-    if(completed.error)throw new Error("No pudimos comprobar los retos de hoy.");
-    if(!completed.data?.length)throw new Error("Completa los diez retos de hoy para abrir el comedor.");
-  }
-  const { data, error } = await db
-    .from("shelter_state")
-    .select("food,blankets,lamps,clean_zones,affection")
-    .eq("user_id", userId)
-    .single();
-  if (error || !data) throw new Error("No pudimos guardar este cuidado.");
-  const values = {
-    ...data,
-    affection: data.affection + (action === "play" ? 1 : 0),
-    clean_zones: data.clean_zones + (action === "clean" ? 1 : 0),
-  };
-  const patch =
-    action === "play"
-      ? { affection: values.affection }
-      : action === "clean"
-        ? { clean_zones: values.clean_zones }
-        : null;
-  if (patch) {
-    const saved = await db
-      .from("shelter_state")
-      .update(patch)
-      .eq("user_id", userId);
-    if (saved.error) throw new Error("No pudimos guardar este cuidado.");
-  }
-  return values as ShelterState;
 }

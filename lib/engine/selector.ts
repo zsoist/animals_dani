@@ -24,24 +24,18 @@ export function dailySkill(
 }
 export function selectDaily(
   skills: Skill[],
-  masteries: Mastery[],
+  _masteries: Mastery[],
   now: string,
   sessionSeed: string,
   lockedId?: string,
 ): Question[] {
   const skill = dailySkill(skills, now, lockedId);
   if (!skill) return [];
-  const mastery = masteries.find((m) => m.skill_id === skill.id);
-  const level = skill.fixedLevel
-    ? skill.base_difficulty
-    : (Math.max(
-        skill.base_difficulty,
-        mastery?.current_level ?? 1,
-      ) as Question["level"]);
+  const available=skill.family==="custom" ? [...new Set(skill.questions?.map(q=>q.level)??[])].sort() : [];
   return Array.from({ length: 10 }, (_, i) => ({
     skillId: skill.id,
     family: skill.family,
-    level,
+    level: (available.length ? available.filter(l=>l<=([1,1,1,2,2,2,3,3,4,4] as const)[i]).at(-1) ?? available[0] : ([1,1,1,2,2,2,3,3,4,4] as const)[i]),
     seed: `${sessionSeed}:${i}`,
   }));
 }

@@ -45,14 +45,13 @@ export function AIInsights({
       <div className="studio-heading">
         <Icon name="bulb" />
         <div>
-          <h2>Una mirada pedagógica a su progreso</h2>
+          <h2>Lo esencial para la próxima práctica</h2>
           <p>
-            DeepSeek analiza errores, ayudas y tiempos reales. Tú decides qué
-            cambiar.
+            Una observación y un siguiente paso.
           </p>
         </div>
       </div>
-      <div className="teacher-question"><label>¿Qué te gustaría entender o preparar?<textarea rows={2} value={question} onChange={e=>setQuestion(e.target.value)} maxLength={2000} placeholder="¿Cómo le explico el cambio de unidades sin darle la respuesta?"/></label><div className="teacher-prompts">{["¿Qué error conviene trabajar primero y cómo se lo explico?","Diseña una práctica guiada de 10 minutos con un solo tema.","¿Está aprendiendo de forma independiente o depende de las pistas?"].map(text=><button type="button" key={text} disabled={busy} onClick={()=>setQuestion(text)}>{text}</button>)}</div></div>
+      <div className="teacher-question"><label>¿Qué te gustaría entender o preparar?<textarea rows={2} value={question} onChange={e=>setQuestion(e.target.value)} maxLength={2000} placeholder="¿Cómo le explico el cambio de unidades sin darle la respuesta?"/></label></div>
       <button
         className="secondary"
         disabled={busy}
@@ -71,7 +70,7 @@ export function AIInsights({
       )}
       {report && (
         <article className="ai-report">
-          <ReadableText text={report}/>
+          <ReadableText text={report.split(/\s+/).length>100 ? report.split(/\s+/).slice(0,100).join(" ")+"…" : report}/>
           <small>
             Basado en {count} intentos registrados. Orientación IA, revisable
             por el tutor.
@@ -85,7 +84,7 @@ export function AIInsights({
         <p className="memory-text">
           {memory || "Aún no hay recuerdos guardados."}
         </p>
-        <p>Laura puede corregir su memoria desde «Lo que recuerdo» en Numa.</p>
+
         {messages.length ? (
           messages.map((m, i) => (
             <article key={i} className="coach-message">

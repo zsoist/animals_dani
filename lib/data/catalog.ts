@@ -8,14 +8,17 @@ export function prepareSkill(row: Record<string, unknown>): Skill {
   let custom = false;
   let practiceDays: number[] = [];
   let fixedLevel = false;
+  let classTopic = "";
   for (const level of levels) {
     try {
       const parsed = JSON.parse(level.description) as {
         kind?: string;
+        classTopic?: string;
         practiceDays?: number[];
         fixedLevel?: boolean;
         questions?: CustomQuestion[];
       };
+      classTopic = parsed.classTopic ?? classTopic;
       practiceDays = parsed.practiceDays ?? practiceDays;
       fixedLevel = parsed.fixedLevel ?? fixedLevel;
       if (parsed.kind === "custom") {
@@ -45,5 +48,6 @@ export function prepareSkill(row: Record<string, unknown>): Skill {
     questions,
     practiceDays,
     fixedLevel,
+    classTopic,
   };
 }

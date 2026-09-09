@@ -1,5 +1,5 @@
-import {UsagePanel} from "@/components/tutor/usage-panel";
-import {usageData,integrationHealth} from "@/lib/data/telemetry";
+import {LearningProgress} from "@/components/tutor/learning-progress";
+import {usageData} from "@/lib/data/telemetry";
 import { CatalogBrowser } from "@/components/tutor/catalog-browser";
 import Image from "next/image";
 import { TutorWorkspace } from "@/components/tutor/workspace";
@@ -16,10 +16,10 @@ import { Icon } from "@/components/game/icons";
 export default async function Tutor() {
   await requireTutor();
   const data = await getTutorSummary();
-  const [ai,usage,health] = await Promise.all([aiOverview(data.userId),usageData(),integrationHealth()]);
+  const [ai,usage] = await Promise.all([aiOverview(data.userId),usageData()]);
   const completed = data.sessions.filter((s) => s.completed);
   const streak = data.streaks[0];
-  const now = new Date().getTime();
+
   return (
     <main className="admin-shell">
       <header className="admin-header">
@@ -41,9 +41,9 @@ export default async function Tutor() {
       </header>
       <div className="admin-heading">
         <div>
-          <h1>Pequeños pasos.<br/>Grandes descubrimientos.</h1>
+          <h1>La práctica de Laura</h1>
           <p>
-            Tu espacio para entender cómo aprende Laura y preparar lo que sigue.
+            Revisa su avance y prepara la siguiente microhabilidad.
           </p>
         </div>
         <Image className="admin-mascot" src="/art/numa.webp" width={160} height={160} alt="Numa listo para preparar una práctica"/>
@@ -53,21 +53,18 @@ export default async function Tutor() {
         </a>
       </div>
       <TutorWorkspace>
-      <UsagePanel {...usage} health={health}/>
+
       <section
         id="progress"
         className="admin-stats"
         aria-label="Resumen de práctica"
       >
         {[
-          ["Misiones completadas", completed.length],
-          ["Días practicados", new Set(completed.map((s) => s.date)).size],
           [
             "Racha actual",
             streak ? `${visibleStreak(streak, dayKey())} ${visibleStreak(streak, dayKey()) === 1 ? "día" : "días"}` : "0 días",
           ],
           ["Mejor racha", `${streak?.best ?? 0} ${streak?.best === 1 ? "día" : "días"}`],
-          ["Intentos", data.attempts.length],
           [
             "Tiempo de práctica",
             `${Math.round(completed.reduce((n, s) => n + s.duration_ms, 0) / 60000)} min`,
@@ -79,11 +76,7 @@ export default async function Tutor() {
           </div>
         ))}
       </section>
-      <AIInsights
-        initial={ai.report}
-        memory={ai.memory}
-        messages={ai.messages}
-      />
+      <LearningProgress attempts={data.attempts} skills={data.skills} today={dayKey()} events={usage.events}/>
       <section id="catalog" className="admin-catalog">
         <h2>
           Habilidades de práctica <span>{data.skills.length}</span>
@@ -95,32 +88,8 @@ export default async function Tutor() {
         <CatalogBrowser skills={data.skills}>
         {data.skills.map((skill) => {
           const attempts = data.attempts.filter((a) => a.skill_id === skill.id);
-          const hits = attempts.filter((a) => a.correct);
-          const fails = attempts.filter((a) => !a.correct);
-          const mastery = data.mastery.find((m) => m.skill_id === skill.id);
-          const counts = fails.reduce<Record<string, number>>((acc, a) => {
-            const key = a.error_type ?? "UNKNOWN";
-            acc[key] = (acc[key] ?? 0) + 1;
-            return acc;
-          }, {});
-          const dominant = Object.entries(counts).sort(
-            (a, b) => b[1] - a[1],
-          )[0];
-          const recent = attempts.filter(
-            (a) => now - Date.parse(a.created_at) < 7 * 86400000,
-          );
-          const previous = attempts.filter(
-            (a) =>
-              now - Date.parse(a.created_at) >= 7 * 86400000 &&
-              now - Date.parse(a.created_at) < 14 * 86400000,
-          );
-          const accuracy = (list: typeof attempts) =>
-            list.length
-              ? Math.round(
-                  (list.filter((a) => a.correct).length / list.length) * 100,
-                )
-              : 0;
-          const delta = accuracy(recent) - accuracy(previous);
+          const mastery=data.mastery.find(m=>m.skill_id===skill.id);
+          const accuracy=(rows:typeof attempts)=>Math.round(rows.filter(a=>a.correct).length/rows.length*100);
           return (
             <details className="admin-skill" key={skill.id}>
               <summary>
@@ -145,109 +114,6 @@ export default async function Tutor() {
                 <Icon name="plus" size={20} />
               </summary>
               <div className="admin-skill-body">
-                <div className="skill-metrics">
-                  <span>
-                    Nivel{" "}
-                    <b>{mastery?.current_level ?? skill.base_difficulty}</b>
-                  </span>
-                  <span>
-                    Dominio <b>{Math.round(mastery?.mastery_score ?? 0)}/100</b>
-                  </span>
-                  <span>
-                    Respuesta media{" "}
-                    <b>
-                      {attempts.length
-                        ? `${Math.round(attempts.reduce((n, a) => n + a.response_ms, 0) / attempts.length / 1000)} s`
-                        : "—"}
-                    </b>
-                  </span>
-                  <span>
-                    Frecuencia{" "}
-                    <b>
-                      {
-                        new Set(attempts.map((a) => a.created_at.slice(0, 10)))
-                          .size
-                      }{" "}
-                      días
-                    </b>
-                  </span>
-                </div>
-                <div className="insights">
-                  <h3>Qué observar</h3>
-                  {!attempts.length && (
-                    <p>
-                      Aún no hay intentos. Los datos aparecerán cuando Laura
-                      practique.
-                    </p>
-                  )}
-                  {recent.length > 0 && previous.length > 0 && (
-                    <p>
-                      Últimos 7 días: {delta >= 0 ? "+" : ""}
-                      {delta} puntos de acierto frente a la semana anterior.
-                    </p>
-                  )}
-                  {dominant && (
-                    <p>
-                      {dominant[1] / fails.length >= 0.4
-                        ? "Error dominante"
-                        : "Error más frecuente"}
-                      : <b>{dominant[0]}</b> · {dominant[1]} de {fails.length}{" "}
-                      errores.
-                    </p>
-                  )}
-                  {hits.length > 0 &&
-                    hits.filter((a) => a.hint_level > 0).length / hits.length >=
-                      0.5 && (
-                      <p>
-                        Al menos la mitad de los aciertos necesitó pistas.
-                        Conviene repetir con menos ayuda.
-                      </p>
-                    )}
-                  {mastery &&
-                    mastery.mastery_score >= 60 &&
-                    mastery.mastery_score < 75 &&
-                    new Set(
-                      attempts
-                        .filter((a) => a.level === mastery.current_level)
-                        .map((a) => a.created_at.slice(0, 10)),
-                    ).size >= 5 && (
-                      <p>
-                        Lleva al menos 5 días practicados en este nivel:
-                        conviene revisar el procedimiento juntos.
-                      </p>
-                    )}
-                  <div className="weekly-trend">
-                    {[2, 1, 0].map((week) => {
-                      const list = attempts.filter((a) => {
-                        const age = now - Date.parse(a.created_at);
-                        return (
-                          age >= week * 7 * 86400000 &&
-                          age < (week + 1) * 7 * 86400000
-                        );
-                      });
-                      return (
-                        <span key={week}>
-                          {week === 0
-                            ? "Esta semana"
-                            : `Hace ${week} ${week === 1 ? "semana" : "semanas"}`}
-                          <b>
-                            {list.length ? `${accuracy(list)}%` : "Sin datos"}
-                          </b>
-                        </span>
-                      );
-                    })}
-                  </div>
-                  {fails.slice(0, 4).map((a) => (
-                    <div className="attempt-example" key={a.id}>
-                      <strong>{a.prompt_text}</strong>
-                      <p>
-                        Respondió: {a.given_answer} · Esperado:{" "}
-                        {a.expected_answer}
-                      </p>
-                      <small>{a.error_type ?? "UNKNOWN"}</small>
-                    </div>
-                  ))}
-                </div>
                 <SkillEditor skill={skill} />
                 <h3>Notas del tutor</h3>
                 {data.notes
@@ -266,6 +132,7 @@ export default async function Tutor() {
       </section>
       <section className="new-skill-section" id="new-skill">
         <PracticeLab skills={data.skills}/>
+        <AIInsights initial={ai.report} memory={ai.memory} messages={ai.messages}/>
       </section>
       </TutorWorkspace>
     </main>

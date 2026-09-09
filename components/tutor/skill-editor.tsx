@@ -17,7 +17,7 @@ const blank = (): DraftQuestion => ({
   level: 3,
   answerFormat: "number",
 });
-export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; skill?: Skill; draft?: { name:string; description:string; subject:string; questions:CustomQuestion[] } }) {
+export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; skill?: Skill; draft?: { name:string; description:string; classTopic?:string; subject:string; questions:CustomQuestion[] } }) {
   const [clientId]=useState(()=>crypto.randomUUID());
   const [mode, setMode] = useState(
     skill?.family === "custom" ? "custom" : skill ? "generated" : "custom",
@@ -90,19 +90,8 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
               required
             />
           </label>
-          <label>
-            Nivel inicial
-            <select
-              name="difficulty"
-              defaultValue={skill?.base_difficulty ?? 3}
-            >
-              {[1, 2, 3, 4].map((n) => (
-                <option key={n} value={n}>
-                  Nivel {n}
-                </option>
-              ))}
-            </select>
-          </label>
+          <input type="hidden" name="difficulty" value="1"/>
+          <label>Tema de clase<input name="classTopic" maxLength={300} defaultValue={skill?.classTopic ?? draft?.classTopic ?? ""} placeholder="Gases ideales, presión, termodinámica…"/></label>
         </div>
         <fieldset className="schedule-picker">
           <legend>Planifica su práctica</legend>
@@ -123,18 +112,7 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
               </label>
             ))}
           </div>
-          <label className="check-label">
-            <input
-              type="checkbox"
-              name="fixedLevel"
-              defaultChecked={skill?.fixedLevel}
-            />
-            Mantener el nivel que elijo (sin adaptación automática)
-          </label>
-          <p>
-            El nivel inicial es también el mínimo de dificultad. Súbelo para
-            proponer más desafío.
-          </p>
+          <p>Diez preguntas: nivel 0 → 3. Los repasos conservan el nivel que necesita reforzar.</p>
         </fieldset>
         <label className="check-label">
           <input
@@ -194,7 +172,7 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
               químicos.
             </p>
             {questions.map((q, i) => (
-              <details key={q.localId} className="question-accordion" open={i === 0 ? true : undefined}><summary><span className="question-number">{i+1}</span><span>{q.prompt || "Nueva pregunta"}<small>Nivel {q.level} · {q.answerFormat === "coefficients" ? "Coeficientes" : q.answerFormat === "fraction" ? "Fracción" : "Número"}</small></span><Icon name="gear" size={18}/></summary><fieldset className="editable-question">
+              <details key={q.localId} className="question-accordion" open={i === 0 ? true : undefined}><summary><span className="question-number">{i+1}</span><span>{q.prompt || "Nueva pregunta"}<small>Nivel {q.level-1} · {q.answerFormat === "coefficients" ? "Coeficientes" : q.answerFormat === "fraction" ? "Fracción" : q.answerFormat === "expression" ? "Expresión" : "Número"}</small></span><Icon name="gear" size={18}/></summary><fieldset className="editable-question">
                 <legend>Pregunta {i + 1}</legend>
                 <input type="hidden" name="image" value={q.image ?? ""} />
                 <input type="hidden" name="imageAlt" value={q.imageAlt ?? ""} />
@@ -271,7 +249,7 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
                     >
                       {[1, 2, 3, 4].map((n) => (
                         <option key={n} value={n}>
-                          {n}
+                          {n-1}
                         </option>
                       ))}
                     </select>
@@ -373,7 +351,7 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
               );
               return (
                 <p key={level}>
-                  <b>Nivel {level}</b> {e.prompt}
+                  <b>Nivel {level-1}</b> {e.prompt}
                   <span>Respuesta: {e.answer}</span>
                 </p>
               );

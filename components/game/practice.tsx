@@ -1,7 +1,7 @@
 "use client";
 import {track} from "@/components/telemetry/client";
 import {expressionSymbols} from "@/lib/engine/algebra";
-import { AICoach } from "./ai-coach";
+
 import { useActiveTime } from "./use-active-time";
 import { ImageViewer } from "./image-viewer";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -12,7 +12,7 @@ import type { Question, ShelterState, Skill, Streak } from "@/lib/engine/types";
 import type { ShelterCat } from "@/lib/data/shelter";
 import { Icon } from "./icons";
 import { CatArt } from "@/components/scene/cat-art";
-type Completion = { streak: Streak; cat: ShelterCat | null };
+type Completion = { streak: Streak; cat: ShelterCat | null; reward?:string|null;state?:ShelterState };
 export function Practice({
   sessionId,
   queue,
@@ -44,8 +44,8 @@ export function Practice({
   const [skillResults, setSkillResults] = useState<
     Record<string, { correct: number; total: number }>
   >({});
-  const [coachBusy, setCoachBusy] = useState(false);
-  const [aiHelp, setAiHelp] = useState(false);
+
+
   const gate = useRef(false);
   const edits=useRef({edits:0,deletes:0,clears:0});
   const pendingAttempt=useRef<{id:string;key:string}|null>(null);
@@ -65,7 +65,7 @@ export function Practice({
   },[question,sessionId,index]);
   const activeTime = useActiveTime(
     question?.seed ?? "complete",
-    busy || coachBusy || solved || Boolean(result),
+    busy || solved || Boolean(result),
   );
   const sessionTime = useActiveTime(sessionId, Boolean(result));
   useEffect(() => {
@@ -79,7 +79,7 @@ export function Practice({
       };
   };
   const edit = (key: string) => {
-    if (solved || busy || coachBusy) return;
+    if (solved || busy) return;
     edits.current.edits++;if(key==="back")edits.current.deletes++;if(key==="clear")edits.current.clears++;
     const selection = cursor.current ?? {
       start: answer.length,
@@ -139,7 +139,7 @@ export function Practice({
         correct: evaluated.correct,
         response_ms: responseMs,
         timing_version: 2,
-        ai_help: aiHelp,
+        ai_help: false,
         hint_level: hint,
         error_type: evaluated.errorType,
         session_id: sessionId,
@@ -160,9 +160,9 @@ export function Practice({
         setSolved(true);
         setMessage(
           [
-            "¡Una manta más para el refugio!",
-            "¡Una patita más cerca del rescate!",
-            "¡Milo está orgulloso de ti!",
+            "¡Bien! Dejaste la letra sola.",
+            "¡Ese paso está resuelto!",
+            "¡Seguimos avanzando!",
           ][index % 3],
         );
       } else {
@@ -193,6 +193,7 @@ export function Practice({
           sessionTime.read(),
         );
         setResult(completion);
+        onReward(completion.state);
         onStep(10);
       } catch {
         setMessage(
@@ -213,7 +214,7 @@ export function Practice({
     setSolved(false);
     setWrong(false);
     setReview(false);
-    setAiHelp(false);
+
   };
   if (result)
     return (
@@ -230,11 +231,11 @@ export function Practice({
         <h1>
           {result.cat
             ? `¡${result.cat.name} está en casa!`
-            : "¡Refugio lleno de cariño!"}
+            : "¡Cuidado del día entregado!"}
         </h1>
         <p>
           {result.cat?.story ??
-            "Todos los gatos tienen un lugar contigo. Hoy les regalaste un poco más de cuidado."}
+            (result.reward === "box" ? "Milo recibió una caja nueva para explorar." : result.reward === "food" ? "Milo recibió su comida de hoy." : "El cuidado de hoy ya estaba entregado. Mañana seguimos.")}
         </p>
         <div className="completion-stats">
           <strong>
@@ -282,9 +283,7 @@ export function Practice({
           {index + 1} de 10{question.reinforced ? " · Repaso" : ""}
         </span>
       </div>
-      <p className="active-time">
-        Tiempo activo: {activeTime.seconds}s · A tu ritmo
-      </p>
+      <p className="practice-level">Nivel {exercise.level - 1}{question.reinforced ? " · Reforzamos este paso" : ""}</p>
       <h2 className="question-instruction">
         {skill.family === "equations"
           ? `Deja ${exercise.target ?? "la incógnita"} sola`
@@ -378,7 +377,7 @@ export function Practice({
               key={key}
               onPointerDown={(e) => e.preventDefault()}
               onClick={() => edit(key)}
-              disabled={busy || coachBusy}
+              disabled={busy}
             >
               {key === "clear" ? "Limpiar" : key === "-" ? "−" : key === "*" ? "×" : key}
             </button>
@@ -401,12 +400,12 @@ export function Practice({
         <button
           className="primary"
           onClick={() => void advance()}
-          disabled={busy || coachBusy}
+          disabled={busy}
         >
           {busy
             ? "Guardando…"
             : index === 9
-              ? "Terminar misión"
+              ? "Terminar reto"
               : "Siguiente paso"}
           <Icon name="arrow" />
         </button>
@@ -415,7 +414,7 @@ export function Practice({
           <button
             className="primary"
             onClick={() => void check()}
-            disabled={busy || coachBusy || !answer}
+            disabled={busy || !answer}
           >
             {busy ? "Guardando…" : "Comprobar"}
             <Icon name="check" />
@@ -423,7 +422,7 @@ export function Practice({
           <div className="question-options">
             <button
               className="quiet"
-              disabled={busy || coachBusy}
+              disabled={busy}
               onClick={() => {
                 track("hint_requested",{hint_level:Math.min(3,hint+1),step:index},{sessionId,skillId:skill.id});
                 setMessage(exercise.hints[Math.min(hint, 2)]);
@@ -441,20 +440,7 @@ export function Practice({
           </div>
         </>
       )}
-      <AICoach
-        key={exercise.seed}
-        onBusyChange={setCoachBusy}
-        context={{
-          sessionId,
-          skillId: skill.id,
-          seed: exercise.seed,
-          level: exercise.level,
-        }}
-        onHelp={() => {
-          setAiHelp(true);
-          setHint((h) => Math.max(1, h));
-        }}
-      />
+
     </section>
   );
 }

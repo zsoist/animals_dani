@@ -1,0 +1,11 @@
+import {expect,it} from 'vitest';
+import {weeklyProgress,repeatedProgress} from './weekly-progress';
+import {careEnergy} from './care';
+import {equations,formulaBank} from './generators/equations';
+import {evaluate} from './exercises';
+import type {Attempt} from './types';
+const attempt=(created_at:string,correct:boolean,level:Attempt['level']=1):Attempt=>({id:crypto.randomUUID(),user_id:'student',skill_id:'skill',level,exercise_seed:'test',prompt_text:'F=P*A',expected_answer:'F/A',given_answer:correct?'F/A':'F*A',correct,response_ms:1000,hint_level:0,error_type:null,session_id:'session',created_at});
+it('compara días solo donde coinciden los niveles',()=>{const rows=[attempt('2026-09-08T12:00:00Z',false),attempt('2026-09-09T12:00:00Z',true),attempt('2026-09-09T12:01:00Z',false,4)];expect(repeatedProgress(rows)).toMatchObject({delta:100,currentCount:1,previousCount:1,levels:[0]});expect(repeatedProgress([rows[0],rows[2]])).toBeNull();});
+it('la semana usa el día colombiano y distingue falta de datos',()=>{const days=weeklyProgress([attempt('2026-09-10T02:00:00Z',true,3)],'2026-09-09');expect(days).toHaveLength(7);expect(days[6]).toMatchObject({total:1,accuracy:100,maxLevel:2});expect(days[0].accuracy).toBeNull();});
+it('los cuidados perdidos reducen energía suavemente y completar restaura',()=>{expect(careEnergy('2026-09-09','2026-09-09')).toBe(100);expect(careEnergy('2026-09-08','2026-09-09')).toBe(100);expect(careEnergy('2026-09-06','2026-09-09')).toBe(70);expect(careEnergy('2026-01-01','2026-09-09')).toBe(55);});
+it('los temas de clase acotan fórmulas correctas y sin decimales',()=>{for(const level of [1,2,3,4] as const){for(const topic of ['Gases ideales','Termodinámica','Arquímedes','Presión y densidad','Matemáticas']){const e=equations('skill',level,'topic',topic);expect(e.prompt).not.toMatch(/\d[.,]\d/);expect(evaluate(e,e.answer)).toMatchObject({correct:true});}expect(formulaBank[level]).toHaveLength(5);}});

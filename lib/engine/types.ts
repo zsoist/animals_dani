@@ -38,6 +38,7 @@ export type Skill = {
   questions?: CustomQuestion[];
   practiceDays?: number[];
   fixedLevel?: boolean;
+  classTopic?: string;
 };
 export type Mastery = {
   skill_id: string;
@@ -79,6 +80,8 @@ export type Streak = {
   last_session_date: string | null;
 };
 export type ShelterState = {
+  boxes?: number;
+  last_care_date?: string;
   food: number;
   blankets: number;
   lamps: number;

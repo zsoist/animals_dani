@@ -118,7 +118,8 @@ export async function saveSkill(
       .getAll("practiceDay")
       .map(Number)
       .filter((n) => Number.isInteger(n) && n >= 0 && n <= 6);
-    const fixedLevel = form.get("fixedLevel") === "on";
+    const fixedLevel = false;
+    const classTopic=String(form.get("classTopic")??"").trim().slice(0,300);
     const values = {
       name,
       description,
@@ -129,7 +130,7 @@ export async function saveSkill(
     };
     const levels = ([1, 2, 3, 4] as const).map((level) => ({
       level,
-      description: JSON.stringify(mode === "custom" ? {kind:"custom",practiceDays,fixedLevel,questions:questions.filter(q=>q.level===level)} : {kind:"generated",practiceDays,fixedLevel}),
+      description: JSON.stringify(mode === "custom" ? {kind:"custom",practiceDays,fixedLevel,classTopic,questions:questions.filter(q=>q.level===level)} : {kind:"generated",practiceDays,fixedLevel,classTopic}),
     }));
     const saved=await db.rpc("save_skill_atomic",{p_id:id || String(form.get("clientId") || crypto.randomUUID()),p_values:{...values,is_test:process.env.NODE_ENV!=="production"},p_levels:levels});
     if(saved.error)throw new Error("No se guardaron cambios. Tus preguntas siguen aquí; vuelve a intentarlo.");
@@ -194,4 +195,12 @@ export async function saveNote(
   } catch {
     return { error: "No se pudo guardar la nota.", success: "" };
   }
+}
+export async function saveClassTopic(skillId:string,topic:string){
+ if(typeof topic!=='string'||topic.length>300)throw new Error('El tema admite hasta 300 caracteres.');
+ const db=await tutorDatabase();const {data:skill,error}=await db.from('skills').select('*,skill_levels(level,description)').eq('id',skillId).single();
+ if(error||!skill)throw new Error('Elige una microhabilidad disponible.');
+ const levels=(skill.skill_levels as {level:number;description:string}[]).map(l=>{let config:Record<string,unknown>={kind:'generated'};try{config=JSON.parse(l.description) as Record<string,unknown>;}catch{/* Plain legacy generator description. */}return {level:l.level,description:JSON.stringify({...config,classTopic:topic.trim(),fixedLevel:false})};});
+ const saved=await db.rpc('save_skill_atomic',{p_id:skillId,p_values:{name:skill.name,description:skill.description,subject:skill.subject,priority:skill.priority,active:skill.active,base_difficulty:1,is_test:process.env.NODE_ENV!=='production'},p_levels:levels});
+ if(saved.error)throw new Error('No se guardó el tema. Reintenta.');revalidatePath('/');revalidatePath('/tutor');return {success:true};
 }

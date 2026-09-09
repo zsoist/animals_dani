@@ -37,26 +37,8 @@ describe("Una sola habilidad cada día", () => {
     }));
     expect(dailySkill(scheduled, "2026-09-09")?.id).toBe("1");
   });
-  it("respeta el mínimo de dificultad y el nivel fijo", () => {
-    expect(selectDaily(skills, [], "2026-09-09", "a")[0].level).toBe(2);
-    const s = { ...skills[0], fixedLevel: true };
-    expect(
-      selectDaily(
-        [s],
-        [
-          {
-            skill_id: s.id,
-            current_level: 4,
-            mastery_score: 90,
-            recent_accuracy: 1,
-            attempts_total: 9,
-            last_practiced_at: null,
-          },
-        ],
-        "2026-09-09",
-        "a",
-      )[0].level,
-    ).toBe(2);
+  it("aumenta dificultad durante diez preguntas, empezando en nivel cero visible",()=>{
+    expect(selectDaily(skills,[],"2026-09-09","a").map(q=>q.level-1)).toEqual([0,0,0,1,1,1,2,2,3,3]);
   });
   it("no selecciona habilidades desactivadas", () =>
     expect(

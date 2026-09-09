@@ -46,3 +46,11 @@
 - Ventana de 14 días, máximo 5.000 eventos y retención detallada de 90 días. La cola tiene límites explícitos y deduplicación.
 - Transacciones SQL para intento/dominio/recompensa, cierre/racha/gato, habilidad/niveles y mensajes/memoria; identificadores estables al reintentar.
 - Numa interpreta señales con prudencia, ofrece mensajes cálidos y útiles, preserva ediciones manuales y distingue historial de ejercicio vigente. Un reintento de formato IA comparte el límite de 55 segundos.
+
+## Simplificación solicitada — 2026-09-09
+- Se conserva el arte existente y se anima por capas; no se reemplazan los gatos ni la paleta.
+- Se oculta la IA a Laura, conservando pistas deterministas y herramientas del profe.
+- Nivel mostrado 0–3 equivale a nivel interno 1–4. La sesión crece en dificultad; un repaso puede volver al nivel que necesita apoyo.
+- Comida en días impares de racha y caja en pares; un rescate nuevo solo en cada múltiplo de cinco días consecutivos. La racha no quita gatos ya rescatados. El cuidado se entrega por completar, no por acertar todo.
+- Los días sin completar reducen suavemente energía hasta un mínimo de 55/100; completar recupera 100. Se calcula desde fechas persistidas, sin tareas programadas ni lenguaje culpabilizador.
+- Tema por microhabilidad guardado dentro de su configuración existente; propuestas IA revisables, sin activar contenido automáticamente. Comparaciones basadas en días y niveles coincidentes, con tamaño de muestra visible.

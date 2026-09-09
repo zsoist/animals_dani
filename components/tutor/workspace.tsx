@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState, type ReactNode } from "react";
 import { Icon } from "@/components/game/icons";
-type View = 'progress'|'new-skill'|'catalog'|'usage';
-const tabs = [{id:'usage',label:'Uso y señales',icon:'star'},{id:'progress',label:'Progreso',icon:'book'},{id:'new-skill',label:'Laboratorio IA',icon:'bulb'},{id:'catalog',label:'Habilidades',icon:'gear'}] as const;
+type View = 'progress'|'new-skill'|'catalog';
+const tabs = [{id:'progress',label:'Progreso',icon:'book'},{id:'new-skill',label:'Laboratorio IA',icon:'bulb'},{id:'catalog',label:'Habilidades',icon:'gear'}] as const;
 export function TutorWorkspace({children}:{children:ReactNode}) {
  const [view,setView]=useState<View>('progress');
  useEffect(()=>{const update=()=>{const hash=location.hash.slice(1);if(tabs.some(t=>t.id===hash))setView(hash as View);};update();window.addEventListener('hashchange',update);return()=>window.removeEventListener('hashchange',update);},[]);

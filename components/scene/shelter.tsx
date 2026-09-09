@@ -1,79 +1,49 @@
 "use client";
+import {careEnergy} from "@/lib/engine/care";
 import Image from "next/image";
 import { useState } from "react";
 import type { ShelterCat } from "@/lib/data/shelter";
 import type { ShelterState } from "@/lib/engine/types";
 import { CatArt } from "./cat-art";
 import { Icon } from "@/components/game/icons";
-import { care } from "@/lib/data/actions";
+
 export function Shelter({
   cats,
   state,
-  onCare,
   compact = false,
   feedingUnlocked = false,
+  today,
+  lastCare,
 }: {
   cats: ShelterCat[];
   state?: ShelterState;
-  onCare?: (state: ShelterState) => void;
   compact?: boolean;
   feedingUnlocked?: boolean;
+  today?:string;
+  lastCare?:string|null;
 }) {
   const [selected, setSelected] = useState<ShelterCat | null>(null);
-  const [activity, setActivity] = useState("");
-  const [interaction, setInteraction] = useState(0);
-  const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState("");
-  const [lights, setLights] = useState(true);
-  async function interact(action: "play" | "feed" | "clean") {
-    if (busy || (action === "feed" && !feedingUnlocked)) return;
-    setBusy(true);
-    if(action !== "feed")setActivity(action);
-    setInteraction(n=>n+1);
-    setMessage(
-      action === "play"
-        ? "¡A perseguir la pelota!"
-        : action === "clean"
-          ? "Una zona limpia para descansar."
-          : "Abriendo el comedor…",
-    );
-    try {
-      onCare?.(await care(action));
-      if(action === "feed"){setActivity("feed");setMessage("¡Todos al comedor!");}
-    } catch {
-      setMessage(
-        "No pudimos guardar el cuidado. Toca para volver a intentarlo.",
-      );
-    } finally {
-      setBusy(false);
-    }
-  }
+  const energy=feedingUnlocked?100:careEnergy(state?.last_care_date??lastCare,today??new Date().toISOString().slice(0,10));
   return (
     <div
-      className={`room-world rescue-world painted-world ${compact ? "room-compact" : ""} activity-${activity} ${lights ? "" : "evening"}`}
+      className={`room-world rescue-world painted-world ${compact ? "room-compact" : ""} ${feedingUnlocked ? "daily-cared" : "daily-waiting"} ${energy<85 ? "needs-care" : ""}`}
     >
       <Image className="room-illustration" src="/art/refuge-courtyard.webp" alt="Refugio de animales: patio soleado, enfermería, casitas de adopción y comedor" fill sizes="(max-width: 760px) 100vw, 95vw" priority />
       <div className="world-atmosphere" aria-hidden="true"><span/><span/><span/></div>
-      <div className="room-name">
-        <Icon name="paw" size={18} /> {cats.length} amigos a salvo
-      </div>
-      <div className="shelter-stock" aria-label="Cuidado acumulado"><span><Icon name="bowl" size={15}/>{feedingUnlocked ? "Comedor abierto" : "Comedor · 10 retos"}</span><span><Icon name="heart" size={15}/>{state?.affection ?? 0} mimos</span></div>
       <div className="room-cats">
         {cats.map((cat, index) => (
           <button
             key={cat.id}
-            className={`room-cat cat-${index % 6} ${selected?.id === cat.id ? "patted" : ""}`}
+            className={`room-cat cat-${index % 6} personality-${cat.personality.normalize("NFD").replace(/[\u0300-\u036f]/g,"")} ${selected?.id === cat.id ? "patted" : ""}`}
             data-track={`cat_${cat.id}`} aria-label={`Conocer a ${cat.name}`}
             onClick={() => {
               setSelected(cat);
-              setInteraction(n=>n+1);
-              setActivity("");
             }}
           >
             <CatArt
               body={cat.palette.body}
               belly={cat.palette.belly}
-              sleeping={cat.personality === "dormilón" && activity !== "play"}
+              sleeping={cat.personality === "dormilón"}
             />
             <span>
               {cat.name}
@@ -82,41 +52,7 @@ export function Shelter({
           </button>
         ))}
       </div>
-      {activity === "feed" && <div key={interaction} className="food-delivery" aria-hidden="true"><Icon name="bowl" size={40}/><span>¡Ñam!</span></div>}
-      {activity === "play" && (
-        <div key={interaction} className="play-ball" aria-hidden="true" />
-      )}
-      {activity === "clean" && (
-        <div key={interaction} className="clean-sparkles" aria-hidden="true">
-          <Icon name="star" />
-          <Icon name="star" />
-          <Icon name="star" />
-        </div>
-      )}
-      <div className="care-controls" aria-label="Cuidar el refugio">
-        <button data-track="care_feed" disabled={busy || !feedingUnlocked} title={feedingUnlocked ? "Comedor abierto por completar los retos de hoy" : "Completa los diez retos diarios"} onClick={() => void interact("feed")}>
-          <Icon name="bowl" />
-          {feedingUnlocked ? "Comedor" : "10 retos → comer"}
-        </button>
-        <button data-track="care_play" disabled={busy} onClick={() => void interact("play")}>
-          <Icon name="star" />
-          Jugar
-        </button>
-        <button data-track="care_clean" disabled={busy} onClick={() => void interact("clean")}>
-          <Icon name="heart" />
-          Limpiar
-        </button>
-        <button data-track="care_lights" onClick={() => setLights((v) => !v)} aria-pressed={!lights}>
-          <Icon name="bulb" />
-          {lights ? "Noche" : "Día"}
-        </button>
-      </div>
-      {!feedingUnlocked && !message && <p className="care-message">Completa los 10 retos de hoy para abrir el comedor.</p>}
-      {message && (
-        <p className="care-message" role="status">
-          {message}
-        </p>
-      )}
+      {feedingUnlocked && <div className="daily-gift" aria-label="Cuidado entregado hoy">{(state?.boxes ?? 0)>0 ? <span className="milo-box" aria-label="Caja de Milo"/> : <span aria-label="Comida de Milo"><Icon name="bowl" size={34}/></span>}</div>}
       {selected && (
         <div
           className="cat-story"
@@ -133,7 +69,7 @@ export function Shelter({
           <div className="story-portrait"><CatArt body={selected.palette.body} belly={selected.palette.belly}/></div>
           <strong>{selected.name} te saluda</strong>
           <span>{selected.personality}</span>
-          <p>{selected.story}</p>
+          <p>{selected.story}</p><p className="cat-wellbeing">{feedingUnlocked ? "El cuidado del refugio ya está listo por hoy." : "Espera tus cuidados de hoy. Completa el reto para ayudarle."}</p>{energy<100&&<small>Energía: {energy}/100. El reto completo la recupera.</small>}
         </div>
       )}
     </div>
