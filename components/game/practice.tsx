@@ -197,7 +197,7 @@ export function Practice({
         onStep(10);
       } catch {
         setMessage(
-          "No se pudo guardar el rescate. Toca «Terminar misión» para reintentar.",
+        "No se pudo guardar el reto. Toca «Terminar reto» para reintentar.",
         );
       } finally {
         gate.current = false;
