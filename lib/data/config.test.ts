@@ -1,0 +1,4 @@
+import {afterEach,describe,expect,it,vi} from 'vitest';
+import {isConfigured,publicConfig} from './config';
+afterEach(()=>vi.unstubAllEnvs());
+describe('Configuración real, sin sustitutos de datos',()=>{it('rechaza una conexión incompleta',()=>{vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL','');vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY','');expect(isConfigured()).toBe(false);expect(publicConfig).toThrow('Falta conectar')});it('requiere ambas claves públicas',()=>{vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL','https://example.supabase.co');vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY','');expect(isConfigured()).toBe(false)});it('nunca incluye la clave de servicio en la configuración pública',()=>{vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL','https://example.supabase.co');vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY','public-key');vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY','private-key');expect(publicConfig()).toEqual({url:'https://example.supabase.co',key:'public-key'})})});
