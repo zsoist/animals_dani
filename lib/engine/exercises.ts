@@ -1,3 +1,4 @@
+import {equivalentExpressions, parseExpression, expressionSymbols} from "./algebra";
 import type { Family, Level, Exercise, Skill, Question } from "./types";
 import { random } from "./random";
 import { equations } from "./generators/equations";
@@ -52,6 +53,20 @@ export type Evaluation =
 export function evaluate(exercise: Exercise, input: string): Evaluation {
   if (input.length > 100)
     return { valid: false, message: "La respuesta es demasiado larga." };
+  if (exercise.answerFormat === "expression") {
+    const raw=input.trim();
+    const pieces=raw.split('=');
+    if(pieces.length>2 || (pieces.length===2 && pieces[0].trim()!==exercise.target))return {valid:false,message:`Escribe solo la expresión${exercise.target ? ` o ${exercise.target} = …` : ''}.`};
+    const value=pieces.at(-1) ?? '';
+    const allowed=expressionSymbols(exercise.formula ?? exercise.answer);
+    try {
+      parseExpression(value);
+      if(expressionSymbols(value).some(s=>!allowed.includes(s)))return {valid:false,message:'Usa las letras de la fórmula; mayúsculas y minúsculas son distintas.'};
+      if(exercise.target && expressionSymbols(value).includes(exercise.target))return {valid:true,correct:false,errorType:'VARIABLE_SIN_AISLAR'};
+      if(equivalentExpressions(value,exercise.answer))return {valid:true,correct:true,errorType:null};
+      return {valid:true,correct:false,errorType:exercise.errorSignatures.find(s=>equivalentExpressions(value,s.value))?.errorType ?? 'UNKNOWN'};
+    } catch {return {valid:false,message:'Completa la expresión con letras, operaciones y paréntesis. Por ejemplo F/a.'};}
+  }
   if (exercise.answerFormat === "coefficients") {
     const parts = input.trim().split(/[,;\s]+/);
     const expected = exercise.answer.split(",").map(Number);

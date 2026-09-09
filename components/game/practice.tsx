@@ -1,4 +1,5 @@
 "use client";
+import {expressionSymbols} from "@/lib/engine/algebra";
 import { AICoach } from "./ai-coach";
 import { useActiveTime } from "./use-active-time";
 import { ImageViewer } from "./image-viewer";
@@ -142,7 +143,7 @@ export function Practice({
         setSolved(true);
         setMessage(
           [
-            "¡Un plato lleno y un gato feliz!",
+            "¡Una manta más para el refugio!",
             "¡Una patita más cerca del rescate!",
             "¡Milo está orgulloso de ti!",
           ][index % 3],
@@ -268,13 +269,14 @@ export function Practice({
       </p>
       <h2 className="question-instruction">
         {skill.family === "equations"
-          ? "Encuentra el valor que falta"
+          ? `Deja ${exercise.target ?? "la incógnita"} sola`
           : skill.family === "units"
             ? "Cambia la unidad, conserva la cantidad"
             : skill.family === "chemistry"
               ? "Equilibra la reacción"
               : "Tu siguiente desafío"}
       </h2>
+      {exercise.symbolMeaning && <p className="formula-legend">{exercise.symbolMeaning}</p>}
       <p
         className={`question-prompt ${prompt.length > 75 ? "long-prompt" : ""}`}
       >
@@ -284,7 +286,7 @@ export function Practice({
               .map((part, i) =>
                 /^\d+$/.test(part) ? <sub key={i}>{part}</sub> : part,
               )
-          : prompt}
+          : exercise.formula ? exercise.formula.replaceAll("*", " · ") : prompt}
       </p>
       {exercise.image && (
         <ImageViewer src={exercise.image} alt={exercise.imageAlt} />
@@ -292,7 +294,7 @@ export function Practice({
       <label className="answer-label" htmlFor="answer">
         {exercise.answerFormat === "coefficients"
           ? "Coeficientes, separados por comas"
-          : "Tu respuesta"}
+          : exercise.target ? `${exercise.target} =` : "Tu respuesta"}
       </label>
       <div className="answer-wrap">
         <input
@@ -308,7 +310,7 @@ export function Practice({
           onSelect={capture}
           onClick={capture}
           onKeyDown={(event) => {
-            if (/^[0-9.,/\-]$/.test(event.key)) {
+            if ((exercise.answerFormat === "expression" ? /^[A-Za-z0-9+*()/\-]$/ : /^[0-9.,/\-]$/).test(event.key)) {
               event.preventDefault();
               edit(event.key);
             } else if (event.key === "Backspace") {
@@ -336,7 +338,7 @@ export function Practice({
       </div>
       {!solved && !review && (
         <div className="keypad" aria-label="Teclado de respuesta">
-          {[
+          {(exercise.answerFormat === "expression" ? [...expressionSymbols(exercise.formula ?? exercise.answer).filter(s=>s!==exercise.target), "2", "+", "-", "*", "/", "(", ")", "clear"] : [
             "1",
             "2",
             "3",
@@ -352,7 +354,7 @@ export function Practice({
             "/",
             "0",
             "clear",
-          ].map((key) => (
+          ]).map((key) => (
             <button
               className={`key ${["-", "/", "clear"].includes(key) ? "auxiliary" : ""} ${key === "clear" ? "clear-key" : ""}`}
               key={key}
@@ -360,7 +362,7 @@ export function Practice({
               onClick={() => edit(key)}
               disabled={busy || coachBusy}
             >
-              {key === "clear" ? "Limpiar" : key === "-" ? "−" : key}
+              {key === "clear" ? "Limpiar" : key === "-" ? "−" : key === "*" ? "×" : key}
             </button>
           ))}
         </div>

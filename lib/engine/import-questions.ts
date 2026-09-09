@@ -15,7 +15,7 @@ export function validateQuestions(value: unknown): CustomQuestion[] {
       !Array.isArray(q.hints) ||
       q.hints.length !== 3 ||
       q.hints.some((h) => typeof h !== "string" || !h.trim()) ||
-      !["number", "fraction", "coefficients"].includes(
+      !["number", "fraction", "coefficients", "expression"].includes(
         String(q.answerFormat),
       ) ||
       ![1, 2, 3, 4].includes(Number(q.level))

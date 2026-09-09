@@ -33,3 +33,9 @@
 - Se pausa el reloj activo mientras Numa responde y se impide avanzar durante esa consulta para mantener la ayuda vinculada al ejercicio correcto.
 - Las ecuaciones generadas de nivel 3 usan denominadores que permiten representar el enunciado exactamente con decimales cortos.
 - Animaciones de transformaciones y opacidad, con reducción de movimiento persistente y preferencia del sistema. No se afirma rendimiento físico sin medirlo.
+
+## Ajuste solicitado: fórmulas, gatos y comedor
+- Despejar significa aislar una letra en una fórmula de octavo, no resolver aritmética mental. 16 fórmulas reales con significado de las variables, teclado simbólico y equivalencia algebraica exacta.
+- No se usa IA para calificar expresiones. Parser acotado de expresiones racionales; firmas distinguen inversa, signos, orden y variable sin aislar.
+- La comida se desbloquea por completar diez retos diarios; el servidor exige sesión completada de hoy. Los aciertos individuales dan cuidado sin comida. Se conservan los contadores históricos existentes.
+- Gatos aproximadamente un tercio menores, colores fantásticos estables mediante filtros visuales, mismas identidades y ficha al tocarlos.

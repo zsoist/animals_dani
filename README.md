@@ -59,3 +59,9 @@ Arte original generado con la herramienta integrada de OpenAI, optimizado como W
 - `public/art/rescue-kittens.webp` y `rescue-kittens.webp.json`: seis gatos recortables con transparencia.
 
 Las animaciones de cuidado, gatos y ambiente respetan la preferencia de movimiento reducido del sistema y el control dentro del refugio. No se ha medido 60 FPS en un móvil físico.
+
+## Despejes simbólicos y comedor diario
+
+Los despejes usan 16 fórmulas de física, química y matemáticas de octavo, repartidas en cuatro niveles. Laura construye el lado despejado con un teclado de letras y operaciones: no sustituye números. La corrección compara expresiones racionales de forma exacta mediante polinomios; admite productos implícitos y expresiones equivalentes. Se distinguen mayúsculas y minúsculas. Este alcance admite letras de un carácter, enteros pequeños, +, −, ×, / y paréntesis; no raíces, potencias ni funciones. El editor del profe y la generación IA admiten el formato «Expresión con letras».
+
+Los gatos son más pequeños y tienen colores fantásticos estables; al tocarlos aparece nombre, personalidad e historia. El comedor se desbloquea por una misión completada en la fecha local de hoy (Colombia), comprobada también por el servidor. Mañana vuelve a cerrarse hasta terminar los retos. Los aciertos intermedios dan mantas y afecto, sin entregar comida; los antiguos contadores se conservan como historial.

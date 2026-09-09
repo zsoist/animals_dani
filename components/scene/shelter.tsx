@@ -11,11 +11,13 @@ export function Shelter({
   state,
   onCare,
   compact = false,
+  feedingUnlocked = false,
 }: {
   cats: ShelterCat[];
   state?: ShelterState;
   onCare?: (state: ShelterState) => void;
   compact?: boolean;
+  feedingUnlocked?: boolean;
 }) {
   const [selected, setSelected] = useState<ShelterCat | null>(null);
   const [activity, setActivity] = useState("");
@@ -24,19 +26,20 @@ export function Shelter({
   const [message, setMessage] = useState("");
   const [lights, setLights] = useState(true);
   async function interact(action: "play" | "feed" | "clean") {
-    if (busy) return;
+    if (busy || (action === "feed" && !feedingUnlocked)) return;
     setBusy(true);
-    setActivity(action);
+    if(action !== "feed")setActivity(action);
     setInteraction(n=>n+1);
     setMessage(
       action === "play"
         ? "¡A perseguir la pelota!"
         : action === "clean"
           ? "Una zona limpia para descansar."
-          : "¡Todos al comedor!",
+          : "Abriendo el comedor…",
     );
     try {
       onCare?.(await care(action));
+      if(action === "feed"){setActivity("feed");setMessage("¡Todos al comedor!");}
     } catch {
       setMessage(
         "No pudimos guardar el cuidado. Toca para volver a intentarlo.",
@@ -54,7 +57,7 @@ export function Shelter({
       <div className="room-name">
         <Icon name="paw" size={18} /> {cats.length} amigos a salvo
       </div>
-      <div className="shelter-stock" aria-label="Cuidado acumulado"><span><Icon name="bowl" size={15}/>{state?.food ?? 0} comidas</span><span><Icon name="heart" size={15}/>{state?.affection ?? 0} mimos</span></div>
+      <div className="shelter-stock" aria-label="Cuidado acumulado"><span><Icon name="bowl" size={15}/>{feedingUnlocked ? "Comedor abierto" : "Comedor · 10 retos"}</span><span><Icon name="heart" size={15}/>{state?.affection ?? 0} mimos</span></div>
       <div className="room-cats">
         {cats.map((cat, index) => (
           <button
@@ -91,9 +94,9 @@ export function Shelter({
         </div>
       )}
       <div className="care-controls" aria-label="Cuidar el refugio">
-        <button disabled={busy} onClick={() => void interact("feed")}>
+        <button disabled={busy || !feedingUnlocked} title={feedingUnlocked ? "Comedor abierto por completar los retos de hoy" : "Completa los diez retos diarios"} onClick={() => void interact("feed")}>
           <Icon name="bowl" />
-          Comedor
+          {feedingUnlocked ? "Comedor" : "10 retos → comer"}
         </button>
         <button disabled={busy} onClick={() => void interact("play")}>
           <Icon name="star" />
@@ -108,6 +111,7 @@ export function Shelter({
           {lights ? "Noche" : "Día"}
         </button>
       </div>
+      {!feedingUnlocked && !message && <p className="care-message">Completa los 10 retos de hoy para abrir el comedor.</p>}
       {message && (
         <p className="care-message" role="status">
           {message}

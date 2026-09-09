@@ -205,9 +205,8 @@ export async function saveAttempt(input: Omit<Attempt, "id" | "created_at">) {
   if (result.correct) {
     const reward = {
       ...state,
-      food: state.food + 1,
-      blankets: Math.floor((state.food + 1) / 3),
-      lamps: Math.floor((state.food + 1) / 5),
+      blankets: state.blankets + 1,
+      lamps: state.lamps + ((state.blankets + 1) % 5 === 0 ? 1 : 0),
       affection: state.affection + 1,
     };
     const saved = await db
@@ -339,6 +338,11 @@ export async function getTutorSummary() {
 
 export async function careForShelter(action: "play" | "clean" | "feed") {
   const { db, userId } = await studentClient();
+  if(action === "feed") {
+    const completed = await db.from("sessions").select("id").eq("user_id",userId).eq("date",dayKey()).eq("completed",true).limit(1);
+    if(completed.error)throw new Error("No pudimos comprobar los retos de hoy.");
+    if(!completed.data?.length)throw new Error("Completa los diez retos de hoy para abrir el comedor.");
+  }
   const { data, error } = await db
     .from("shelter_state")
     .select("food,blankets,lamps,clean_zones,affection")

@@ -6,7 +6,10 @@ export type Exercise = {
   seed: string;
   prompt: string;
   answer: string;
-  answerFormat: "number" | "fraction" | "coefficients";
+  answerFormat: "number" | "fraction" | "coefficients" | "expression";
+  formula?: string;
+  target?: string;
+  symbolMeaning?: string;
   tolerance?: number;
   image?: string;
   imageAlt?: string;

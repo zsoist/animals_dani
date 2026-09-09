@@ -59,3 +59,11 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - Capturas Chrome reales en 390 × 844 y 1280 × 900: refugio, tarjeta central, progreso y laboratorio. Revisión independiente Impeccable: corregido selector pedagógico truncado; disposición final ship. Se trata de refinamiento de dirección fijada, no de una exploración conceptual nueva.
 - No se midieron FPS ni Lighthouse. No se afirma que la IA sea infalible; los borradores requieren revisión del profe.
 - Publicada en https://animals-dani.vercel.app, despliegue `dpl_A4FoiSVb2nT9bDWWf4LcPwoZEqFa`. HTTP 200 de la página y las tres ilustraciones comprobados; login admin, laboratorio, catálogo y análisis persistido verificados en producción. Código `b21ee52`.
+
+## Fórmulas de octavo, gatos pequeños y comedor diario
+- Gatos más pequeños, violeta/verde y otras variantes, con nombre, personalidad e historia verificados al tocar en móvil.
+- Comedor bloqueado hasta completar los diez retos de hoy, tanto en la interfaz como en la acción del servidor. Los aciertos ya no aumentan comida.
+- 16 fórmulas simbólicas en cuatro niveles, teclado de letras y operaciones, pistas y firmas algebraicas. Editor e IA aceptan expresiones.
+- 55 pruebas: equivalencias exactas, sintaxis inválida, clasificación de errores, 100 semillas por familia/nivel con sustitución independiente y bloqueo del comedor mediante pruebas de la acción del servidor.
+- Móvil 390 × 844: fórmula x = s+v*t, respuesta equivalente (x-s)/(v) aceptada y guardada realmente; teclado, ficha de Milo y colores comprobados.
+- Despliegue pendiente de verificar.

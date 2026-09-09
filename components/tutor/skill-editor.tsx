@@ -253,7 +253,7 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
                       }
                     >
                       <option value="number">Número</option>
-                      <option value="fraction">Fracción</option>
+                      <option value="fraction">Fracción</option><option value="expression">Expresión con letras</option>
                       <option value="coefficients">Coeficientes: 2,1,2</option>
                     </select>
                   </label>

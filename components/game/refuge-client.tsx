@@ -66,7 +66,7 @@ export function RefugeClient({
         : step < 5
           ? "¡Ya encontramos a nuestro amigo!"
           : step < 7
-            ? "Una comida y muchos mimos"
+            ? "Preparando el comedor"
             : step < 10
               ? "Preparando su nuevo hogar"
               : "¡Rescate completado!";
@@ -142,7 +142,7 @@ export function RefugeClient({
               </div>
             </div>
           )}
-          <Shelter cats={liveCats} state={liveState} onCare={setLiveState} />
+          <Shelter feedingUnlocked={dates.includes(today)} cats={liveCats} state={liveState} onCare={setLiveState} />
           {!session && (
             <>
               <div className="room-caption">
@@ -289,7 +289,7 @@ export function RefugeClient({
               <div className="shelter-progress">
                 <Icon name="bowl" />
                 <p>
-                  <strong>{liveState.food} respuestas que alimentan</strong>
+                  <strong>{dates.includes(today) ? "¡Comedor abierto hoy!" : "Completa los 10 retos para abrir el comedor"}</strong>
                   <span>
                     Tu práctica se convierte en cuidado real para el refugio.
                   </span>
