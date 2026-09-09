@@ -40,3 +40,12 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - 41 pruebas pasan, incluyendo 1.200 ejercicios, selección de tema estable por día, calendario, dificultad, importación y recorrido de preguntas propias sin repeticiones hasta agotar el banco.
 - Navegador en 1280 × 720: tarjeta centrada, cuidado interactivo, respuesta nivel 3 guardada y siguiente ejercicio de la misma habilidad. El control de viewport de esta sesión no aplicó 390 × 844; no se declara una nueva verificación móvil visual.
 - Animaciones de transformaciones/opacity y movimiento reducido. 60 FPS es objetivo; no se midió FPS en móvil físico ni Lighthouse en esta revisión.
+
+## DeepSeek y memoria — 2026-09-09
+- Implementado Numa dentro del refugio y los ejercicios: pistas, explicación, revisión, historial persistente y memoria editable.
+- DeepSeek real verificado: conversación conservada tras recarga; informe del admin generado con 30 intentos reales.
+- Generación de preguntas conectada al servidor; clave en entorno local ignorado y Vercel producción cifrado.
+- Migración aplicada, tablas con RLS y RPC de cuotas accesible únicamente al servidor.
+- Medición de tiempo activo y etiqueta de ayuda IA; tiempos antiguos excluidos de evidencia temporal.
+- Verificado en navegador: respuesta contextual sin dar solución, recarga del historial, informe real y generación de dos borradores con segunda revisión de razonamiento. Un intento guardó 59.110 ms de tiempo activo, ai_help=true y hint_level=1.
+- 46 tests pasan, incluyendo mediana de tiempos, privacidad y reloj con pausas/reintentos; typecheck, lint y build pasan. Pendiente: despliegue y verificación pública.

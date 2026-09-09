@@ -38,6 +38,12 @@ Todos los visitantes de la URL usan el mismo refugio de Laura, por petición exp
 
 1. Abre Nueva habilidad o edita una existente y selecciona preguntas propias.
 2. En PDF e imágenes, abre tu archivo, elige página y recorte y pulsa Añadir como pregunta con imagen. Completa respuesta, nivel y tres pistas; guarda la habilidad.
-3. Crear con IA acepta un prompt y, opcionalmente, texto extraído del PDF. Necesita `OPENAI_API_KEY` en Vercel o una clave introducida en el formulario; utiliza la facturación de esa cuenta. Revisa los borradores antes de guardar. `OPENAI_QUESTION_MODEL` permite elegir el modelo (predeterminado `gpt-4.1-mini`).
+3. Crear con IA acepta un prompt y, opcionalmente, texto extraído del PDF. Utiliza `DEEPSEEK_API_KEY` exclusivamente en el servidor; usa la facturación de esa cuenta. Revisa los borradores antes de guardar. `DEEPSEEK_MODEL` permite elegir el modelo (predeterminado `deepseek-v4-flash`).
 
 El calendario permite un solo tema diario. Si ya empezó una práctica, el tema permanece ese día mientras esté activo. Nivel inicial también define el mínimo; nivel fijo impide la adaptación. PDF original no se almacena: se guardan las imágenes de preguntas seleccionadas. Los cuidados de los animales no suman respuestas académicas.
+
+## Numa · tutor con memoria
+
+DeepSeek explica el ejercicio actual en español, ofrece pistas y usa los últimos 200 intentos (20 por habilidad en el resumen). La memoria pedagógica y la conversación persisten en Supabase. Laura puede editar o vaciar su memoria y el profe puede consultar conversaciones y generar un informe. No se recopilan datos de navegación ni información personal adicional. La ayuda IA se registra como asistencia al calcular dominio. Los tiempos nuevos excluyen pestañas ocultas y espera de comprobación; los antiguos quedan fuera del análisis temporal IA.
+
+Configura `DEEPSEEK_API_KEY` como secreto de Vercel y aplica `20260909200656_ai_tutor_memory.sql`. Nunca uses una variable NEXT_PUBLIC para la clave. Cada usuario tiene un máximo de 100 consultas en 24 horas, 6 por minuto y una solicitud simultánea. Los límites se aplican en Postgres; los ejercicios siguen funcionando sin IA. La API no evalúa respuestas ni modifica recompensas. El acceso directo de Laura sigue siendo compartido: quien abra el refugio accede a su conversación.

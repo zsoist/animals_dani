@@ -4,10 +4,13 @@ import { getTutorSummary } from "@/lib/data/student";
 import { signOut } from "@/lib/data/auth";
 import { band, visibleStreak, dayKey } from "@/lib/engine/mastery";
 import { SkillEditor, NoteForm } from "@/components/tutor/skill-editor";
+import { AIInsights } from "@/components/tutor/ai-insights";
+import { aiOverview } from "@/lib/data/ai";
 import { Icon } from "@/components/game/icons";
 export default async function Tutor() {
   await requireTutor();
   const data = await getTutorSummary();
+  const ai = await aiOverview(data.userId);
   const completed = data.sessions.filter((s) => s.completed);
   const streak = data.streaks[0];
   const now = new Date().getTime();
@@ -72,6 +75,11 @@ export default async function Tutor() {
           </div>
         ))}
       </section>
+      <AIInsights
+        initial={ai.report}
+        memory={ai.memory}
+        messages={ai.messages}
+      />
       <section id="catalog" className="admin-catalog">
         <h2>
           Habilidades de práctica <span>{data.skills.length}</span>

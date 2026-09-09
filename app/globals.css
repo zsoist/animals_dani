@@ -2696,3 +2696,247 @@ body {
     #62785c 57% 100%
   ) !important;
 }
+.coach-widget {
+  grid-column: 1/-1;
+  width: 100%;
+  margin: 20px 0;
+}
+.coach-launch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  padding: 16px;
+  background: #123e58;
+  color: white;
+  text-align: left;
+  box-shadow: 0 5px 16px #12365018;
+}
+.coach-launch > span:nth-child(2) {
+  flex: 1;
+}
+.coach-launch strong,
+.coach-launch small {
+  display: block;
+}
+.coach-launch small {
+  font-size: 13px;
+  color: #d0e9ed;
+  margin-top: 3px;
+}
+.numa-mark {
+  display: grid;
+  place-items: center;
+  background: #ffcc38;
+  color: #123e58;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+}
+.coach-panel {
+  background: #f2f7f8;
+  border: 1px solid #cbdde2;
+  border-radius: 0 0 16px 16px;
+  padding: 18px;
+  margin-top: 5px;
+}
+.coach-panel > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.coach-panel > header p {
+  font-size: 13px;
+  color: #476077;
+}
+.coach-panel > header .quiet {
+  font-size: 12px;
+  padding: 8px;
+  flex-shrink: 0;
+}
+.coach-history {
+  max-height: 370px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: grid;
+  gap: 12px;
+  padding: 16px 3px;
+}
+.coach-message {
+  padding: 13px 16px;
+  border-radius: 12px;
+  background: white;
+  max-width: 94%;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.coach-message p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-width: none;
+}
+.coach-message b {
+  display: block;
+  color: #006a7d;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+.coach-message.from-user {
+  justify-self: end;
+  background: #dceef2;
+}
+.coach-message.from-assistant {
+  justify-self: start;
+}
+.coach-thinking,
+.coach-welcome {
+  font-size: 14px;
+  color: #37586e;
+  padding: 12px;
+}
+.coach-prompts {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin: 8px 0 14px;
+}
+.coach-prompts button {
+  border: 1px solid #b5cdd6;
+  background: white;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  min-height: 44px;
+}
+.coach-panel form {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.coach-panel textarea {
+  resize: vertical;
+  min-height: 64px;
+  font-size: 16px;
+  background: white;
+}
+.coach-panel form .primary {
+  width: auto;
+  padding: 10px 15px;
+  font-size: 14px;
+}
+.coach-disclosure {
+  font-size: 11px !important;
+  color: #496274;
+  margin-top: 12px !important;
+  line-height: 1.55;
+}
+.coach-memory {
+  padding: 15px;
+  background: #fff4d8;
+  border-radius: 10px;
+  margin-top: 12px;
+}
+.coach-memory label {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 800;
+}
+.coach-memory p {
+  font-size: 12px;
+  margin: 8px 0;
+}
+.in-exercise {
+  margin-bottom: 0;
+}
+.in-exercise .coach-launch {
+  padding: 12px;
+}
+.in-exercise .coach-launch strong {
+  font-size: 15px;
+}
+.in-exercise .coach-panel {
+  padding: 12px;
+}
+.active-time {
+  font-size: 12px;
+  color: #557084;
+  margin: 9px 0 15px;
+}
+.ai-insights {
+  padding: 28px 0;
+  border-top: 1px solid #cbdde2;
+  border-bottom: 1px solid #cbdde2;
+  margin: 26px 0;
+}
+.ai-insights .studio-heading h2 {
+  font-size: 26px;
+}
+.ai-insights .studio-heading p {
+  margin-top: 7px;
+}
+.ai-report {
+  padding: 24px;
+  background: #e8f3f4;
+  border-radius: 14px;
+  margin: 18px 0;
+}
+.ai-report > p,
+.memory-text {
+  white-space: pre-wrap;
+  line-height: 1.8;
+  max-width: 75ch;
+}
+.ai-report small {
+  display: block;
+  margin-top: 18px;
+  color: #496274;
+}
+.ai-insights details {
+  margin-top: 20px;
+}
+.ai-insights summary {
+  font-weight: 800;
+}
+.ai-insights details > p {
+  margin: 12px 0;
+}
+.ai-insights .coach-message {
+  margin: 12px 0;
+}
+.coach-launch:focus-visible {
+  outline-color: #ffcc38;
+}
+.coach-panel [role="alert"] {
+  margin-top: 10px;
+}
+@media (max-width: 760px) {
+  .coach-panel > header {
+    flex-wrap: wrap;
+  }
+  .coach-panel form {
+    flex-direction: column;
+  }
+  .coach-panel form .primary {
+    width: 100%;
+  }
+  .coach-history {
+    max-height: 320px;
+  }
+  .coach-message {
+    font-size: 14px;
+    max-width: 100%;
+  }
+  .ai-insights {
+    padding: 22px 0;
+  }
+  .ai-insights .studio-heading h2 {
+    font-size: 22px;
+  }
+  .coach-launch small {
+    font-size: 11px;
+  }
+}

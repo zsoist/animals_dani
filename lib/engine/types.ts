@@ -45,6 +45,8 @@ export type Mastery = {
   last_practiced_at: string | null;
 };
 export type Attempt = {
+  timing_version?: number;
+  ai_help?: boolean;
   user_id: string;
   id: string;
   skill_id: string;

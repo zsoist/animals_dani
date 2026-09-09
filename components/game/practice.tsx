@@ -1,6 +1,8 @@
 "use client";
+import { AICoach } from "./ai-coach";
+import { useActiveTime } from "./use-active-time";
 import { ImageViewer } from "./image-viewer";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { completeMission, recordAttempt } from "@/lib/data/actions";
 import { evaluate, exerciseFor } from "@/lib/engine/exercises";
 import { reinforce } from "@/lib/engine/selector";
@@ -40,8 +42,7 @@ export function Practice({
   const [skillResults, setSkillResults] = useState<
     Record<string, { correct: number; total: number }>
   >({});
-  const started = useRef(0);
-  const questionStarted = useRef(0);
+  const [aiHelp, setAiHelp] = useState(false);
   const gate = useRef(false);
   const field = useRef<HTMLInputElement>(null);
   const cursor = useRef<{ start: number; end: number } | null>(null);
@@ -51,6 +52,14 @@ export function Practice({
     () => (question && skill ? exerciseFor(skill, question) : null),
     [question, skill],
   );
+  const activeTime = useActiveTime(
+    question?.seed ?? "complete",
+    busy || solved || Boolean(result),
+  );
+  const sessionTime = useActiveTime(sessionId, Boolean(result));
+  useEffect(() => {
+    field.current?.focus({ preventScroll: true });
+  }, [question?.seed]);
   const capture = () => {
     if (field.current)
       cursor.current = {
@@ -99,7 +108,7 @@ export function Practice({
     gate.current = true;
     setBusy(true);
     setMessage("");
-    if (!started.current) started.current = Date.now();
+    const responseMs = activeTime.read();
     try {
       const saved = await recordAttempt({
         user_id: userId,
@@ -110,12 +119,15 @@ export function Practice({
         expected_answer: exercise.answer,
         given_answer: answer,
         correct: evaluated.correct,
-        response_ms: Date.now() - (questionStarted.current || started.current),
+        response_ms: responseMs,
+        timing_version: 2,
+        ai_help: aiHelp,
         hint_level: hint,
         error_type: evaluated.errorType,
         session_id: sessionId,
       });
       onReward(saved.state);
+      activeTime.reset();
       setSkillResults((previous) => ({
         ...previous,
         [skill.name]: {
@@ -158,7 +170,7 @@ export function Practice({
         const completion = await completeMission(
           sessionId,
           correct,
-          Date.now() - (started.current || Date.now()),
+          sessionTime.read(),
         );
         setResult(completion);
         onStep(10);
@@ -181,7 +193,7 @@ export function Practice({
     setSolved(false);
     setWrong(false);
     setReview(false);
-    questionStarted.current = Date.now();
+    setAiHelp(false);
   };
   if (result)
     return (
@@ -250,6 +262,9 @@ export function Practice({
           {index + 1} de 10{question.reinforced ? " · Repaso" : ""}
         </span>
       </div>
+      <p className="active-time">
+        Tiempo activo: {activeTime.seconds}s · A tu ritmo
+      </p>
       <h2 className="question-instruction">
         {skill.family === "equations"
           ? "Encuentra el valor que falta"
@@ -289,10 +304,6 @@ export function Practice({
           placeholder={
             exercise.answerFormat === "coefficients" ? "2,1,2" : "Escribe aquí…"
           }
-          onFocus={() => {
-            if (!questionStarted.current) questionStarted.current = Date.now();
-            if (!started.current) started.current = Date.now();
-          }}
           onSelect={capture}
           onClick={capture}
           onKeyDown={(event) => {
@@ -408,6 +419,18 @@ export function Practice({
           </div>
         </>
       )}
+      <AICoach
+        context={{
+          sessionId,
+          skillId: skill.id,
+          seed: exercise.seed,
+          level: exercise.level,
+        }}
+        onHelp={() => {
+          setAiHelp(true);
+          setHint((h) => Math.max(1, h));
+        }}
+      />
     </section>
   );
 }

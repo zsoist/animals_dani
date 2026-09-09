@@ -14,6 +14,7 @@ import type {
 import { startMission } from "@/lib/data/actions";
 import { Practice } from "./practice";
 import { Icon } from "./icons";
+import { AICoach } from "./ai-coach";
 import { StreakDisplay } from "./streak";
 export function RefugeClient({
   cats,
@@ -280,6 +281,7 @@ export function RefugeClient({
                   <p>Activa una habilidad desde Admin para empezar.</p>
                 )}
               </section>
+              <AICoach />
               <StreakDisplay streak={liveStreak} dates={dates} today={today} />
               <div className="shelter-progress">
                 <Icon name="bowl" />

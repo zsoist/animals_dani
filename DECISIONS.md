@@ -18,3 +18,10 @@
 - Las imágenes usan hasta 1.800 píxeles en el lado mayor y un límite aproximado de 330 KB por imagen, 3 MB por habilidad. Las preguntas se revisan antes de guardarse; el PDF no inventa soluciones.
 - Generación opcional con OpenAI mediante prompt y texto del PDF. Clave del servidor o clave introducida para una sola petición; no se persiste. No había clave configurada y no se simuló una respuesta de IA.
 - Jugar y limpiar guardan afecto y zonas limpias; comer y cambiar la iluminación tienen respuesta visual sin otorgar aciertos. Los cuidados no alteran el aprendizaje.
+
+## Tutor DeepSeek (2026-09-09)
+- Sustituimos la integración opcional OpenAI por DeepSeek v4 Flash real con clave solo servidor; el formulario nunca recibe credenciales.
+- Memoria persistente, visible y editable, limitada a aprendizaje; no seguimiento ajeno a la práctica. Conversación y evidencia se envían a DeepSeek para responder.
+- Un solo tema vigente al día también se comunica al tutor. La corrección académica permanece determinista y la ayuda IA cuenta como pista.
+- RLS en las cuatro tablas nuevas, reservas de uso atómicas y cuotas para controlar gasto. Migración aplicada mediante el editor SQL autenticado de Supabase porque el conector no tenía permisos.
+- El admin revisa los borradores generados: validamos formato y respuesta numérica, sin prometer que un modelo nunca comete errores matemáticos.

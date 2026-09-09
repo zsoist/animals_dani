@@ -51,7 +51,7 @@ export function QuestionStudio({
   const [prompt, setPrompt] = useState(
     "Crea problemas de grado octavo que requieran varios pasos y razonamiento. Usa cantidades realistas y evita ejercicios triviales.",
   );
-  const [key, setKey] = useState("");
+
   const [count, setCount] = useState(10);
   const [level, setLevel] = useState(3);
   const [json, setJson] = useState("");
@@ -198,7 +198,7 @@ export function QuestionStudio({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           prompt: prompt + (text ? `\nMaterial de referencia:\n${text}` : ""),
-          apiKey: key,
+
           count,
           level,
         }),
@@ -402,20 +402,10 @@ export function QuestionStudio({
               </select>
             </label>
           </div>
-          <label>
-            Clave de OpenAI (si no está configurada en el servidor)
-            <input
-              type="password"
-              autoComplete="off"
-              value={key}
-              onChange={(e) => setKey(e.target.value)}
-              placeholder="sk-…"
-            />
-          </label>
           <p>
-            Se usa solo para esta petición y no se guarda. La generación utiliza
-            tu cuenta API de OpenAI. Los borradores quedan editables; revisa sus
-            respuestas antes de publicarlos.
+            DeepSeek está conectado desde el servidor. La clave no aparece en
+            este formulario. Revisa los borradores y sus respuestas antes de
+            publicarlos.
           </p>
           {text && (
             <details>

@@ -171,6 +171,8 @@ export async function saveAttempt(input: Omit<Attempt, "id" | "created_at">) {
     error_type: result.errorType,
     hint_level: Math.max(0, Math.min(3, input.hint_level)),
     response_ms: Math.max(0, Math.min(3600000, input.response_ms)),
+    timing_version: input.timing_version===2?2:1,
+    ai_help: Boolean(input.ai_help),
   };
   const { data: attempt, error } = await db
     .from("attempts")
