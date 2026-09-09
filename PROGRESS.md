@@ -48,4 +48,4 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - Migración aplicada, tablas con RLS y RPC de cuotas accesible únicamente al servidor.
 - Medición de tiempo activo y etiqueta de ayuda IA; tiempos antiguos excluidos de evidencia temporal.
 - Verificado en navegador: respuesta contextual sin dar solución, recarga del historial, informe real y generación de dos borradores con segunda revisión de razonamiento. Un intento guardó 59.110 ms de tiempo activo, ai_help=true y hint_level=1.
-- 46 tests pasan, incluyendo mediana de tiempos, privacidad y reloj con pausas/reintentos; typecheck, lint y build pasan. Pendiente: despliegue y verificación pública.
+- 47 tests pasan, incluyendo mediana de tiempos, privacidad y reloj con pausas/reintentos; typecheck, lint y build pasan. Producción publicada y HTTP 200 verificado para / y /api/coach; consulta real de Numa desde Vercel exitosa. Memoria editada conservada. Una respuesta mal formada de proveedor mostró error recuperable; se añadió parser probado para cercas JSON y escapes matemáticos.

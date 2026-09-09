@@ -1,4 +1,5 @@
 import "server-only";
+import { parseAIJson } from "@/lib/engine/ai-json";
 export type AIMessage = {
   role: "system" | "user" | "assistant";
   content: string;
@@ -52,7 +53,7 @@ export async function deepseek(messages: AIMessage[], maxTokens = 1200, reasonin
     );
   let json: unknown;
   try {
-    json = JSON.parse(choice?.message?.content ?? "");
+    json = parseAIJson(choice?.message?.content ?? "");
   } catch {
     throw new Error(
       "El tutor no devolvió una respuesta completa. Vuelve a intentarlo.",
