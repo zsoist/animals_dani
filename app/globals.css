@@ -36,9 +36,9 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #7c98
 .answer-wrap input{min-width:0}
 .delete-key{width:52px;border:1px solid #d9d5c8;border-radius:12px;background:#efe4d2;color:#4a5859;font-size:22px}
 .keypad{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
-.key{min-height:42px!important;border:1px solid #e0d6c8;border-radius:11px;background:#fffdf8;color:#4a5859;padding:6px}
+.key{min-height:48px!important;border:1px solid #e0d6c8;border-radius:11px;background:#fffdf8;color:#4a5859;padding:6px}
 .key:active,.delete-key:active{background:#e8b4a0}
-.key-muted{font-size:13px;background:#f0e3d1}
+.key-muted{font-size:13px;background:#f0e3d1;grid-column:span 2}
 .hint-button{display:block;margin:0 auto;padding:8px 14px}
 .practice-panel .status{margin-top:10px;padding-top:8px}
 @keyframes sway{to{transform:rotate(12deg)}}
