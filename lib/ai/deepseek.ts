@@ -4,7 +4,16 @@ export type AIMessage = {
   role: "system" | "user" | "assistant";
   content: string;
 };
+class MalformedAIResponse extends Error {}
 export async function deepseek(messages: AIMessage[], maxTokens = 1200, reasoning = false) {
+  const deadline = Date.now() + 55000;
+  try {return await requestCompletion(messages,maxTokens,reasoning,deadline);}
+  catch(error){
+    if(!(error instanceof MalformedAIResponse) || deadline-Date.now()<3000)throw error;
+    return requestCompletion([...messages,{role:"user",content:"Devuelve únicamente un objeto JSON válido con los campos solicitados. Escapa los saltos de línea y las comillas dentro de cadenas. Sin bloques de código."}],maxTokens,reasoning,deadline);
+  }
+}
+async function requestCompletion(messages:AIMessage[],maxTokens:number,reasoning:boolean,deadline:number) {
   const key = process.env.DEEPSEEK_API_KEY;
   if (!key)
     throw new Error(
@@ -19,7 +28,7 @@ export async function deepseek(messages: AIMessage[], maxTokens = 1200, reasonin
         Authorization: `Bearer ${key}`,
         "Content-Type": "application/json",
       },
-      signal: AbortSignal.timeout(55000),
+      signal: AbortSignal.timeout(Math.max(1,deadline-Date.now())),
       body: JSON.stringify({
         model,
         messages,
@@ -55,7 +64,7 @@ export async function deepseek(messages: AIMessage[], maxTokens = 1200, reasonin
   try {
     json = parseAIJson(choice?.message?.content ?? "");
   } catch {
-    throw new Error(
+    throw new MalformedAIResponse(
       "El tutor no devolvió una respuesta completa. Vuelve a intentarlo.",
     );
   }

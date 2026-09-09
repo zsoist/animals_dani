@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- User-owned data URLs are precompressed and opened at their native resolution. */
 "use client";
+import {track} from "@/components/telemetry/client";
 import { useRef, useState } from "react";
 import { Icon } from "./icons";
 export function ImageViewer({
@@ -17,6 +18,7 @@ export function ImageViewer({
         type="button"
         className="image-preview"
         onClick={() => {
+          track("image_opened");
           setZoom(1);
           dialog.current?.showModal();
         }}
@@ -38,7 +40,7 @@ export function ImageViewer({
           <div>
             <button
               type="button"
-              aria-label="Reducir imagen"
+              data-track="image_zoom_out" aria-label="Reducir imagen"
               onClick={() => setZoom((v) => Math.max(1, v - 0.5))}
             >
               −
@@ -46,7 +48,7 @@ export function ImageViewer({
             <output>{Math.round(zoom * 100)}%</output>
             <button
               type="button"
-              aria-label="Ampliar imagen"
+              data-track="image_zoom_in" aria-label="Ampliar imagen"
               onClick={() => setZoom((v) => Math.min(4, v + 0.5))}
             >
               +

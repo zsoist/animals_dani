@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import {track} from "@/components/telemetry/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CatArt } from "@/components/scene/cat-art";
@@ -75,6 +76,7 @@ export function RefugeClient({
     setError("");
     try {
       const id = await startMission();
+      track("mission_started",{}, {sessionId:id,skillId:topic?.id});
       setSession(id);
       setStep(0);
       window.scrollTo({ top: 0 });
@@ -161,7 +163,7 @@ export function RefugeClient({
                   <button
                     key={item.id}
                     className={view === item.id ? "selected" : ""}
-                    onClick={() => setView(item.id)}
+                    data-track={`view_${item.id}`} onClick={() => setView(item.id)}
                   >
                     <Icon name={item.icon} />
                     {item.label}
@@ -220,7 +222,7 @@ export function RefugeClient({
           aria-label={session ? "Práctica del día" : undefined}
         >
           {session && (
-            <button className="practice-close" onClick={() => setSession(null)}>
+            <button className="practice-close" onClick={() => {track("mission_left",{step},{sessionId:session});setSession(null);}}>
               <Icon name="close" />
               Volver al refugio
             </button>
@@ -285,6 +287,7 @@ export function RefugeClient({
                 )}
               </section>
               <AICoach />
+              <details className="learning-privacy"><summary>Tu práctica ayuda a Numa a acompañarte</summary><p>Guardamos tus respuestas, ayudas, tiempo activo y uso del refugio para ofrecerte mejores explicaciones. No grabamos pantallas ni teclas. Este refugio es compartido: el profe ve el uso del enlace, no una identidad verificada.</p></details>
               <StreakDisplay streak={liveStreak} dates={dates} today={today} />
               <div className="shelter-progress">
                 <Icon name="bowl" />

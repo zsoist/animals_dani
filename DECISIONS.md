@@ -39,3 +39,10 @@
 - No se usa IA para calificar expresiones. Parser acotado de expresiones racionales; firmas distinguen inversa, signos, orden y variable sin aislar.
 - La comida se desbloquea por completar diez retos diarios; el servidor exige sesión completada de hoy. Los aciertos individuales dan cuidado sin comida. Se conservan los contadores históricos existentes.
 - Gatos aproximadamente un tercio menores, colores fantásticos estables mediante filtros visuales, mismas identidades y ficha al tocarlos.
+
+## Seguimiento y fiabilidad — 2026-09-09
+- Eventos semánticos propios y propiedades permitidas, sin grabación de pantalla ni teclas. Identidad explícita de refugio compartido.
+- Pruebas y vista previa del profe separadas del uso cotidiano; historial académico existente sigue siendo compartido.
+- Ventana de 14 días, máximo 5.000 eventos y retención detallada de 90 días. La cola tiene límites explícitos y deduplicación.
+- Transacciones SQL para intento/dominio/recompensa, cierre/racha/gato, habilidad/niveles y mensajes/memoria; identificadores estables al reintentar.
+- Numa interpreta señales con prudencia, ofrece mensajes cálidos y útiles, preserva ediciones manuales y distingue historial de ejercicio vigente. Un reintento de formato IA comparte el límite de 55 segundos.

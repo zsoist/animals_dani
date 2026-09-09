@@ -1,3 +1,4 @@
+import {UsageTracking} from "@/components/telemetry/provider";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./refinement.css";
@@ -15,7 +16,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body><UsageTracking/>{children}</body>
     </html>
   );
 }

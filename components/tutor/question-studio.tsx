@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- Locally rendered document pages and user-owned data URLs are already resized. */
 "use client";
+import {track} from "@/components/telemetry/client";
 import { useRef, useState, useEffect } from "react";
 import type { PDFDocumentProxy, PDFDocumentLoadingTask } from "pdfjs-dist";
 import type { CustomQuestion } from "@/lib/engine/types";
@@ -89,6 +90,7 @@ export function QuestionStudio({
   }
   async function openFile(file?: File) {
     if (!file) return;
+    track("file_opened",{format:file.type==="application/pdf"?"pdf":"image"});
     setBusy(true);
     setError("");
     setNotice("");
@@ -189,6 +191,7 @@ export function QuestionStudio({
     }
   }
   async function generate() {
+    track("generation_started",{count,level});
     setBusy(true);
     setError("");
     setNotice("");
@@ -209,11 +212,13 @@ export function QuestionStudio({
       };
       if (!res.ok) throw new Error(body.error || "No pudimos generar.");
       const questions = validateQuestions(body.questions);
+      track("generation_completed",{count:questions.length,level});
       onAdd(questions);
       setNotice(
         `${questions.length} borradores añadidos. Revisa sus soluciones y guarda la habilidad.`,
       );
     } catch (e) {
+      track("generation_failed",{reason:"request_failed"});
       setError(
         e instanceof Error ? e.message : "No se pudo conectar con la IA.",
       );

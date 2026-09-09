@@ -1,4 +1,5 @@
 "use client";
+import {track} from "@/components/telemetry/client";
 import Image from "next/image";
 import { ReadableText } from "./readable-text";
 import { useEffect, useRef, useState } from "react";
@@ -29,6 +30,7 @@ export function AICoach({
     [loaded, setLoaded] = useState(false);
   const history = useRef<HTMLDivElement>(null);
   const gate = useRef(false);
+  const pending=useRef<{key:string;id:string}|null>(null);
   useEffect(() => {
     if (!open || loaded) return;
     let active = true;
@@ -68,12 +70,15 @@ export function AICoach({
     setBusy(true);
     onBusyChange?.(true);
     setError("");
+    const key=JSON.stringify([text,context,mode]);
+    if(pending.current?.key!==key)pending.current={key,id:crypto.randomUUID()};
+    track('coach_requested',{mode},context);
     try {
       const response = await fetch("/api/coach", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          requestId: crypto.randomUUID(),
+          requestId: pending.current.id,
           message: text,
           context,
           mode,
@@ -84,10 +89,14 @@ export function AICoach({
         memory?: string;
         error?: string;
       };
-      if (!response.ok || !result.reply)
+      if (!response.ok || !result.reply) {
+        pending.current=null;
         throw new Error(
           result.error ?? "No llegó la respuesta. Intenta de nuevo.",
         );
+      }
+      pending.current=null;
+      track("coach_replied",{mode},context);
       onHelp?.();
       setMessages((old) => [
         ...old,
@@ -98,6 +107,7 @@ export function AICoach({
       setDraft("");
       setLoaded(true);
     } catch (e) {
+      track("coach_failed",{mode},context);
       setError(e instanceof Error ? e.message : "No pudimos conectar.");
     } finally {
       gate.current = false;
@@ -123,6 +133,7 @@ export function AICoach({
       };
       if (!response.ok) throw new Error(data.error);
       setMemory(data.memory ?? "");
+      track("memory_saved");
       setMemoryOpen(false);
     } catch {
       setError("No se pudo guardar la memoria.");
@@ -138,7 +149,7 @@ export function AICoach({
         type="button"
         className="coach-launch"
         aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {if(!open)track("coach_opened",{},context);setOpen((v) => !v);}}
       >
         <span className="numa-mark">
           <Image src="/art/numa.webp" alt="" width={64} height={64}/>

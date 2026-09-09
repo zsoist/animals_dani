@@ -53,7 +53,7 @@ export async function saveSkill(
           !prompt ||
           !answer ||
           hints.some((h) => !h) ||
-          !["number", "fraction", "coefficients"].includes(format) ||
+          !["number", "fraction", "coefficients", "expression"].includes(format) ||
           !Number.isInteger(level) ||
           level < 1 ||
           level > 4
@@ -127,45 +127,17 @@ export async function saveSkill(
       priority,
       base_difficulty: difficulty,
     };
-    const saved = id
-      ? await db
-          .from("skills")
-          .update(values)
-          .eq("id", id)
-          .select("id")
-          .single()
-      : await db
-          .from("skills")
-          .insert({ ...values, active: false })
-          .select("id")
-          .single();
-    if (saved.error) throw new Error("No se pudo guardar la habilidad.");
     const levels = ([1, 2, 3, 4] as const).map((level) => ({
-      skill_id: saved.data.id,
       level,
-      description:
-        mode === "custom"
-          ? JSON.stringify({
-              kind: "custom",
-              practiceDays,
-              fixedLevel,
-              questions: questions.filter((q) => q.level === level),
-            })
-          : JSON.stringify({ kind: "generated", practiceDays, fixedLevel }),
+      description: JSON.stringify(mode === "custom" ? {kind:"custom",practiceDays,fixedLevel,questions:questions.filter(q=>q.level===level)} : {kind:"generated",practiceDays,fixedLevel}),
     }));
-    const savedLevels = await db.from("skill_levels").upsert(levels);
-    if (savedLevels.error)
-      throw new Error("No se pudieron guardar las preguntas.");
-    const activated = await db
-      .from("skills")
-      .update({ active: values.active })
-      .eq("id", saved.data.id);
-    if (activated.error) throw new Error("No se pudo activar la habilidad.");
+    const saved=await db.rpc("save_skill_atomic",{p_id:id || String(form.get("clientId") || crypto.randomUUID()),p_values:{...values,is_test:process.env.NODE_ENV!=="production"},p_levels:levels});
+    if(saved.error)throw new Error("No se guardaron cambios. Tus preguntas siguen aquí; vuelve a intentarlo.");
     revalidatePath("/tutor");
     revalidatePath("/");
     return {
       error: "",
-      id: saved.data.id,
+      id: String(saved.data),
       success: id
         ? "Cambios guardados."
         : values.active ? "Habilidad creada. Ya está disponible para la próxima misión." : "Borrador guardado. Actívalo cuando termines de revisarlo.",

@@ -18,6 +18,7 @@ const blank = (): DraftQuestion => ({
   answerFormat: "number",
 });
 export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; skill?: Skill; draft?: { name:string; description:string; subject:string; questions:CustomQuestion[] } }) {
+  const [clientId]=useState(()=>crypto.randomUUID());
   const [mode, setMode] = useState(
     skill?.family === "custom" ? "custom" : skill ? "generated" : "custom",
   );
@@ -43,8 +44,8 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
   const [deletion, deleteAction, deleting] = useActionState(removeSkill, empty);
   return (
     <div className="skill-editor">
-      <form action={action} onReset={e=>e.preventDefault()} onInvalidCapture={e=>{const element=e.target as HTMLElement;const details=element.closest("details");if(details)details.open=true;}}>
-        <input type="hidden" name="id" value={skill?.id ?? state.id ?? ""} />
+      <form data-track="skill_save" action={action} onReset={e=>e.preventDefault()} onInvalidCapture={e=>{const element=e.target as HTMLElement;const details=element.closest("details");if(details)details.open=true;}}>
+        <input type="hidden" name="clientId" value={clientId}/><input type="hidden" name="id" value={skill?.id ?? state.id ?? ""} />
         <div className="form-grid">
           <label>
             Nombre de la habilidad
@@ -399,8 +400,8 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
         </button>
       </form>
       {skill && (
-        <form action={deleteAction} className="delete-form">
-          <input type="hidden" name="id" value={skill.id} />
+        <form data-track="skill_delete" action={deleteAction} className="delete-form">
+          <input type="hidden" name="clientId" value={clientId}/><input type="hidden" name="id" value={skill.id} />
           <button className="quiet danger" disabled={deleting}>
             Eliminar habilidad sin historial
           </button>
@@ -424,7 +425,7 @@ export function NoteForm({
 }) {
   const [state, action, pending] = useActionState(saveNote, empty);
   return (
-    <form action={action} className="note-form">
+    <form data-track="skill_save" action={action} className="note-form">
       <input name="skill_id" type="hidden" value={skillId} />
       <input name="user_id" type="hidden" value={userId} />
       <label>

@@ -1,4 +1,5 @@
 "use client";
+import {track} from "@/components/telemetry/client";
 import { ReadableText } from "@/components/game/readable-text";
 import { useState } from "react";
 import { Icon } from "@/components/game/icons";
@@ -17,6 +18,7 @@ export function AIInsights({
   const [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   async function analyze() {
+    track("coach_requested",{mode:"teacher_report"});
     setBusy(true);
     setError("");
     try {
@@ -28,9 +30,11 @@ export function AIInsights({
       };
       if (!response.ok || !data.report)
         throw new Error(data.error ?? "No se pudo generar.");
+      track("coach_replied",{mode:"teacher_report"});
       setReport(data.report);
       setCount(data.evidenceCount ?? 0);
     } catch (e) {
+      track("coach_failed",{mode:"teacher_report"});
       setError(e instanceof Error ? e.message : "No se pudo conectar.");
     } finally {
       setBusy(false);

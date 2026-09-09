@@ -1,5 +1,5 @@
 import { askCoach, coachState, editMemory } from "@/lib/data/ai";
-export const maxDuration = 60;
+export const maxDuration = 90;
 const failure = (error: unknown) =>
   Response.json(
     {

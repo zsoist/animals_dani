@@ -1,4 +1,5 @@
 "use client";
+import {track} from "@/components/telemetry/client";
 import {expressionSymbols} from "@/lib/engine/algebra";
 import { AICoach } from "./ai-coach";
 import { useActiveTime } from "./use-active-time";
@@ -46,6 +47,8 @@ export function Practice({
   const [coachBusy, setCoachBusy] = useState(false);
   const [aiHelp, setAiHelp] = useState(false);
   const gate = useRef(false);
+  const edits=useRef({edits:0,deletes:0,clears:0});
+  const pendingAttempt=useRef<{id:string;key:string}|null>(null);
   const field = useRef<HTMLInputElement>(null);
   const cursor = useRef<{ start: number; end: number } | null>(null);
   const question = items[index];
@@ -54,6 +57,12 @@ export function Practice({
     () => (question && skill ? exerciseFor(skill, question) : null),
     [question, skill],
   );
+  useEffect(()=>{
+    if(!question)return;
+    const context={sessionId,skillId:question.skillId};
+    track('question_viewed',{level:question.level,step:index},context);
+    return()=>{if(edits.current.edits)track('answer_edited',{...edits.current,step:index},context);edits.current={edits:0,deletes:0,clears:0};};
+  },[question,sessionId,index]);
   const activeTime = useActiveTime(
     question?.seed ?? "complete",
     busy || coachBusy || solved || Boolean(result),
@@ -71,6 +80,7 @@ export function Practice({
   };
   const edit = (key: string) => {
     if (solved || busy || coachBusy) return;
+    edits.current.edits++;if(key==="back")edits.current.deletes++;if(key==="clear")edits.current.clears++;
     const selection = cursor.current ?? {
       start: answer.length,
       end: answer.length,
@@ -104,6 +114,7 @@ export function Practice({
     if (gate.current || solved || !exercise || !skill) return;
     const evaluated = evaluate(exercise, answer);
     if (!evaluated.valid) {
+      track("input_invalid",{step:index}, {sessionId,skillId:skill.id});
       setMessage(evaluated.message);
       return;
     }
@@ -111,8 +122,13 @@ export function Practice({
     setBusy(true);
     setMessage("");
     const responseMs = activeTime.read();
+    if(edits.current.edits)track("answer_edited",{...edits.current,step:index},{sessionId,skillId:skill.id});
+    edits.current={edits:0,deletes:0,clears:0};
     try {
+      const attemptKey=JSON.stringify([sessionId,exercise.seed,answer,hint]);
+      if(pendingAttempt.current?.key!==attemptKey)pendingAttempt.current={id:crypto.randomUUID(),key:attemptKey};
       const saved = await recordAttempt({
+        request_id:pendingAttempt.current.id,
         user_id: userId,
         skill_id: skill.id,
         level: exercise.level,
@@ -128,6 +144,7 @@ export function Practice({
         error_type: evaluated.errorType,
         session_id: sessionId,
       });
+      pendingAttempt.current=null;
       onReward(saved.state);
       activeTime.reset();
       setSkillResults((previous) => ({
@@ -155,6 +172,7 @@ export function Practice({
         setMessage(exercise.hints[Math.min(hint, 2)]);
       }
     } catch {
+      track("save_failed",{reason:"attempt",step:index},{sessionId,skillId:skill.id});
       setMessage(
         "No se guardó la respuesta. Comprueba tu conexión y vuelve a intentarlo.",
       );
@@ -407,6 +425,7 @@ export function Practice({
               className="quiet"
               disabled={busy || coachBusy}
               onClick={() => {
+                track("hint_requested",{hint_level:Math.min(3,hint+1),step:index},{sessionId,skillId:skill.id});
                 setMessage(exercise.hints[Math.min(hint, 2)]);
                 setHint((n) => Math.min(3, n + 1));
               }}
@@ -415,7 +434,7 @@ export function Practice({
               Una pista{hint > 0 ? ` · ${hint}/3` : ""}
             </button>
             {wrong && (
-              <button className="quiet" onClick={() => setReview(true)}>
+              <button className="quiet" onClick={() => {track("solution_viewed",{step:index},{sessionId,skillId:skill.id});setReview(true);}}>
                 Ver solución y seguir
               </button>
             )}

@@ -67,3 +67,13 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - 55 pruebas: equivalencias exactas, sintaxis inválida, clasificación de errores, 100 semillas por familia/nivel con sustitución independiente y bloqueo del comedor mediante pruebas de la acción del servidor.
 - Móvil 390 × 844: fórmula x = s+v*t, respuesta equivalente (x-s)/(v) aceptada y guardada realmente; teclado, ficha de Milo y colores comprobados.
 - Publicado en https://animals-dani.vercel.app, despliegue `dpl_BeS1oPDjhZjRYrjrBPoGBM2aMj2o`, código `372419b`. HTTP 200 y nueva misión simbólica con teclado de letras comprobados en producción. Typecheck, lint, 55 pruebas y build pasan.
+
+## Seguimiento y fiabilidad — 2026-09-09
+- Añadido Uso y señales en Admin: actividad, ayudas, funciones exploradas, exportación, separación de orígenes/pruebas y estado de solicitudes IA.
+- Eventos propios persistidos con deduplicación, cola local y reintentos; tiempo visible y activo aproximado; no se registra contenido de teclas ni pantallas.
+- Corregidos guardados parciales/duplicados de intentos, rescates, habilidades y conversaciones. Expresiones aceptadas en el guardado del profe; sesión compartida reutilizada.
+- SQL real con rollback verifica idempotencia, reversión tras error, RLS de eventos, guardado de cuatro niveles y protección de memoria manual. Tres migraciones aplicadas.
+- Chrome: pista, respuesta m-d correcta y recompensa persistida; Admin muestra sus eventos de prueba. Reenvío HTTP de evento deja una fila y elimina propiedades privadas.
+- DeepSeek real: respuesta persistida; reenvío devuelve la misma y conserva exactamente dos mensajes. Formato inválido del proveedor observado y cubierto con reintento único probado.
+- 63 pruebas pasan; typecheck, lint y build pasan. Captura móvil 390 × 844 revisada y cabecera de Uso ajustada para no comprimir el texto.
+- Pendiente: publicación y comprobación de producción. No se midieron FPS ni Lighthouse. No se afirma captura absoluta ni identidad verificada de Laura.

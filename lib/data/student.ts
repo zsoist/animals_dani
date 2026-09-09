@@ -1,8 +1,8 @@
 import "server-only";
 import { cache } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { publicConfig } from "./config";
-import { database } from "./server";
+import { database, isTutorPreview } from "./server";
 import { prepareSkill } from "./catalog";
 import type {
   Attempt,
@@ -13,23 +13,29 @@ import type {
 import { selectDaily } from "@/lib/engine/selector";
 import {
   dayKey,
-  completeStreak,
   updateMastery,
   visibleStreak,
 } from "@/lib/engine/mastery";
 import { evaluate, exerciseFor } from "@/lib/engine/exercises";
 import type { ShelterCat } from "./shelter";
+type LauraConnection = {db: SupabaseClient; userId:string; expiresAt:number};
+let connected:LauraConnection|null=null;
+let connecting:Promise<LauraConnection>|null=null;
 export const studentClient = cache(async () => {
-  const { url, key } = publicConfig();
-  const db = createClient(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-  const email = process.env.LAURA_EMAIL,
-    password = process.env.LAURA_PASSWORD;
-  if (!email || !password) throw new Error("Falta el acceso de Laura.");
-  const { data, error } = await db.auth.signInWithPassword({ email, password });
-  if (error || !data.user) throw new Error("No se pudo abrir el refugio.");
-  return { db, userId: data.user.id };
+  if(connected && connected.expiresAt>Date.now()+60000)return connected;
+  if(connecting)return connecting;
+  connecting=(async()=>{
+    const {url,key}=publicConfig();
+    const db=connected?.db ?? createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}});
+    const email=process.env.LAURA_EMAIL,password=process.env.LAURA_PASSWORD;
+    if(!email||!password)throw new Error("Falta el acceso de Laura.");
+    let auth=connected ? await db.auth.refreshSession() : await db.auth.signInWithPassword({email,password});
+    if(auth.error && connected)auth=await db.auth.signInWithPassword({email,password});
+    if(auth.error||!auth.data.user)throw new Error("El refugio necesita reconectar. Intentémoslo de nuevo.");
+    connected={db,userId:auth.data.user.id,expiresAt:(auth.data.session?.expires_at ?? Math.floor(Date.now()/1000)+300)*1000};
+    return connected;
+  })();
+  try{return await connecting;}finally{connecting=null;}
 });
 export async function loadPractice() {
   const { db, userId } = await studentClient();
@@ -118,180 +124,38 @@ export async function createSession() {
   if (error || !data) throw new Error("No pudimos iniciar la misión.");
   return data.id as string;
 }
-export async function saveAttempt(input: Omit<Attempt, "id" | "created_at">) {
-  const { db, userId } = await studentClient();
-  const [skillRow, session, history, current] = await Promise.all([
-    db
-      .from("skills")
-      .select("*,skill_levels(description)")
-      .eq("id", input.skill_id)
-      .single(),
-    db
-      .from("sessions")
-      .select("completed")
-      .eq("id", input.session_id)
-      .eq("user_id", userId)
-      .single(),
-    db
-      .from("attempts")
-      .select("*")
-      .eq("user_id", userId)
-      .eq("skill_id", input.skill_id)
-      .order("created_at"),
-    db
-      .from("skill_mastery")
-      .select("*")
-      .eq("user_id", userId)
-      .eq("skill_id", input.skill_id)
-      .maybeSingle(),
-  ]);
-  if (
-    skillRow.error ||
-    session.error ||
-    history.error ||
-    current.error ||
-    session.data?.completed
-  )
-    throw new Error("Esta misión ya terminó o no está disponible.");
-  const skill = prepareSkill(skillRow.data);
-  const exercise = exerciseFor(skill, {
-    skillId: skill.id,
-    family: skill.family,
-    level: input.level,
-    seed: input.exercise_seed,
-  });
-  const result = evaluate(exercise, input.given_answer);
-  if (!result.valid) throw new Error(result.message);
-  const row = {
-    ...input,
-    user_id: userId,
-    prompt_text: exercise.prompt,
-    expected_answer: exercise.answer,
-    correct: result.correct,
-    error_type: result.errorType,
-    hint_level: Math.max(0, Math.min(3, input.hint_level)),
-    response_ms: Math.max(0, Math.min(3600000, input.response_ms)),
-    timing_version: input.timing_version===2?2:1,
-    ai_help: Boolean(input.ai_help),
-  };
-  const { data: attempt, error } = await db
-    .from("attempts")
-    .insert(row)
-    .select("*")
-    .single();
-  if (error || !attempt) throw new Error("No pudimos guardar este intento.");
-  const next = updateMastery(
-    current.data ?? {
-      skill_id: skill.id,
-      mastery_score: 0,
-      current_level: input.level,
-      recent_accuracy: 0,
-      attempts_total: 0,
-      last_practiced_at: null,
-    },
-    attempt as Attempt,
-    (history.data ?? []) as Attempt[],
-  );
-  const { error: masteryError } = await db
-    .from("skill_mastery")
-    .upsert({ user_id: userId, ...next });
-  if (masteryError) throw new Error("No pudimos guardar tu avance.");
-  const { data: state, error: stateError } = await db
-    .from("shelter_state")
-    .select("food,blankets,lamps,clean_zones,affection")
-    .eq("user_id", userId)
-    .single();
-  if (stateError) throw new Error("No pudimos abrir el refugio.");
-  if (result.correct) {
-    const reward = {
-      ...state,
-      blankets: state.blankets + 1,
-      lamps: state.lamps + ((state.blankets + 1) % 5 === 0 ? 1 : 0),
-      affection: state.affection + 1,
-    };
-    const saved = await db
-      .from("shelter_state")
-      .update(reward)
-      .eq("user_id", userId);
-    if (saved.error) throw new Error("No pudimos guardar la recompensa.");
-    return { state: reward as ShelterState };
+export async function saveAttempt(input: Omit<Attempt, "id" | "created_at"> & {request_id?:string}) {
+  if(![1,2,3,4].includes(input.level)||typeof input.exercise_seed!=="string"||input.exercise_seed.length>200||typeof input.given_answer!=="string"||!Number.isFinite(input.response_ms)||!Number.isInteger(input.hint_level))throw new Error("Revisemos la respuesta antes de guardarla.");
+  const {db,userId}=await studentClient();
+  const requestId=input.request_id ?? crypto.randomUUID();
+  if(!/^[0-9a-f-]{36}$/i.test(requestId))throw new Error("Vuelve a comprobar la respuesta.");
+  const skillRow=await db.from("skills").select("*,skill_levels(description)").eq("id",input.skill_id).single();
+  if(skillRow.error)throw new Error("No pudimos abrir esta habilidad. Tu respuesta sigue aquí.");
+  const skill=prepareSkill(skillRow.data);
+  const exercise=exerciseFor(skill,{skillId:skill.id,family:skill.family,level:input.level,seed:input.exercise_seed});
+  const result=evaluate(exercise,input.given_answer);
+  if(!result.valid)throw new Error(result.message);
+  for(let retry=0;retry<3;retry++) {
+    const [history,current]=await Promise.all([
+      db.from("attempts").select("*").eq("user_id",userId).eq("skill_id",skill.id).order("created_at",{ascending:false}).limit(200),
+      db.from("skill_mastery").select("*").eq("user_id",userId).eq("skill_id",skill.id).maybeSingle()
+    ]);
+    if(history.error||current.error)throw new Error("No pudimos leer tu avance. Reintenta: tu respuesta sigue aquí.");
+    const row:Attempt={id:requestId,user_id:userId,skill_id:skill.id,level:input.level,exercise_seed:input.exercise_seed,prompt_text:exercise.prompt,expected_answer:exercise.answer,given_answer:input.given_answer,correct:result.correct,error_type:result.errorType,hint_level:Math.max(0,Math.min(3,input.hint_level)),response_ms:Math.max(0,Math.min(3600000,input.response_ms)),timing_version:input.timing_version===2?2:1,ai_help:Boolean(input.ai_help),session_id:input.session_id,created_at:new Date().toISOString()};
+    const previous=current.data ?? {skill_id:skill.id,mastery_score:0,current_level:input.level,recent_accuracy:0,attempts_total:0,last_practiced_at:null};
+    const next=updateMastery(previous,row,(history.data??[]).reverse() as Attempt[]);
+    const saved=await db.rpc("record_attempt_atomic",{p_row:{...row,is_test:process.env.NODE_ENV!=="production" || await isTutorPreview()},p_mastery:next,p_expected_total:previous.attempts_total});
+    if(saved.error?.message.includes("STALE_MASTERY"))continue;
+    if(saved.error)throw new Error("No se confirmó el guardado. Vuelve a comprobar: no duplicaremos tu respuesta.");
+    return saved.data as {state:ShelterState;duplicate:boolean};
   }
-  return { state: state as ShelterState };
+  throw new Error("El refugio está guardando otro avance. Prueba otra vez en un momento.");
 }
-export async function finishSession(
-  sessionId: string,
-  _correctCount: number,
-  durationMs: number,
-) {
-  const { db, userId } = await studentClient();
-  const { data: session, error: sessionError } = await db
-    .from("sessions")
-    .select("*")
-    .eq("id", sessionId)
-    .eq("user_id", userId)
-    .single();
-  if (sessionError) throw new Error("No se encontró la misión.");
-  const [attempts, unlocks, cats, streak] = await Promise.all([
-    db
-      .from("attempts")
-      .select("correct,exercise_seed")
-      .eq("session_id", sessionId)
-      .eq("user_id", userId),
-    db.from("cat_unlocks").select("cat_id").eq("user_id", userId),
-    db.from("cats").select("*").order("name"),
-    db.from("streaks").select("*").eq("user_id", userId).maybeSingle(),
-  ]);
-  if (attempts.error || unlocks.error || cats.error || streak.error)
-    throw new Error("No pudimos cerrar la misión.");
-  if (new Set(attempts.data.map((a) => a.exercise_seed)).size < 10)
-    throw new Error("Completa los diez pasos de la misión.");
-  const rescued = cats.data.find(
-    (c) => !unlocks.data.some((u) => u.cat_id === c.id),
-  );
-  const rescuedId = session.completed ? session.cat_id : (rescued?.id ?? null);
-  const next = completeStreak(
-    streak.data ?? {
-      current: 0,
-      best: 0,
-      total_days: 0,
-      last_session_date: null,
-    },
-    dayKey(),
-  );
-  if (!session.completed) {
-    const saved = await db
-      .from("sessions")
-      .update({
-        completed: true,
-        correct_count: new Set(
-          attempts.data.filter((a) => a.correct).map((a) => a.exercise_seed),
-        ).size,
-        total_count: 10,
-        duration_ms: Math.max(0, durationMs),
-        cat_id: rescuedId,
-      })
-      .eq("id", sessionId)
-      .eq("user_id", userId);
-    if (saved.error) throw new Error("No pudimos terminar la misión.");
-  }
-  if (rescuedId) {
-    const saved = await db
-      .from("cat_unlocks")
-      .upsert(
-        { user_id: userId, cat_id: rescuedId },
-        { onConflict: "user_id,cat_id", ignoreDuplicates: true },
-      );
-    if (saved.error) throw new Error("No pudimos guardar el rescate.");
-  }
-  const saved = await db.from("streaks").upsert({ user_id: userId, ...next });
-  if (saved.error) throw new Error("No pudimos guardar la racha.");
-  const cat = cats.data.find((c) => c.id === rescuedId);
-  return {
-    streak: next,
-    cat: cat
-      ? ({ ...cat, unlockedAt: new Date().toISOString() } as ShelterCat)
-      : null,
-  };
+export async function finishSession(sessionId:string,_correctCount:number,durationMs:number) {
+  const {db}=await studentClient();
+  const saved=await db.rpc("finish_mission_atomic",{p_session:sessionId,p_is_test:process.env.NODE_ENV!=="production" || await isTutorPreview(),p_duration:Math.max(0,Math.min(7200000,Math.round(durationMs)||0))});
+  if(saved.error)throw new Error("Aún no se confirmó el rescate. Reintenta; conservamos lo que ya guardaste.");
+  return saved.data as {streak:Streak;cat:ShelterCat|null};
 }
 export async function getTutorSummary() {
   const db = await database();

@@ -1,4 +1,5 @@
 "use client";
+import {track} from "@/components/telemetry/client";
 import { useMemo, useRef, useState } from "react";
 import { useLocalValue, saveLocalValue } from "@/components/game/local-preference";
 import Image from "next/image";
@@ -25,15 +26,17 @@ export function PracticeLab({skills}:{skills:Skill[]}) {
   const gate = useRef(false);
   async function generate() {
     if(gate.current) return; gate.current=true;setBusy(true);setError("");
+    track("generation_started",{count,level},{skillId});
     try {
       const selected=skills.find(s=>s.id===skillId);
       const response=await fetch('/api/tutor/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({skillId:skillId||undefined,count,level,strategy,prompt:`Objetivo: ${goal.trim() || selected?.description || 'Practicar problemas de varios pasos de grado octavo'}. Estrategia: ${strategy}. ${selected ? `Tema exclusivo: ${selected.name}.` : ''}`})});
       const result=await response.json() as {questions?:unknown;evidenceCount?:number;error?:string};
       if(!response.ok)throw new Error(result.error || 'No pudimos preparar la práctica.');
       const next={name:`${selected?.name ?? 'Práctica'} · Refuerzo`, description:goal.trim()||selected?.description||strategy,subject:selected?.subject??'matematicas',questions:validateQuestions(result.questions)};
+      track("generation_completed",{count:next.questions.length,level},{skillId});
       setDraft(next);setVersion(v=>v+1);setSample(result.evidenceCount??0);
       if(saveLocalValue(storageKey,JSON.stringify(next))){setDismissed(true);}else{setError('La práctica está lista, pero este navegador no pudo conservar una copia. Guárdala antes de salir.');}
-    }catch(e){setError(e instanceof Error?e.message:'No pudimos conectar. Tus preguntas anteriores siguen aquí.');}
+    }catch(e){track("generation_failed",{reason:"provider"},{skillId});setError(e instanceof Error?e.message:'No pudimos conectar. Tus preguntas anteriores siguen aquí.');}
     finally{gate.current=false;setBusy(false);}
   }
   return <section className="practice-lab">

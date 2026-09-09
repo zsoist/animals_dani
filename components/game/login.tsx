@@ -1,10 +1,12 @@
 "use client";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { signIn } from "@/lib/data/auth";
+import {track} from "@/components/telemetry/client";
 export function Login() {
   const [state, action, pending] = useActionState(signIn, { error: "" });
+  useEffect(()=>{if(state.error)track("auth_result",{success:false,reason:"access_unconfirmed"});},[state]);
   return (
-    <form action={action}>
+    <form action={action} data-track="admin_login">
       <label htmlFor="email">Usuario</label>
       <input
         id="email"

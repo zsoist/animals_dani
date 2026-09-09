@@ -15,3 +15,9 @@ export async function database() {
   },
  });
 }
+export async function isTutorPreview(){
+ const db=await database();const auth=await db.auth.getUser();
+ if(!auth.data.user)return false;
+ const profile=await db.from('profiles').select('role').eq('id',auth.data.user.id).maybeSingle();
+ return profile.data?.role==='tutor';
+}

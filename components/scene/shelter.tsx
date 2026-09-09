@@ -63,7 +63,7 @@ export function Shelter({
           <button
             key={cat.id}
             className={`room-cat cat-${index % 6} ${selected?.id === cat.id ? "patted" : ""}`}
-            aria-label={`Conocer a ${cat.name}`}
+            data-track={`cat_${cat.id}`} aria-label={`Conocer a ${cat.name}`}
             onClick={() => {
               setSelected(cat);
               setInteraction(n=>n+1);
@@ -94,19 +94,19 @@ export function Shelter({
         </div>
       )}
       <div className="care-controls" aria-label="Cuidar el refugio">
-        <button disabled={busy || !feedingUnlocked} title={feedingUnlocked ? "Comedor abierto por completar los retos de hoy" : "Completa los diez retos diarios"} onClick={() => void interact("feed")}>
+        <button data-track="care_feed" disabled={busy || !feedingUnlocked} title={feedingUnlocked ? "Comedor abierto por completar los retos de hoy" : "Completa los diez retos diarios"} onClick={() => void interact("feed")}>
           <Icon name="bowl" />
           {feedingUnlocked ? "Comedor" : "10 retos → comer"}
         </button>
-        <button disabled={busy} onClick={() => void interact("play")}>
+        <button data-track="care_play" disabled={busy} onClick={() => void interact("play")}>
           <Icon name="star" />
           Jugar
         </button>
-        <button disabled={busy} onClick={() => void interact("clean")}>
+        <button data-track="care_clean" disabled={busy} onClick={() => void interact("clean")}>
           <Icon name="heart" />
           Limpiar
         </button>
-        <button onClick={() => setLights((v) => !v)} aria-pressed={!lights}>
+        <button data-track="care_lights" onClick={() => setLights((v) => !v)} aria-pressed={!lights}>
           <Icon name="bulb" />
           {lights ? "Noche" : "Día"}
         </button>

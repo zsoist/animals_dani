@@ -1,3 +1,5 @@
+import {UsagePanel} from "@/components/tutor/usage-panel";
+import {usageData,integrationHealth} from "@/lib/data/telemetry";
 import { CatalogBrowser } from "@/components/tutor/catalog-browser";
 import Image from "next/image";
 import { TutorWorkspace } from "@/components/tutor/workspace";
@@ -14,7 +16,7 @@ import { Icon } from "@/components/game/icons";
 export default async function Tutor() {
   await requireTutor();
   const data = await getTutorSummary();
-  const ai = await aiOverview(data.userId);
+  const [ai,usage,health] = await Promise.all([aiOverview(data.userId),usageData(),integrationHealth()]);
   const completed = data.sessions.filter((s) => s.completed);
   const streak = data.streaks[0];
   const now = new Date().getTime();
@@ -51,6 +53,7 @@ export default async function Tutor() {
         </a>
       </div>
       <TutorWorkspace>
+      <UsagePanel {...usage} health={health}/>
       <section
         id="progress"
         className="admin-stats"

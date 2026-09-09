@@ -1,3 +1,4 @@
+import {behaviorEvidence} from "./telemetry";
 import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { studentClient, loadPractice } from "./student";
@@ -60,8 +61,8 @@ export async function completeAI(
 ) {
   const { error } = await aiStore()
     .from("ai_requests")
-    .update({ status, model, tokens })
-    .eq("id", id);
+    .update({ status, model, tokens, error_code:status==="failed"?"operation_failed":null })
+    .eq("id", id).eq("status","pending");
   if (error) throw new Error("No pudimos cerrar la consulta IA.");
 }
 export async function learnerEvidence(userId: string) {
@@ -85,6 +86,7 @@ export async function learnerEvidence(userId: string) {
       mastery.data as Mastery[],
     ),
     attemptCount: attempts.data.length,
+    behavior: await behaviorEvidence(),
   };
 }
 export async function coachState() {
@@ -169,6 +171,13 @@ export async function askCoach(input: {
       seed: context.seed,
     });
   }
+  const started=Date.now();
+  const previous=await aiStore().from("ai_requests").select("status").eq("id",input.requestId).eq("user_id",userId).maybeSingle();
+  if(previous.data?.status==='completed'){
+    const [saved,state]=await Promise.all([aiStore().from("coach_messages").select("content").eq("request_id",input.requestId).eq("user_id",userId).eq("role","assistant").single(),coachState()]);
+    if(saved.error)throw new Error("La respuesta está guardada, pero no pudimos abrirla. Intenta de nuevo.");
+    return {reply:saved.data.content as string,memory:state.memory};
+  }
   const store = await reserveAI(input.requestId, userId, "coach");
   try {
     const [state, evidence, practice] = await Promise.all([
@@ -186,6 +195,7 @@ export async function askCoach(input: {
             todayTopic: practice.skills.find(s => s.id === practice.queue[0]?.skillId)?.name ?? null,
             memory: state.memory,
             evidence: evidence.evidence,
+            behavior: evidence.behavior,
             exercise: exercise
               ? {
                   prompt: exercise.prompt,
@@ -197,7 +207,7 @@ export async function askCoach(input: {
           }),
         },
         ...state.messages
-          .filter(m => !context || m.exercise_seed === context.seed)
+          .filter(m => context ? m.exercise_seed === context.seed : !m.exercise_seed)
           .slice(-14)
           .map((m) => ({
             role: m.role as "user" | "assistant",
@@ -221,45 +231,16 @@ export async function askCoach(input: {
       typeof output.memory === "string"
         ? redactLearningText(output.memory).slice(0, 1800)
         : state.memory;
-    const saved = await store.from("coach_messages").insert([
-      {
-        user_id: userId,
-        request_id: input.requestId,
-        role: "user",
-        created_at: new Date().toISOString(),
-        content: message,
-        skill_id: context?.skillId ?? null,
-        exercise_seed: context?.seed ?? null,
-      },
-      {
-        user_id: userId,
-        request_id: input.requestId,
-        role: "assistant",
-        created_at: new Date(Date.now() + 1).toISOString(),
-        content: reply,
-        skill_id: context?.skillId ?? null,
-        exercise_seed: context?.seed ?? null,
-      },
-    ]);
-    if (saved.error)
-      throw new Error(
-        "No se pudo guardar la conversación. Vuelve a intentarlo.",
-      );
-    const remembered = await store
-      .from("learner_memory")
-      .upsert({
-        user_id: userId,
-        notes: memory,
-        updated_at: new Date().toISOString(),
-      });
-    if (remembered.error)
-      throw new Error(
-        "Se guardó la conversación, pero no su memoria. Vuelve a abrir el tutor.",
-      );
-    await completeAI(input.requestId, "completed", result.model, result.tokens);
-    return { reply, memory };
+    const saved=await store.rpc("save_coach_atomic",{p_request:input.requestId,p_user:userId,p_memory:memory,p_model:result.model,p_tokens:result.tokens,p_latency:Date.now()-started,p_messages:[
+      {role:"user",content:message,memory_before:state.memory,skill_id:context?.skillId??null,exercise_seed:context?.seed??null,created_at:new Date().toISOString()},
+      {role:"assistant",content:reply,skill_id:context?.skillId??null,exercise_seed:context?.seed??null,created_at:new Date(Date.now()+1).toISOString()}
+    ]});
+    if(saved.error)throw new Error("No se confirmó la conversación. Reintenta; tu mensaje sigue aquí.");
+    const persisted=await store.from("learner_memory").select("notes").eq("user_id",userId).single();
+    if(persisted.error)throw new Error("La respuesta está guardada. Reintenta para abrirla.");
+    return { reply, memory:persisted.data.notes as string };
   } catch (error) {
-    await completeAI(input.requestId, "failed");
+    await completeAI(input.requestId, "failed").catch(()=>console.warn("ai_finalization_pending"));
     throw error;
   }
 }
@@ -312,7 +293,7 @@ export async function tutorReport(question = "") {
     await completeAI(id, "completed", result.model, result.tokens);
     return { report: output.report, evidenceCount: evidence.attemptCount };
   } catch (error) {
-    await completeAI(id, "failed");
+    await completeAI(id, "failed").catch(()=>console.warn("ai_finalization_pending"));
     throw error;
   }
 }

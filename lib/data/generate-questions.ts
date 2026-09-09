@@ -62,7 +62,7 @@ export async function generateQuestions(body: {prompt?: string; count?: number; 
     await completeAI(id, "completed", result.model, result.tokens + review.tokens);
     return { questions, evidenceCount };
   } catch (error) {
-    if (id) await completeAI(id, "failed");
+    if (id) await completeAI(id, "failed").catch(()=>console.warn("ai_finalization_pending"));
     throw error;
   }
 }
