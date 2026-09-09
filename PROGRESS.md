@@ -58,4 +58,4 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - Typecheck, lint, 48 pruebas y build pasan. Incluyen 1.200 semillas por familia/nivel y 100 comprobaciones adicionales de decimales exactos legibles.
 - Capturas Chrome reales en 390 × 844 y 1280 × 900: refugio, tarjeta central, progreso y laboratorio. Revisión independiente Impeccable: corregido selector pedagógico truncado; disposición final ship. Se trata de refinamiento de dirección fijada, no de una exploración conceptual nueva.
 - No se midieron FPS ni Lighthouse. No se afirma que la IA sea infalible; los borradores requieren revisión del profe.
-- Publicación de esta revisión: pendiente de verificar URL de producción.
+- Publicada en https://animals-dani.vercel.app, despliegue `dpl_A4FoiSVb2nT9bDWWf4LcPwoZEqFa`. HTTP 200 de la página y las tres ilustraciones comprobados; login admin, laboratorio, catálogo y análisis persistido verificados en producción. Código `b21ee52`.
