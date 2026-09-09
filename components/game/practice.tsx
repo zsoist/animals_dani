@@ -338,7 +338,7 @@ export function Practice({
       </div>
       {!solved && !review && (
         <div className="keypad" aria-label="Teclado de respuesta">
-          {(exercise.answerFormat === "expression" ? [...expressionSymbols(exercise.formula ?? exercise.answer).filter(s=>s!==exercise.target), "2", "+", "-", "*", "/", "(", ")", "clear"] : [
+          {(exercise.answerFormat === "expression" ? [...new Set([...expressionSymbols(exercise.formula ?? exercise.answer).filter(s=>s!==exercise.target), ...(exercise.answer.match(/\d/g) ?? []), "1", "2"]), "+", "-", "*", "/", "(", ")", "clear"] : [
             "1",
             "2",
             "3",

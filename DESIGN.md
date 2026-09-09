@@ -64,12 +64,12 @@ components:
 
 **Creative North Star: "Refugio · Centro de rescate"**
 
-Este registro actualiza la dirección ya fijada: un refugio 2D colorido, ilustrado y divertido para Laura. Turquesa, naranja y amarillo solar construyen un centro de animales con enfermería, adopción, transportadoras, patio y comedor. Los gatos grandes son personajes interactivos; el lugar conserva su carácter de rescate, sin sofá ni decoración de casa.
+Este registro actualiza la dirección ya fijada: un refugio 2D colorido, ilustrado y divertido para Laura. Turquesa, naranja y amarillo solar construyen un centro de animales con enfermería, adopción, transportadoras, patio y comedor. Los gatos pequeños, con colores fantásticos, son personajes interactivos; el lugar conserva su carácter de rescate, sin sofá ni decoración de casa.
 
 El arte original local mantiene una ilustración pictórica con contornos suaves. Numa, gato naranja con gafas cobalto y cuaderno, acompaña el aprendizaje en español. El espacio del profe comparte el personaje y la tipografía, con papel claro e índigo para leer, preparar y revisar contenido. Es un refinamiento del mundo existente, no una nueva propuesta visual.
 
 **Key Characteristics:**
-- Refugio 2D saturado con gatos ilustrados grandes.
+- Refugio 2D saturado con gatos ilustrados pequeños y colores fantásticos.
 - Nunito redondeada, texto oscuro y superficies claras para aprender.
 - Numa como compañero reconocible entre juego y preparación.
 - Movimiento de respuesta y ambiente con reducción disponible.
