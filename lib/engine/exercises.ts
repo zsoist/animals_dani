@@ -21,7 +21,11 @@ export function exerciseFor(skill: Skill, question: Question): Exercise {
   const choices = matching.length ? matching : bank;
   if (!choices.length)
     throw new Error("Esta habilidad necesita al menos una pregunta.");
-  const picked = choices[Math.floor(random(question.seed)() * choices.length)];
+  const match = question.seed.match(/^(.*):(\d+)(:repaso)?$/);
+  const base = match?.[1] ?? question.seed;
+  const offset = Math.floor(random(base)() * choices.length);
+  const index = Number(match?.[2] ?? 0) + (match?.[3] ? 3 : 0);
+  const picked = choices[(offset + index) % choices.length];
   return {
     ...picked,
     skillId: skill.id,

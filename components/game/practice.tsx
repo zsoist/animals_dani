@@ -1,4 +1,5 @@
 "use client";
+import { ImageViewer } from "./image-viewer";
 import { useMemo, useRef, useState } from "react";
 import { completeMission, recordAttempt } from "@/lib/data/actions";
 import { evaluate, exerciseFor } from "@/lib/engine/exercises";
@@ -269,6 +270,9 @@ export function Practice({
               )
           : prompt}
       </p>
+      {exercise.image && (
+        <ImageViewer src={exercise.image} alt={exercise.imageAlt} />
+      )}
       <label className="answer-label" htmlFor="answer">
         {exercise.answerFormat === "coefficients"
           ? "Coeficientes, separados por comas"

@@ -32,9 +32,9 @@ export default async function Tutor() {
       </header>
       <div className="admin-heading">
         <div>
-          <h1>El aprendizaje de Laura</h1>
+          <h1>Diseña su próxima aventura</h1>
           <p>
-            Prepara sus próximas aventuras y descubre dónde necesita una mano.
+            Un tema al día. Tus materiales, sus desafíos y todo su progreso.
           </p>
         </div>
         <a href="#new-skill" className="primary">
@@ -42,7 +42,16 @@ export default async function Tutor() {
           Nueva habilidad
         </a>
       </div>
-      <section className="admin-stats" aria-label="Resumen de práctica">
+      <nav className="admin-sections">
+        <a href="#new-skill">Crear práctica · PDF / IA</a>
+        <a href="#catalog">Editar habilidades</a>
+        <a href="#progress">Ver progreso</a>
+      </nav>
+      <section
+        id="progress"
+        className="admin-stats"
+        aria-label="Resumen de práctica"
+      >
         {[
           ["Misiones completadas", completed.length],
           ["Días practicados", new Set(completed.map((s) => s.date)).size],
@@ -63,7 +72,7 @@ export default async function Tutor() {
           </div>
         ))}
       </section>
-      <section className="admin-catalog">
+      <section id="catalog" className="admin-catalog">
         <h2>
           Habilidades de práctica <span>{data.skills.length}</span>
         </h2>

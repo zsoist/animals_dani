@@ -26,3 +26,17 @@ Las fases 1–4 tienen implementación. La última petición reemplaza 3D por 2D
 - Las preguntas personalizadas tienen clasificación genérica UNKNOWN; las firmas específicas corresponden a las tres familias generadas.
 - El resumen del tutor consulta los últimos 1.000 intentos. No hay contenido de texto libre evaluado por IA.
 - Los criterios originales exclusivamente 3D quedan sustituidos por la última decisión explícita del usuario.
+
+## Revisión posterior: centro de rescate y estudio de preguntas
+
+Implementación terminada, pendiente verificar publicación de esta revisión.
+
+- Escena amplia de centro de rescate con paleta intensa; preguntas en tarjetas centradas sobre el fondo atenuado.
+- Comedor, pelota, limpieza y día/noche con respuestas visuales. Juego y limpieza persisten cuidado sin alterar aciertos.
+- Un tema por día; calendario semanal, prioridad, nivel mínimo o fijo. Las tres habilidades existentes tienen mínimo nivel 3 guardado desde Admin.
+- Importador PDF e imágenes: página, extracción de texto, recorte vertical, adjuntar imagen, visor con zoom y desplazamiento. PDF local de prueba abierto y texto extraído correctamente; imagen adjuntada al borrador y zoom a 150% comprobado. El archivo de prueba no se publicó como contenido de Laura.
+- Banco editable con duplicado, reordenado, importación/exportación JSON y guardado. Se mantiene validación de respuestas y RLS existentes.
+- Generación OpenAI integrada con prompt, nivel, cantidad y referencia del PDF. No hay clave configurada: se verificó el aviso real de clave ausente, no se verificó una generación pagada.
+- 41 pruebas pasan, incluyendo 1.200 ejercicios, selección de tema estable por día, calendario, dificultad, importación y recorrido de preguntas propias sin repeticiones hasta agotar el banco.
+- Navegador en 1280 × 720: tarjeta centrada, cuidado interactivo, respuesta nivel 3 guardada y siguiente ejercicio de la misma habilidad. El control de viewport de esta sesión no aplicó 390 × 844; no se declara una nueva verificación móvil visual.
+- Animaciones de transformaciones/opacity y movimiento reducido. 60 FPS es objetivo; no se midió FPS en móvil físico ni Lighthouse en esta revisión.

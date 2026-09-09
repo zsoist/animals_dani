@@ -1,21 +1,9 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { database } from "./server";
+import { tutorDatabase } from "./tutor-auth";
 import type { CustomQuestion, Level } from "@/lib/engine/types";
 import { evaluate } from "@/lib/engine/exercises";
 type ActionState = { error: string; success: string };
-async function tutorDatabase() {
-  const db = await database();
-  const { data } = await db.auth.getUser();
-  if (!data.user) throw new Error("Entra como Admin para guardar.");
-  const { data: profile } = await db
-    .from("profiles")
-    .select("role")
-    .eq("id", data.user.id)
-    .single();
-  if (profile?.role !== "tutor") throw new Error("Acceso reservado al tutor.");
-  return db;
-}
 export async function saveSkill(
   _previous: ActionState,
   form: FormData,
@@ -95,11 +83,42 @@ export async function saveSkill(
             error: `Pregunta ${i + 1}: ${evaluation.message}`,
             success: "",
           };
-        questions.push(question);
+        const image = String(form.getAll("image")[i] ?? "");
+        if (
+          image &&
+          (!/^data:image\/(webp|png|jpeg);base64,[A-Za-z0-9+/=]+$/.test(
+            image,
+          ) ||
+            image.length > 450000)
+        )
+          return {
+            error: `Imagen ${i + 1}: usa una imagen de menos de 330 KB.`,
+            success: "",
+          };
+        questions.push({
+          ...question,
+          image: image || undefined,
+          imageAlt: String(
+            form.getAll("imageAlt")[i] ?? "Ilustración del ejercicio",
+          ).slice(0, 300),
+        });
       }
       if (!questions.length)
         return { error: "Añade al menos una pregunta propia.", success: "" };
     }
+    if (questions.length > 60)
+      return { error: "Guarda hasta 60 preguntas por habilidad.", success: "" };
+    if (questions.reduce((n, q) => n + (q.image?.length ?? 0), 0) > 3000000)
+      return {
+        error:
+          "Las imágenes juntas superan 3 MB. Recorta más o divide el material en dos habilidades.",
+        success: "",
+      };
+    const practiceDays = form
+      .getAll("practiceDay")
+      .map(Number)
+      .filter((n) => Number.isInteger(n) && n >= 0 && n <= 6);
+    const fixedLevel = form.get("fixedLevel") === "on";
     const values = {
       name,
       description,
@@ -128,11 +147,11 @@ export async function saveSkill(
         mode === "custom"
           ? JSON.stringify({
               kind: "custom",
+              practiceDays,
+              fixedLevel,
               questions: questions.filter((q) => q.level === level),
             })
-          : ["Primeros pasos", "Práctica guiada", "Más desafío", "Aplicación"][
-              level - 1
-            ],
+          : JSON.stringify({ kind: "generated", practiceDays, fixedLevel }),
     }));
     const savedLevels = await db.from("skill_levels").upsert(levels);
     if (savedLevels.error)
@@ -191,13 +210,11 @@ export async function saveNote(
     const db = await tutorDatabase();
     const body = String(form.get("body") ?? "").trim();
     if (!body) return { error: "Escribe una nota.", success: "" };
-    const { error } = await db
-      .from("tutor_notes")
-      .insert({
-        user_id: String(form.get("user_id")),
-        skill_id: String(form.get("skill_id")),
-        body,
-      });
+    const { error } = await db.from("tutor_notes").insert({
+      user_id: String(form.get("user_id")),
+      skill_id: String(form.get("skill_id")),
+      body,
+    });
     if (error) throw error;
     revalidatePath("/tutor");
     return { error: "", success: "Nota guardada." };

@@ -33,33 +33,42 @@ export const studentClient = cache(async () => {
 });
 export async function loadPractice() {
   const { db, userId } = await studentClient();
-  const [skills, masteries, streak, state, sessions] = await Promise.all([
-    db
-      .from("skills")
-      .select("*,skill_levels(description)")
-      .eq("active", true)
-      .order("priority", { ascending: false }),
-    db.from("skill_mastery").select("*").eq("user_id", userId),
-    db.from("streaks").select("*").eq("user_id", userId).maybeSingle(),
-    db
-      .from("shelter_state")
-      .select("food,blankets,lamps,clean_zones,affection")
-      .eq("user_id", userId)
-      .maybeSingle(),
-    db
-      .from("sessions")
-      .select("date")
-      .eq("user_id", userId)
-      .eq("completed", true)
-      .order("date", { ascending: false })
-      .limit(60),
-  ]);
+  const [skills, masteries, streak, state, sessions, practiced] =
+    await Promise.all([
+      db
+        .from("skills")
+        .select("*,skill_levels(description)")
+        .eq("active", true)
+        .order("priority", { ascending: false }),
+      db.from("skill_mastery").select("*").eq("user_id", userId),
+      db.from("streaks").select("*").eq("user_id", userId).maybeSingle(),
+      db
+        .from("shelter_state")
+        .select("food,blankets,lamps,clean_zones,affection")
+        .eq("user_id", userId)
+        .maybeSingle(),
+      db
+        .from("sessions")
+        .select("date")
+        .eq("user_id", userId)
+        .eq("completed", true)
+        .order("date", { ascending: false })
+        .limit(60),
+      db
+        .from("attempts")
+        .select("skill_id")
+        .eq("user_id", userId)
+        .gte("created_at", `${dayKey()}T00:00:00-05:00`)
+        .order("created_at", { ascending: true })
+        .limit(1),
+    ]);
   if (
     skills.error ||
     masteries.error ||
     streak.error ||
     state.error ||
-    sessions.error
+    sessions.error ||
+    practiced.error
   )
     throw new Error("No pudimos cargar el refugio. Vuelve a intentarlo.");
   const prepared = (skills.data ?? [])
@@ -71,15 +80,21 @@ export async function loadPractice() {
     total_days: 0,
     last_session_date: null,
   }) as Streak;
+  const queue = selectDaily(
+    prepared,
+    (masteries.data ?? []) as Mastery[],
+    dayKey(),
+    `daily-${dayKey()}-${crypto.randomUUID()}`,
+    practiced.data?.[0]?.skill_id,
+  );
   return {
-    skills: prepared,
-    masteries: (masteries.data ?? []) as Mastery[],
-    queue: selectDaily(
-      prepared,
-      (masteries.data ?? []) as Mastery[],
-      new Date().toISOString(),
-      `daily-${dayKey()}-${crypto.randomUUID()}`,
+    skills: prepared.map((skill) =>
+      skill.id === queue[0]?.skillId
+        ? skill
+        : { ...skill, questions: undefined },
     ),
+    masteries: (masteries.data ?? []) as Mastery[],
+    queue,
     streak: { ...streakData, current: visibleStreak(streakData, dayKey()) },
     state: (state.data ?? {
       food: 0,
@@ -318,4 +333,33 @@ export async function getTutorSummary() {
     streaks: streaks.data,
     userId: profiles.data.id,
   };
+}
+
+export async function careForShelter(action: "play" | "clean" | "feed") {
+  const { db, userId } = await studentClient();
+  const { data, error } = await db
+    .from("shelter_state")
+    .select("food,blankets,lamps,clean_zones,affection")
+    .eq("user_id", userId)
+    .single();
+  if (error || !data) throw new Error("No pudimos guardar este cuidado.");
+  const values = {
+    ...data,
+    affection: data.affection + (action === "play" ? 1 : 0),
+    clean_zones: data.clean_zones + (action === "clean" ? 1 : 0),
+  };
+  const patch =
+    action === "play"
+      ? { affection: values.affection }
+      : action === "clean"
+        ? { clean_zones: values.clean_zones }
+        : null;
+  if (patch) {
+    const saved = await db
+      .from("shelter_state")
+      .update(patch)
+      .eq("user_id", userId);
+    if (saved.error) throw new Error("No pudimos guardar este cuidado.");
+  }
+  return values as ShelterState;
 }

@@ -8,10 +8,14 @@ export type Exercise = {
   answer: string;
   answerFormat: "number" | "fraction" | "coefficients";
   tolerance?: number;
+  image?: string;
+  imageAlt?: string;
   errorSignatures: { value: string; errorType: string }[];
   hints: [string, string, string];
 };
 export type CustomQuestion = {
+  image?: string;
+  imageAlt?: string;
   prompt: string;
   answer: string;
   hints: [string, string, string];
@@ -29,6 +33,8 @@ export type Skill = {
   created_at: string;
   family: Family;
   questions?: CustomQuestion[];
+  practiceDays?: number[];
+  fixedLevel?: boolean;
 };
 export type Mastery = {
   skill_id: string;

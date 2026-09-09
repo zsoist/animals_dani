@@ -6,12 +6,18 @@ export function prepareSkill(row: Record<string, unknown>): Skill {
     : [];
   const questions: CustomQuestion[] = [];
   let custom = false;
+  let practiceDays: number[] = [];
+  let fixedLevel = false;
   for (const level of levels) {
     try {
       const parsed = JSON.parse(level.description) as {
         kind?: string;
+        practiceDays?: number[];
+        fixedLevel?: boolean;
         questions?: CustomQuestion[];
       };
+      practiceDays = parsed.practiceDays ?? practiceDays;
+      fixedLevel = parsed.fixedLevel ?? fixedLevel;
       if (parsed.kind === "custom") {
         custom = true;
         questions.push(...(parsed.questions ?? []));
@@ -37,5 +43,7 @@ export function prepareSkill(row: Record<string, unknown>): Skill {
           ? "units"
           : "chemistry",
     questions,
+    practiceDays,
+    fixedLevel,
   };
 }

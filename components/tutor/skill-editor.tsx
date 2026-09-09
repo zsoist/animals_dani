@@ -3,6 +3,8 @@ import { useActionState, useState } from "react";
 import type { Skill, CustomQuestion, Level } from "@/lib/engine/types";
 import { generate } from "@/lib/engine/exercises";
 import { saveSkill, removeSkill, saveNote } from "@/lib/data/tutor-actions";
+import { QuestionStudio } from "./question-studio";
+import { ImageViewer } from "@/components/game/image-viewer";
 import { Icon } from "@/components/game/icons";
 const empty = { error: "", success: "" };
 type DraftQuestion = CustomQuestion & { localId: string };
@@ -11,7 +13,7 @@ const blank = (): DraftQuestion => ({
   prompt: "",
   answer: "",
   hints: ["", "", ""],
-  level: 1,
+  level: 3,
   answerFormat: "number",
 });
 export function SkillEditor({ skill }: { skill?: Skill }) {
@@ -24,6 +26,17 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
       ? skill.questions.map((q) => ({ ...q, localId: crypto.randomUUID() }))
       : [blank()],
   );
+  const update = (id: string, patch: Partial<CustomQuestion>) =>
+    setQuestions((old) =>
+      old.map((q) => (q.localId === id ? { ...q, ...patch } : q)),
+    );
+  const addImported = (incoming: CustomQuestion[]) =>
+    setQuestions((old) =>
+      [
+        ...old.filter((q) => q.prompt.trim() || q.answer.trim() || q.image),
+        ...incoming.map((q) => ({ ...q, localId: crypto.randomUUID() })),
+      ].slice(0, 60),
+    );
   const [state, action, pending] = useActionState(saveSkill, empty);
   const [deletion, deleteAction, deleting] = useActionState(removeSkill, empty);
   return (
@@ -78,7 +91,7 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
             Nivel inicial
             <select
               name="difficulty"
-              defaultValue={skill?.base_difficulty ?? 1}
+              defaultValue={skill?.base_difficulty ?? 3}
             >
               {[1, 2, 3, 4].map((n) => (
                 <option key={n} value={n}>
@@ -88,6 +101,38 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
             </select>
           </label>
         </div>
+        <fieldset className="schedule-picker">
+          <legend>Planifica su práctica</legend>
+          <p>
+            Un solo tema al día. Marca los días en que esta habilidad puede
+            aparecer; sin marcar, participa todos los días.
+          </p>
+          <div className="weekday-options">
+            {["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"].map((day, index) => (
+              <label key={day}>
+                <input
+                  type="checkbox"
+                  name="practiceDay"
+                  value={index}
+                  defaultChecked={skill?.practiceDays?.includes(index)}
+                />
+                <span>{day}</span>
+              </label>
+            ))}
+          </div>
+          <label className="check-label">
+            <input
+              type="checkbox"
+              name="fixedLevel"
+              defaultChecked={skill?.fixedLevel}
+            />
+            Mantener el nivel que elijo (sin adaptación automática)
+          </label>
+          <p>
+            El nivel inicial es también el mínimo de dificultad. Súbelo para
+            proponer más desafío.
+          </p>
+        </fieldset>
         <label className="check-label">
           <input
             type="checkbox"
@@ -111,21 +156,71 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
         </label>
         {mode === "custom" ? (
           <div className="question-bank">
-            <h3>Preguntas de esta habilidad</h3>
+            <QuestionStudio onAdd={addImported} />
+            <div className="bank-toolbar">
+              <h3>
+                Banco · {questions.length}{" "}
+                {questions.length === 1 ? "pregunta" : "preguntas"}
+              </h3>
+              <button
+                type="button"
+                className="quiet"
+                onClick={() => {
+                  const data = questions.map(({ localId, ...q }) => {
+                    void localId;
+                    return q;
+                  });
+                  const url = URL.createObjectURL(
+                    new Blob([JSON.stringify(data, null, 2)], {
+                      type: "application/json",
+                    }),
+                  );
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.download = "preguntas-refugio.json";
+                  link.click();
+                  URL.revokeObjectURL(url);
+                }}
+              >
+                Exportar JSON
+              </button>
+            </div>
             <p>
               Laura practicará estas preguntas. Añade varias por nivel para
               darle variedad. Aceptamos números, fracciones y coeficientes
               químicos.
             </p>
             {questions.map((q, i) => (
-              <fieldset key={q.localId}>
+              <fieldset key={q.localId} className="editable-question">
                 <legend>Pregunta {i + 1}</legend>
+                <input type="hidden" name="image" value={q.image ?? ""} />
+                <input type="hidden" name="imageAlt" value={q.imageAlt ?? ""} />
+                {q.image && (
+                  <div className="attached-image">
+                    <ImageViewer src={q.image} alt={q.imageAlt} />
+                    <button
+                      type="button"
+                      className="quiet"
+                      onClick={() =>
+                        update(q.localId, {
+                          image: undefined,
+                          imageAlt: undefined,
+                        })
+                      }
+                    >
+                      Quitar imagen
+                    </button>
+                  </div>
+                )}
                 <label>
                   Enunciado
                   <textarea
                     name="prompt"
                     required
-                    defaultValue={q.prompt}
+                    value={q.prompt}
+                    onChange={(e) =>
+                      update(q.localId, { prompt: e.target.value })
+                    }
                     rows={2}
                     placeholder="Escribe el problema completo."
                   />
@@ -136,13 +231,25 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
                     <input
                       name="answer"
                       required
-                      defaultValue={q.answer}
+                      value={q.answer}
+                      onChange={(e) =>
+                        update(q.localId, { answer: e.target.value })
+                      }
                       placeholder="Ej. 0,5 o 1/2"
                     />
                   </label>
                   <label>
                     Formato
-                    <select name="format" defaultValue={q.answerFormat}>
+                    <select
+                      name="format"
+                      value={q.answerFormat}
+                      onChange={(e) =>
+                        update(q.localId, {
+                          answerFormat: e.target
+                            .value as CustomQuestion["answerFormat"],
+                        })
+                      }
+                    >
                       <option value="number">Número</option>
                       <option value="fraction">Fracción</option>
                       <option value="coefficients">Coeficientes: 2,1,2</option>
@@ -150,7 +257,15 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
                   </label>
                   <label>
                     Nivel
-                    <select name="level" defaultValue={q.level}>
+                    <select
+                      name="level"
+                      value={q.level}
+                      onChange={(e) =>
+                        update(q.localId, {
+                          level: Number(e.target.value) as Level,
+                        })
+                      }
+                    >
                       {[1, 2, 3, 4].map((n) => (
                         <option key={n} value={n}>
                           {n}
@@ -170,10 +285,43 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
                     <input
                       name={`hint${n}`}
                       required
-                      defaultValue={q.hints[n - 1]}
+                      value={q.hints[n - 1]}
+                      onChange={(e) => {
+                        const hints = [...q.hints] as CustomQuestion["hints"];
+                        hints[n - 1] = e.target.value;
+                        update(q.localId, { hints });
+                      }}
                     />
                   </label>
                 ))}
+                <div className="question-actions">
+                  <button
+                    type="button"
+                    className="quiet"
+                    onClick={() =>
+                      setQuestions((old) => [
+                        ...old,
+                        { ...q, localId: crypto.randomUUID() },
+                      ])
+                    }
+                  >
+                    Duplicar pregunta
+                  </button>
+                  <button
+                    type="button"
+                    className="quiet"
+                    disabled={i === 0}
+                    onClick={() =>
+                      setQuestions((old) => {
+                        const copy = [...old];
+                        [copy[i - 1], copy[i]] = [copy[i], copy[i - 1]];
+                        return copy;
+                      })
+                    }
+                  >
+                    Subir
+                  </button>
+                </div>
                 {questions.length > 1 && (
                   <button
                     type="button"
@@ -238,7 +386,7 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
             {state.success}
           </p>
         )}
-        <button className="primary" disabled={pending}>
+        <button className="primary save-skill" disabled={pending}>
           {pending
             ? "Guardando…"
             : skill

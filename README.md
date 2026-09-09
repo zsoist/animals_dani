@@ -33,3 +33,11 @@ Todos los visitantes de la URL usan el mismo refugio de Laura, por petición exp
 - [Supabase SSR](https://supabase.com/docs/guides/auth/server-side/creating-a-client)
 - [Next.js App Router](https://nextjs.org/docs/app)
 - La escena actual usa SVG y CSS; los componentes 3D anteriores no se cargan en la aplicación.
+
+## Admin: preparar material
+
+1. Abre Nueva habilidad o edita una existente y selecciona preguntas propias.
+2. En PDF e imágenes, abre tu archivo, elige página y recorte y pulsa Añadir como pregunta con imagen. Completa respuesta, nivel y tres pistas; guarda la habilidad.
+3. Crear con IA acepta un prompt y, opcionalmente, texto extraído del PDF. Necesita `OPENAI_API_KEY` en Vercel o una clave introducida en el formulario; utiliza la facturación de esa cuenta. Revisa los borradores antes de guardar. `OPENAI_QUESTION_MODEL` permite elegir el modelo (predeterminado `gpt-4.1-mini`).
+
+El calendario permite un solo tema diario. Si ya empezó una práctica, el tema permanece ese día mientras esté activo. Nivel inicial también define el mínimo; nivel fijo impide la adaptación. PDF original no se almacena: se guardan las imágenes de preguntas seleccionadas. Los cuidados de los animales no suman respuestas académicas.

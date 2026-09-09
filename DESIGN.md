@@ -1,5 +1,5 @@
-# Refugio · Club de los gatos
-Dirección fijada por las referencias del usuario: habitación ilustrada 2D con perspectiva frontal, grandes áreas de color, contornos índigo y muebles turquesa, coral, crema y amarillo. Gatos interactivos dibujados como personajes, no iconos.
-La composición móvil separa físicamente habitación y ejercicio, sin desplazamientos negativos ni paneles que oculten los gatos. Tipografía redondeada, ecuación protagonista de 28–40 px, controles de 48 px mínimo. Racha con llama, número, explicación y siete días reales.
-Inicio: bienvenida breve, habitación, misión y botón principal. Práctica: compañero visible, progreso de diez pasos, enunciado grande, teclado editable, recompensa. Admin: navegación visible, catálogo y editor de preguntas propias con pistas.
-Las ilustraciones vectoriales siguen la referencia explícita del usuario. Movimiento reducido respetado. Colores y objetivos están supeditados a contraste y legibilidad.
+# Refugio · Centro de rescate
+La última instrucción amplifica los colores: turquesa intenso, naranja, amarillo solar e índigo. La escena representa un centro de animales con enfermería, casitas de adopción, transportadoras, patio y comedor; sin sofá ni decoración de casa.
+El refugio ocupa casi toda la pantalla. Las preguntas son tarjetas grandes centradas que cubren el refugio; el fondo queda atenuado, sin interacción mientras se responde. En pantallas pequeñas se permite desplazamiento vertical dentro de la tarjeta. Tipografía Nunito suavizada y ecuación protagonista.
+Interacciones: pelota y acercamiento de los gatos, comedor, limpieza con destellos y día/noche. Movimiento basado en transformaciones y opacidad; se respeta movimiento reducido. No se garantiza FPS sin medir el dispositivo.
+Admin tiene navegación por tareas, planificación semanal, nivel fijo/adaptativo, estudio PDF/imagen/IA y banco editable. Los documentos se abren localmente, se recortan y se revisan antes de guardar. Visor modal con zoom y desplazamiento.

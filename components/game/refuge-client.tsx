@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Shelter } from "@/components/scene/shelter";
@@ -37,6 +37,7 @@ export function RefugeClient({
   masteries: Mastery[];
 }) {
   const router = useRouter();
+  const topic = skills.find((s) => s.id === queue[0]?.skillId);
   const [session, setSession] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -46,6 +47,14 @@ export function RefugeClient({
   const [liveCats, setLiveCats] = useState(cats);
   const [liveStreak, setLiveStreak] = useState(streak);
   const [dates, setDates] = useState(practiceDates);
+  useEffect(() => {
+    if (!session) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [session]);
   const milestone =
     step < 1
       ? "Una nueva aventura"
@@ -74,7 +83,7 @@ export function RefugeClient({
   };
   return (
     <main className={`game-shell ${session ? "is-playing" : ""}`}>
-      <header className="game-header">
+      <header className="game-header" inert={Boolean(session)}>
         <Link href="/" className="brand" aria-label="Refugio, inicio">
           <span className="brand-mark">
             <Icon name="paw" size={25} />
@@ -97,12 +106,12 @@ export function RefugeClient({
         </div>
       </header>
       <div className="game-content">
-        <div className="world-column">
+        <div className="world-column" inert={Boolean(session)}>
           {!session && (
             <div className="welcome">
               <div>
                 <h1>
-                  ¡Hola, Laura!<span>Tu lugar feliz está aquí.</span>
+                  ¡Hola, Laura!<span>Tu centro de rescate.</span>
                 </h1>
                 <p>Una pequeña aventura. Mucho por aprender.</p>
               </div>
@@ -130,16 +139,12 @@ export function RefugeClient({
               </div>
             </div>
           )}
-          <Shelter
-            cats={liveCats}
-            state={liveState}
-            compact={Boolean(session)}
-          />
+          <Shelter cats={liveCats} state={liveState} onCare={setLiveState} />
           {!session && (
             <>
               <div className="room-caption">
                 <Icon name="heart" size={16} />
-                <span>Toca a un gato. Tiene algo que contarte.</span>
+                <span>Explora, juega y cuida a tus nuevos amigos.</span>
               </div>
               <nav className="world-tabs" aria-label="Explorar el refugio">
                 {(
@@ -204,7 +209,18 @@ export function RefugeClient({
             </>
           )}
         </div>
-        <div className="action-column">
+        <div
+          className="action-column"
+          role={session ? "dialog" : undefined}
+          aria-modal={session ? true : undefined}
+          aria-label={session ? "Práctica del día" : undefined}
+        >
+          {session && (
+            <button className="practice-close" onClick={() => setSession(null)}>
+              <Icon name="close" />
+              Volver al refugio
+            </button>
+          )}
           {session ? (
             <Practice
               key={session}
@@ -233,12 +249,10 @@ export function RefugeClient({
                 <div className="mission-icon">
                   <Icon name="star" size={30} />
                 </div>
-                <h2>
-                  Una misión. <br />
-                  Un nuevo amigo.
-                </h2>
+                <h2>{topic?.name ?? "Prepara una aventura"}</h2>
                 <p>
-                  Resuelve 10 desafíos y ayuda a un gato a encontrar su hogar.
+                  Hoy nos concentramos en un solo tema. Diez desafíos para
+                  rescatar a un nuevo amigo.
                 </p>
                 <div className="mission-perks">
                   <span>

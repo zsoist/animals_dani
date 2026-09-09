@@ -9,3 +9,12 @@
 - La escena permanece visible durante la práctica. Se avanza con un botón después de cada respuesta, sin temporizadores que interrumpan la lectura. Comida, mantas, lámparas, gatos rescatados y racha se guardan en Supabase.
 - El servidor reconstruye el ejercicio y comprueba la respuesta antes de persistirla. El cierre calcula el resultado desde intentos guardados y evita duplicar el rescate al repetir la finalización.
 - Tipografía Nunito servida localmente. Sin trackers ni generación por LLM en ejecución.
+
+## Revisión: centro de rescate, material propio y un tema diario
+- La petición más reciente reemplaza la práctica lateral por una tarjeta centrada sobre el refugio a pantalla amplia. Los colores son intensos y las zonas representan cuidado animal.
+- Se elige una única habilidad para las diez preguntas del día, con prioridad y calendario del tutor. El primer intento de ese día fija el tema mientras siga activo. No se aplica la antigua mezcla 4/3/2/1.
+- Nivel mínimo 3 aplicado a las tres habilidades existentes a petición de mayor dificultad; el tutor puede ajustar el mínimo o fijarlo. Las preguntas propias se recorren sin repetir hasta agotar el banco.
+- PDF.js se carga solo en Admin cuando se abre un PDF. Archivos de hasta 15 MB se procesan localmente; la página/recorte se guarda comprimida junto a la pregunta, no el PDF original. Se admiten imágenes JPG, PNG y WebP con visor ampliable.
+- Las imágenes usan hasta 1.800 píxeles en el lado mayor y un límite aproximado de 330 KB por imagen, 3 MB por habilidad. Las preguntas se revisan antes de guardarse; el PDF no inventa soluciones.
+- Generación opcional con OpenAI mediante prompt y texto del PDF. Clave del servidor o clave introducida para una sola petición; no se persiste. No había clave configurada y no se simuló una respuesta de IA.
+- Jugar y limpiar guardan afecto y zonas limpias; comer y cambiar la iluminación tienen respuesta visual sin otorgar aciertos. Los cuidados no alteran el aprendizaje.
