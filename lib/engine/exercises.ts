@@ -1,0 +1,21 @@
+import type {Family,Level,Exercise} from './types';
+import {equations} from './generators/equations';
+import {units} from './generators/units';
+import {chemistry} from './generators/chemistry';
+export function generate(family:Family,skillId:string,level:Level,seed:string):Exercise{return {equations,units,chemistry}[family](skillId,level,seed)}
+function numeric(raw:string):number|null{const text=raw.trim().replace(/\s+/g,'').replace(',','.');if(!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:\/[+-]?(?:\d+(?:\.\d*)?|\.\d+))?$/.test(text))return null;const parts=text.split('/').map(Number);const result=parts.length===2?parts[0]/parts[1]:parts[0];return Number.isFinite(result)&&Math.abs(result)<=1e12?result:null}
+export type Evaluation={valid:false;message:string}|{valid:true;correct:boolean;errorType:string|null};
+export function evaluate(exercise:Exercise,input:string):Evaluation{
+ if(input.length>100)return {valid:false,message:'La respuesta es demasiado larga.'};
+ if(exercise.answerFormat==='coefficients'){
+  const parts=input.trim().split(/[,;\s]+/);const expected=exercise.answer.split(',').map(Number);
+  if(parts.length!==expected.length||parts.some(v=>!/^\d+$/.test(v)||Number(v)<=0||Number(v)>100000))return {valid:false,message:`Escribe ${expected.length} enteros positivos separados por comas.`};
+  const numbers=parts.map(Number),answer=numbers.join(',');if(answer===exercise.answer)return {valid:true,correct:true,errorType:null};
+  const ratios=numbers.map((n,i)=>n/expected[i]);const multiple=ratios.every(r=>Math.abs(r-ratios[0])<1e-9)&&ratios[0]>1;
+  return {valid:true,correct:false,errorType:multiple?'RATIO_NO_MINIMO':exercise.errorSignatures.find(s=>s.value===answer)?.errorType??'UNKNOWN'};
+ }
+ const value=numeric(input);if(value===null)return {valid:false,message:'Escribe un número o una fracción, por ejemplo 0,5 o 1/2.'};
+ const expected=numeric(exercise.answer);if(expected===null)throw new Error('Respuesta canónica inválida');const close=(a:number,b:number)=>Math.abs(a-b)<=(exercise.tolerance??1e-9);
+ if(close(value,expected))return {valid:true,correct:true,errorType:null};
+ return {valid:true,correct:false,errorType:exercise.errorSignatures.find(s=>{const v=numeric(s.value);return v!==null&&close(value,v)})?.errorType??'UNKNOWN'};
+}

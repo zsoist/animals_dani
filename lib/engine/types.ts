@@ -1,0 +1,14 @@
+export type Level = 1 | 2 | 3 | 4;
+export type Family = 'equations' | 'units' | 'chemistry';
+export type Exercise = {
+ skillId: string; level: Level; seed: string; prompt: string; answer: string;
+ answerFormat: 'number' | 'fraction' | 'coefficients'; tolerance?: number;
+ errorSignatures: { value: string; errorType: string }[];
+ hints: [string, string, string];
+};
+export type Skill = {id:string;name:string;subject:string;description:string;active:boolean;priority:number;base_difficulty:Level;created_at:string;family:Family};
+export type Mastery = {skill_id:string;mastery_score:number;current_level:Level;recent_accuracy:number;attempts_total:number;last_practiced_at:string|null};
+export type Attempt = {user_id:string;id:string;skill_id:string;level:Level;exercise_seed:string;prompt_text:string;expected_answer:string;given_answer:string;correct:boolean;response_ms:number;hint_level:number;error_type:string|null;session_id:string;created_at:string};
+export type Question = {skillId:string;family:Family;level:Level;seed:string;reinforced?:boolean};
+export type Streak = {current:number;best:number;total_days:number;last_session_date:string|null};
+export type ShelterState = {food:number;blankets:number;lamps:number;clean_zones:number;affection:number};
