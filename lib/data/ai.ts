@@ -263,7 +263,8 @@ export async function askCoach(input: {
     throw error;
   }
 }
-export async function tutorReport() {
+export async function tutorReport(question = "") {
+  if (typeof question !== "string" || question.length > 2000) throw new Error("Escribe una consulta de hasta 2.000 caracteres.");
   const db = await tutorDatabase();
   const { data: auth } = await db.auth.getUser();
   const { data: profile } = await db
@@ -287,14 +288,15 @@ export async function tutorReport() {
         {
           role: "system",
           content:
-            'Eres un tutor pedagógico en español. Analiza únicamente estos datos reales y su tamaño de muestra. No diagnostiques ni supongas que lentitud es falta de capacidad. Distingue dificultad, dependencia de pistas y tiempo activo. Los tiempos antiguos sin medición fiable son null. Propón tres acciones concretas para la próxima práctica de UN solo tema, con un ejemplo y criterio de mejora. Si hay pocos datos dilo. No inventes porcentajes ni logros. Texto plano, máximo 350 palabras. Devuelve JSON {"report":"análisis y plan para el tutor humano"}.',
+            'Eres un tutor pedagógico en español. Analiza únicamente estos datos reales y su tamaño de muestra. No diagnostiques ni supongas que lentitud es falta de capacidad. Distingue dificultad, dependencia de pistas y tiempo activo. Los tiempos antiguos sin medición fiable son null. Responde primero la consulta específica del profesor si la hay, con una explicación pedagógica útil y ejemplos. Propón tres acciones concretas para la próxima práctica de UN solo tema, con un ejemplo y criterio de mejora. Si el profesor pregunta por una habilidad, las tres acciones deben trabajar ESA habilidad aunque el tema diario guardado sea otro: el plan es una propuesta, no cambia la sesión actual. Sin consulta específica, prioriza la dificultad observada más relevante. Evalúa comprensión y autonomía; no inventes límites de segundos ni metas de rapidez sin una base temporal suficiente. Si hay pocos datos dilo. No inventes porcentajes ni logros. Antes de redactar comprueba matemáticamente todos tus ejemplos y que cada criterio coincida con el ejercicio: cantidades equivalentes deben identificarse como iguales, y una conversión correcta nunca debe etiquetarse como error. Texto plano, máximo 350 palabras. Devuelve JSON {"report":"análisis y plan para el tutor humano"}.',
         },
         {
           role: "user",
-          content: JSON.stringify({ ...evidence, memory: memory?.notes ?? "" }),
+          content: JSON.stringify({ ...evidence, memory: memory?.notes ?? "", tutorQuestion: redactLearningText(question) }),
         },
       ],
-      1800,
+      8000,
+      true,
     );
     const output = result.json as { report?: unknown };
     if (typeof output.report !== "string" || !output.report.trim())

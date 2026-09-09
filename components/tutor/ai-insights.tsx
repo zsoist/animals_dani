@@ -1,4 +1,5 @@
 "use client";
+import { ReadableText } from "@/components/game/readable-text";
 import { useState } from "react";
 import { Icon } from "@/components/game/icons";
 export function AIInsights({
@@ -10,6 +11,7 @@ export function AIInsights({
   memory: string;
   messages: { role: string; content: string; created_at: string }[];
 }) {
+  const [question,setQuestion] = useState("");
   const [report, setReport] = useState(initial?.body ?? "");
   const [count, setCount] = useState(initial?.evidence_count ?? 0);
   const [busy, setBusy] = useState(false),
@@ -18,7 +20,7 @@ export function AIInsights({
     setBusy(true);
     setError("");
     try {
-      const response = await fetch("/api/tutor/report", { method: "POST" });
+      const response = await fetch("/api/tutor/report", { method: "POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({question}) });
       const data = (await response.json()) as {
         report?: string;
         evidenceCount?: number;
@@ -46,6 +48,7 @@ export function AIInsights({
           </p>
         </div>
       </div>
+      <div className="teacher-question"><label>¿Qué te gustaría entender o preparar?<textarea rows={2} value={question} onChange={e=>setQuestion(e.target.value)} maxLength={2000} placeholder="¿Cómo le explico el cambio de unidades sin darle la respuesta?"/></label><div className="teacher-prompts">{["¿Qué error conviene trabajar primero y cómo se lo explico?","Diseña una práctica guiada de 10 minutos con un solo tema.","¿Está aprendiendo de forma independiente o depende de las pistas?"].map(text=><button type="button" key={text} disabled={busy} onClick={()=>setQuestion(text)}>{text}</button>)}</div></div>
       <button
         className="secondary"
         disabled={busy}
@@ -53,7 +56,7 @@ export function AIInsights({
       >
         {busy
           ? "Analizando la práctica…"
-          : report
+          : question.trim() ? "Consultar a Numa" : report
             ? "Actualizar análisis IA"
             : "Analizar con IA"}
       </button>
@@ -64,13 +67,14 @@ export function AIInsights({
       )}
       {report && (
         <article className="ai-report">
-          <p>{report}</p>
+          <ReadableText text={report}/>
           <small>
             Basado en {count} intentos registrados. Orientación IA, revisable
             por el tutor.
           </small>
         </article>
       )}
+      {report && <div className="report-actions"><a className="primary" href="#new-skill"><Icon name="bulb"/> Preparar una práctica de refuerzo</a><button className="quiet" onClick={()=>{const blob=new Blob([report],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='plan-pedagogico-laura.txt';a.click();URL.revokeObjectURL(url);}}>Descargar análisis</button></div>}
       <details>
         <summary>Memoria y conversaciones de Laura</summary>
         <h3>Memoria pedagógica</h3>
@@ -85,7 +89,7 @@ export function AIInsights({
                 {m.role === "user" ? "Laura" : "Numa"} ·{" "}
                 {new Date(m.created_at).toLocaleDateString("es")}
               </b>
-              <p>{m.content}</p>
+              <ReadableText text={m.content}/>
             </article>
           ))
         ) : (

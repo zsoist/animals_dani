@@ -1,0 +1,278 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-09T21:00:59.599982+00:00",
+  "title": "Design System: Refugio",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "neutral",
+        "displayName": "ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.0495 232.84)",
+          "oklch(26.43% 0.0495 232.84)",
+          "oklch(37.86% 0.0495 232.84)",
+          "oklch(49.29% 0.0495 232.84)",
+          "oklch(60.71% 0.0495 232.84)",
+          "oklch(72.14% 0.0495 232.84)",
+          "oklch(83.57% 0.0495 232.84)",
+          "oklch(95.00% 0.0495 232.84)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "muted",
+        "tonalRamp": [
+          "oklch(15.00% 0.0443 239.48)",
+          "oklch(26.43% 0.0443 239.48)",
+          "oklch(37.86% 0.0443 239.48)",
+          "oklch(49.29% 0.0443 239.48)",
+          "oklch(60.71% 0.0443 239.48)",
+          "oklch(72.14% 0.0443 239.48)",
+          "oklch(83.57% 0.0443 239.48)",
+          "oklch(95.00% 0.0443 239.48)"
+        ]
+      },
+      "cream": {
+        "role": "neutral",
+        "displayName": "cream",
+        "tonalRamp": [
+          "oklch(15.00% 0.0092 106.57)",
+          "oklch(26.43% 0.0092 106.57)",
+          "oklch(37.86% 0.0092 106.57)",
+          "oklch(49.29% 0.0092 106.57)",
+          "oklch(60.71% 0.0092 106.57)",
+          "oklch(72.14% 0.0092 106.57)",
+          "oklch(83.57% 0.0092 106.57)",
+          "oklch(95.00% 0.0092 106.57)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "paper",
+        "tonalRamp": [
+          "oklch(15.00% 0.0054 95.10)",
+          "oklch(26.43% 0.0054 95.10)",
+          "oklch(37.86% 0.0054 95.10)",
+          "oklch(49.29% 0.0054 95.10)",
+          "oklch(60.71% 0.0054 95.10)",
+          "oklch(72.14% 0.0054 95.10)",
+          "oklch(83.57% 0.0054 95.10)",
+          "oklch(95.00% 0.0054 95.10)"
+        ]
+      },
+      "teal": {
+        "role": "primary",
+        "displayName": "teal",
+        "tonalRamp": [
+          "oklch(15.00% 0.0834 202.52)",
+          "oklch(26.43% 0.0834 202.52)",
+          "oklch(37.86% 0.0834 202.52)",
+          "oklch(49.29% 0.0834 202.52)",
+          "oklch(60.71% 0.0834 202.52)",
+          "oklch(72.14% 0.0834 202.52)",
+          "oklch(83.57% 0.0834 202.52)",
+          "oklch(95.00% 0.0834 202.52)"
+        ]
+      },
+      "coral": {
+        "role": "secondary",
+        "displayName": "coral",
+        "tonalRamp": [
+          "oklch(15.00% 0.1854 34.64)",
+          "oklch(26.43% 0.1854 34.64)",
+          "oklch(37.86% 0.1854 34.64)",
+          "oklch(49.29% 0.1854 34.64)",
+          "oklch(60.71% 0.1854 34.64)",
+          "oklch(72.14% 0.1854 34.64)",
+          "oklch(83.57% 0.1854 34.64)",
+          "oklch(95.00% 0.1854 34.64)"
+        ]
+      },
+      "yellow": {
+        "role": "secondary",
+        "displayName": "yellow",
+        "tonalRamp": [
+          "oklch(15.00% 0.1599 85.60)",
+          "oklch(26.43% 0.1599 85.60)",
+          "oklch(37.86% 0.1599 85.60)",
+          "oklch(49.29% 0.1599 85.60)",
+          "oklch(60.71% 0.1599 85.60)",
+          "oklch(72.14% 0.1599 85.60)",
+          "oklch(83.57% 0.1599 85.60)",
+          "oklch(95.00% 0.1599 85.60)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "line",
+        "tonalRamp": [
+          "oklch(15.00% 0.0098 204.91)",
+          "oklch(26.43% 0.0098 204.91)",
+          "oklch(37.86% 0.0098 204.91)",
+          "oklch(49.29% 0.0098 204.91)",
+          "oklch(60.71% 0.0098 204.91)",
+          "oklch(72.14% 0.0098 204.91)",
+          "oklch(83.57% 0.0098 204.91)",
+          "oklch(95.00% 0.0098 204.91)"
+        ]
+      },
+      "primary": {
+        "role": "primary",
+        "displayName": "primary",
+        "tonalRamp": [
+          "oklch(15.00% 0.1629 264.97)",
+          "oklch(26.43% 0.1629 264.97)",
+          "oklch(37.86% 0.1629 264.97)",
+          "oklch(49.29% 0.1629 264.97)",
+          "oklch(60.71% 0.1629 264.97)",
+          "oklch(72.14% 0.1629 264.97)",
+          "oklch(83.57% 0.1629 264.97)",
+          "oklch(95.00% 0.1629 264.97)"
+        ]
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "primary-hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.1393 263.90)",
+          "oklch(26.43% 0.1393 263.90)",
+          "oklch(37.86% 0.1393 263.90)",
+          "oklch(49.29% 0.1393 263.90)",
+          "oklch(60.71% 0.1393 263.90)",
+          "oklch(72.14% 0.1393 263.90)",
+          "oklch(83.57% 0.1393 263.90)",
+          "oklch(95.00% 0.1393 263.90)"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "white",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 89.88)",
+          "oklch(26.43% 0.0000 89.88)",
+          "oklch(37.86% 0.0000 89.88)",
+          "oklch(49.29% 0.0000 89.88)",
+          "oklch(60.71% 0.0000 89.88)",
+          "oklch(72.14% 0.0000 89.88)",
+          "oklch(83.57% 0.0000 89.88)",
+          "oklch(95.00% 0.0000 89.88)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Pregunta",
+        "purpose": "Ecuación protagonista en la práctica."
+      }
+    },
+    "shadows": [
+      {
+        "name": "action",
+        "value": "0 5px 12px #1a348523",
+        "purpose": "Botón primario"
+      },
+      {
+        "name": "exercise",
+        "value": "0 20px 64px #09273d55",
+        "purpose": "Capa de ejercicio"
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(.16,1,.3,1)",
+        "purpose": "Entrada de mensajes, preguntas y respuestas del mundo; desactivada con movimiento reducido."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact",
+        "value": "900px"
+      },
+      {
+        "name": "mobile",
+        "value": "760px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón primario",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Botón primario",
+      "html": "<button class=\"ds-primary\">Guardar habilidad</button>",
+      "css": ".ds-primary{font-family:Nunito,sans-serif;font-size:18px;font-weight:800;min-height:48px;padding:15px 20px;background:#2448aa;color:white;border:0;border-radius:12px;box-shadow:0 5px 12px #1a348523;transition:background .18s,transform .18s}.ds-primary:hover{background:#183989;transform:translateY(-2px)}.ds-primary:active{transform:translateY(1px)}.ds-primary:focus-visible{outline:3px solid #2452ba;outline-offset:3px}"
+    },
+    {
+      "name": "Botón secundario",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Botón secundario",
+      "html": "<button class=\"ds-secondary\">Ver refugio</button>",
+      "css": ".ds-secondary{font-family:Nunito,sans-serif;font-weight:800;min-height:48px;padding:10px 16px;background:white;color:#17394a;border:1px solid #b9cbd0;border-radius:10px}.ds-secondary:hover{background:#d1e6dc}.ds-secondary:active{transform:scale(.97)}.ds-secondary:focus-visible{outline:3px solid #2452ba;outline-offset:3px}"
+    },
+    {
+      "name": "Campo de administración",
+      "kind": "input",
+      "refersTo": "admin-field",
+      "description": "Campo de administración",
+      "html": "<label class=\"ds-label\">Nombre de habilidad<input class=\"ds-field\" placeholder=\"Ecuaciones\" /></label>",
+      "css": ".ds-label{display:grid;font-family:Nunito,sans-serif;font-size:14px;font-weight:700;color:#314b60}.ds-field{margin-top:6px;min-height:48px;font:16px Nunito,sans-serif;padding:12px;border:1px solid #b9cbd5;border-radius:9px;color:#17394a;background:white}.ds-field:focus-visible{outline:3px solid #2452ba;outline-offset:3px}"
+    },
+    {
+      "name": "Espacios del profe",
+      "kind": "nav",
+      "description": "Espacios del profe",
+      "html": "<nav class=\"ds-tabs\"><a href=\"#progress\" aria-current=\"page\">Progreso</a><a href=\"#new-skill\">Laboratorio IA</a><a href=\"#catalog\">Habilidades</a></nav>",
+      "css": ".ds-tabs{display:flex;gap:6px;font-family:Nunito,sans-serif;border-bottom:1px solid #cbd7e0}.ds-tabs a{display:flex;align-items:center;min-height:56px;padding:12px 22px;font-size:15px;font-weight:800;color:#23394b;text-decoration:none;border-bottom:1px solid transparent}.ds-tabs a[aria-current]{color:#234baf;background:#eaf0fa;border-bottom-color:#234baf;border-radius:10px 10px 0 0}.ds-tabs a:hover{background:#ecf0f2}.ds-tabs a:focus-visible{outline:3px solid #2452ba;outline-offset:3px}"
+    },
+    {
+      "name": "Estado de habilidad",
+      "kind": "chip",
+      "description": "Estado de habilidad",
+      "html": "<span class=\"ds-active\">Activa</span>",
+      "css": ".ds-active{font:11px Nunito,sans-serif;display:inline-block;padding:4px 9px;border-radius:15px;background:#e2f1dc;color:#386541;white-space:nowrap}"
+    },
+    {
+      "name": "Ensayo de pregunta",
+      "kind": "card",
+      "description": "Ensayo de pregunta",
+      "html": "<article class=\"ds-trial\"><strong>Vista de ensayo</strong><p>Resuelve: 2x + 3 = 11</p></article>",
+      "css": ".ds-trial{font-family:Nunito,sans-serif;padding:22px;background:#fff7df;border-radius:12px}.ds-trial strong{font-size:13px;color:#745715}.ds-trial p{font-size:24px;line-height:1.45;margin:16px 0;color:#17394a}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Refugio · Centro de rescate",
+    "overview": "Este registro actualiza la dirección ya fijada: un refugio 2D colorido, ilustrado y divertido para Laura. Turquesa, naranja y amarillo solar construyen un centro de animales con enfermería, adopción, transportadoras, patio y comedor. Los gatos grandes son personajes interactivos; el lugar conserva su carácter de rescate, sin sofá ni decoración de casa.\n\nEl arte original local mantiene una ilustración pictórica con contornos suaves. Numa, gato naranja con gafas cobalto y cuaderno, acompaña el aprendizaje en español. El espacio del profe comparte el personaje y la tipografía, con papel claro e índigo para leer, preparar y revisar contenido. Es un refinamiento del mundo existente, no una nueva propuesta visual.",
+    "keyCharacteristics": [
+      "Refugio 2D saturado con gatos ilustrados grandes.",
+      "Nunito redondeada, texto oscuro y superficies claras para aprender.",
+      "Numa como compañero reconocible entre juego y preparación.",
+      "Movimiento de respuesta y ambiente con reducción disponible."
+    ],
+    "rules": [
+      {
+        "name": "The Papel Legible Rule",
+        "body": "Los textos de aprendizaje y los campos editables viven sobre superficies claras; las ilustraciones son escenario o personaje acompañante.",
+        "section": "colors"
+      },
+      {
+        "name": "The Pregunta Clara Rule",
+        "body": "La pregunta domina su tarjeta; la ayuda, las instrucciones y el estado conservan una jerarquía secundaria.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "**Do** conservar el refugio 2D ilustrado, colorido y protagonizado por gatos.",
+      "**Do** mantener texto de aprendizaje y edición sobre papel legible.",
+      "**Do** respetar la reducción de movimiento del sistema y de la interfaz.",
+      "**Do** usar estados explícitos para carga, error, guardado y ausencia de datos."
+    ],
+    "donts": [
+      "**Don't** convertir el refugio en una sala doméstica con sofá.",
+      "**Don't** dejar interactivo el escenario mientras la pregunta ocupa la capa central.",
+      "**Don't** representar progreso inventado como evidencia de aprendizaje."
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "prompt": "Use case: illustration-story. Create a high resolution original character asset for an educational animal rescue game, isolated on a truly transparent background. A ridiculously charming orange rescue kitten called Numa, wearing oversized round cobalt blue glasses slightly crooked, a tiny teal neckerchief, holding an open golden-yellow notebook upside down with one paw and raising the other paw with a little 'aha!' expression. Funny inquisitive face, huge expressive eyes, one ear tilted, fluffy cheek tufts, oversized paws and curled tail. Premium hand-painted animation character with textured gouache details, dimensional yet clearly 2D storybook illustration, saturated warm orange with deep cobalt and turquoise accents. Entire character visible with generous transparent breathing room, square framing, no frame, no writing, no text, no watermark, no human. Children and young teens should immediately want to tap this friendly study companion. Highest available resolution. Preserve real transparent alpha.",
+  "source": "OpenAI built-in image_gen",
+  "processing": "WebP quality 86 (background), 88 (characters); alpha preserved",
+  "model": "Tool-managed; exact model not exposed"
+}

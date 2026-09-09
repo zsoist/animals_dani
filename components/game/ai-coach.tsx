@@ -1,4 +1,6 @@
 "use client";
+import Image from "next/image";
+import { ReadableText } from "./readable-text";
 import { useEffect, useRef, useState } from "react";
 import type { CoachContext } from "@/lib/data/ai";
 import { Icon } from "./icons";
@@ -11,9 +13,11 @@ type Message = {
 export function AICoach({
   context,
   onHelp,
+  onBusyChange,
 }: {
   context?: CoachContext;
   onHelp?: () => void;
+  onBusyChange?: (busy: boolean) => void;
 }) {
   const [open, setOpen] = useState(false),
     [messages, setMessages] = useState<Message[]>([]),
@@ -62,6 +66,7 @@ export function AICoach({
     if (!text.trim() || gate.current) return;
     gate.current = true;
     setBusy(true);
+    onBusyChange?.(true);
     setError("");
     try {
       const response = await fetch("/api/coach", {
@@ -97,12 +102,14 @@ export function AICoach({
     } finally {
       gate.current = false;
       setBusy(false);
+      onBusyChange?.(false);
     }
   }
   async function saveMemory() {
     if (gate.current) return;
     gate.current = true;
     setBusy(true);
+    onBusyChange?.(true);
     setError("");
     try {
       const response = await fetch("/api/coach", {
@@ -122,6 +129,7 @@ export function AICoach({
     } finally {
       gate.current = false;
       setBusy(false);
+      onBusyChange?.(false);
     }
   }
   return (
@@ -133,7 +141,7 @@ export function AICoach({
         onClick={() => setOpen((v) => !v)}
       >
         <span className="numa-mark">
-          <Icon name="bulb" />
+          <Image src="/art/numa.webp" alt="" width={64} height={64}/>
         </span>
         <span>
           <strong>
@@ -205,7 +213,7 @@ export function AICoach({
                 className={`coach-message from-${m.role}`}
               >
                 <b>{m.role === "user" ? "Laura" : "Numa"}</b>
-                <p>{m.content}</p>
+                <ReadableText text={m.content}/>
               </article>
             ))}
             {busy && (

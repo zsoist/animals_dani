@@ -49,3 +49,13 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - Medición de tiempo activo y etiqueta de ayuda IA; tiempos antiguos excluidos de evidencia temporal.
 - Verificado en navegador: respuesta contextual sin dar solución, recarga del historial, informe real y generación de dos borradores con segunda revisión de razonamiento. Un intento guardó 59.110 ms de tiempo activo, ai_help=true y hint_level=1.
 - 47 tests pasan, incluyendo mediana de tiempos, privacidad y reloj con pausas/reintentos; typecheck, lint y build pasan. Producción publicada y HTTP 200 verificado para / y /api/coach; consulta real de Numa desde Vercel exitosa. Memoria editada conservada. Una respuesta mal formada de proveedor mostró error recuperable; se añadió parser probado para cercas JSON y escapes matemáticos.
+
+## Refinamiento del refugio y laboratorio IA — 2026-09-09
+- Implementados patio ilustrado original, Numa y seis gatos recortables, cuidado animado y reducción de movimiento. Preguntas centradas, texto legible y superficies de carga/conexión nuevas.
+- Admin reorganizado en Progreso, Laboratorio IA y Habilidades, con búsqueda, filtros, preguntas plegables y prueba de respuesta sin crear intentos.
+- Generación real verificada: tres preguntas de despejes a partir de 15 intentos reales, revisión matemática independiente y prueba de la primera respuesta correcta. Guardado en Supabase como «Despejar ecuaciones · Refuerzo», desactivado, disponible para revisión del profe.
+- La consulta pedagógica admite una pregunta concreta del profesor y exportación del análisis; conserva el historial y memoria existentes. Consulta real de conversiones verificada con razonamiento DeepSeek: plan de un solo tema y ejemplos comprobados, sin metas de velocidad inventadas.
+- Typecheck, lint, 48 pruebas y build pasan. Incluyen 1.200 semillas por familia/nivel y 100 comprobaciones adicionales de decimales exactos legibles.
+- Capturas Chrome reales en 390 × 844 y 1280 × 900: refugio, tarjeta central, progreso y laboratorio. Revisión independiente Impeccable: corregido selector pedagógico truncado; disposición final ship. Se trata de refinamiento de dirección fijada, no de una exploración conceptual nueva.
+- No se midieron FPS ni Lighthouse. No se afirma que la IA sea infalible; los borradores requieren revisión del profe.
+- Publicación de esta revisión: pendiente de verificar URL de producción.

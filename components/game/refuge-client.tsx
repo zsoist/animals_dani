@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { CatArt } from "@/components/scene/cat-art";
 import { Shelter } from "@/components/scene/shelter";
 import type { ShelterCat } from "@/lib/data/shelter";
 import type {
@@ -15,6 +16,7 @@ import { startMission } from "@/lib/data/actions";
 import { Practice } from "./practice";
 import { Icon } from "./icons";
 import { AICoach } from "./ai-coach";
+import { MotionControl } from "./motion-control";
 import { StreakDisplay } from "./streak";
 export function RefugeClient({
   cats,
@@ -146,6 +148,7 @@ export function RefugeClient({
               <div className="room-caption">
                 <Icon name="heart" size={16} />
                 <span>Explora, juega y cuida a tus nuevos amigos.</span>
+                <MotionControl/>
               </div>
               <nav className="world-tabs" aria-label="Explorar el refugio">
                 {(
@@ -170,7 +173,7 @@ export function RefugeClient({
                   <h2>Tu pequeña familia</h2>
                   <div className="cat-list">
                     {liveCats.map((cat) => (
-                      <article key={cat.id}>
+                      <article key={cat.id}><CatArt body={cat.palette.body} sleeping={cat.personality==="dormilón"}/>
                         <strong>{cat.name}</strong>
                         <span>{cat.personality}</span>
                         <p>{cat.story}</p>

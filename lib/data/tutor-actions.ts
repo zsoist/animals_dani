@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { tutorDatabase } from "./tutor-auth";
 import type { CustomQuestion, Level } from "@/lib/engine/types";
 import { evaluate } from "@/lib/engine/exercises";
-type ActionState = { error: string; success: string };
+type ActionState = { error: string; success: string; id?: string };
 export async function saveSkill(
   _previous: ActionState,
   form: FormData,
@@ -165,9 +165,10 @@ export async function saveSkill(
     revalidatePath("/");
     return {
       error: "",
+      id: saved.data.id,
       success: id
         ? "Cambios guardados."
-        : "Habilidad creada. Ya está disponible para la próxima misión.",
+        : values.active ? "Habilidad creada. Ya está disponible para la próxima misión." : "Borrador guardado. Actívalo cuando termines de revisarlo.",
     };
   } catch (error) {
     return {

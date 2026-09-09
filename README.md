@@ -32,7 +32,7 @@ Todos los visitantes de la URL usan el mismo refugio de Laura, por petición exp
 
 - [Supabase SSR](https://supabase.com/docs/guides/auth/server-side/creating-a-client)
 - [Next.js App Router](https://nextjs.org/docs/app)
-- La escena actual usa SVG y CSS; los componentes 3D anteriores no se cargan en la aplicación.
+- La escena actual usa ilustraciones WebP originales, recortes animados y CSS; los componentes 3D anteriores no se cargan en la aplicación.
 
 ## Admin: preparar material
 
@@ -47,3 +47,15 @@ El calendario permite un solo tema diario. Si ya empezó una práctica, el tema 
 DeepSeek explica el ejercicio actual en español, ofrece pistas y usa los últimos 200 intentos (20 por habilidad en el resumen). La memoria pedagógica y la conversación persisten en Supabase. Laura puede editar o vaciar su memoria y el profe puede consultar conversaciones y generar un informe. No se recopilan datos de navegación ni información personal adicional. La ayuda IA se registra como asistencia al calcular dominio. Los tiempos nuevos excluyen pestañas ocultas y espera de comprobación; los antiguos quedan fuera del análisis temporal IA.
 
 Configura `DEEPSEEK_API_KEY` como secreto de Vercel y aplica `20260909200656_ai_tutor_memory.sql`. Nunca uses una variable NEXT_PUBLIC para la clave. Cada usuario tiene un máximo de 100 consultas en 24 horas, 6 por minuto y una solicitud simultánea. Los límites se aplican en Postgres; los ejercicios siguen funcionando sin IA. La API no evalúa respuestas ni modifica recompensas. El acceso directo de Laura sigue siendo compartido: quien abra el refugio accede a su conversación.
+
+## Laboratorio del profe e ilustraciones (septiembre de 2026)
+
+El panel se divide en Progreso, Laboratorio IA y Habilidades. El laboratorio toma evidencia de la habilidad elegida, permite elegir estrategia y objetivo pedagógico, genera preguntas y las pasa por una segunda revisión matemática. Puedes probar las respuestas sin registrar intentos de Laura y editar cada pregunta antes de activar la práctica. Los borradores generados se conservan en el navegador hasta guardarlos; las ediciones del formulario requieren pulsar Guardar. El catálogo permite buscar y filtrar prácticas activas o borradores. El análisis de Numa admite preguntas concretas, usa el modo de razonamiento para revisar ejemplos y permite descargar el informe.
+
+Arte original generado con la herramienta integrada de OpenAI, optimizado como WebP local. La herramienta no permite seleccionar ni confirmar un modelo llamado «2.5». Archivos y prompts completos:
+
+- `public/art/refuge-courtyard.webp` y `refuge-courtyard.webp.json`: patio del refugio, 1536 × 1024.
+- `public/art/numa.webp` y `numa.webp.json`: Numa con transparencia.
+- `public/art/rescue-kittens.webp` y `rescue-kittens.webp.json`: seis gatos recortables con transparencia.
+
+Las animaciones de cuidado, gatos y ambiente respetan la preferencia de movimiento reducido del sistema y el control dentro del refugio. No se ha medido 60 FPS en un móvil físico.

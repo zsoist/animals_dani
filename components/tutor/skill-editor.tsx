@@ -1,12 +1,13 @@
 "use client";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import type { Skill, CustomQuestion, Level } from "@/lib/engine/types";
 import { generate } from "@/lib/engine/exercises";
 import { saveSkill, removeSkill, saveNote } from "@/lib/data/tutor-actions";
 import { QuestionStudio } from "./question-studio";
 import { ImageViewer } from "@/components/game/image-viewer";
+import { QuestionPreview } from "./question-preview";
 import { Icon } from "@/components/game/icons";
-const empty = { error: "", success: "" };
+const empty: {error:string;success:string;id?:string} = { error: "", success: "" };
 type DraftQuestion = CustomQuestion & { localId: string };
 const blank = (): DraftQuestion => ({
   localId: crypto.randomUUID(),
@@ -16,14 +17,14 @@ const blank = (): DraftQuestion => ({
   level: 3,
   answerFormat: "number",
 });
-export function SkillEditor({ skill }: { skill?: Skill }) {
+export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; skill?: Skill; draft?: { name:string; description:string; subject:string; questions:CustomQuestion[] } }) {
   const [mode, setMode] = useState(
     skill?.family === "custom" ? "custom" : skill ? "generated" : "custom",
   );
-  const [subject, setSubject] = useState(skill?.subject ?? "matematicas");
+  const [subject, setSubject] = useState(skill?.subject ?? draft?.subject ?? "matematicas");
   const [questions, setQuestions] = useState<DraftQuestion[]>(() =>
-    skill?.questions?.length
-      ? skill.questions.map((q) => ({ ...q, localId: crypto.randomUUID() }))
+    (skill?.questions ?? draft?.questions)?.length
+      ? (skill?.questions ?? draft?.questions ?? []).map((q) => ({ ...q, localId: crypto.randomUUID() }))
       : [blank()],
   );
   const update = (id: string, patch: Partial<CustomQuestion>) =>
@@ -38,11 +39,12 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
       ].slice(0, 60),
     );
   const [state, action, pending] = useActionState(saveSkill, empty);
+  useEffect(()=>{if(state.success && state.id)onSaved?.();},[state.success,state.id,onSaved]);
   const [deletion, deleteAction, deleting] = useActionState(removeSkill, empty);
   return (
     <div className="skill-editor">
-      <form action={action}>
-        <input type="hidden" name="id" value={skill?.id ?? ""} />
+      <form action={action} onReset={e=>e.preventDefault()} onInvalidCapture={e=>{const element=e.target as HTMLElement;const details=element.closest("details");if(details)details.open=true;}}>
+        <input type="hidden" name="id" value={skill?.id ?? state.id ?? ""} />
         <div className="form-grid">
           <label>
             Nombre de la habilidad
@@ -50,7 +52,7 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
               name="name"
               required
               maxLength={100}
-              defaultValue={skill?.name}
+              defaultValue={skill?.name ?? draft?.name}
               placeholder="Por ejemplo: fracciones equivalentes"
             />
           </label>
@@ -71,7 +73,7 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
             <textarea
               name="description"
               required
-              defaultValue={skill?.description}
+              defaultValue={skill?.description ?? draft?.description}
               placeholder="Describe el objetivo de esta práctica."
               rows={2}
             />
@@ -137,7 +139,7 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
           <input
             type="checkbox"
             name="active"
-            defaultChecked={skill?.active ?? true}
+            defaultChecked={skill?.active ?? !draft}
           />{" "}
           Incluir en las misiones de Laura
         </label>
@@ -191,7 +193,7 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
               químicos.
             </p>
             {questions.map((q, i) => (
-              <fieldset key={q.localId} className="editable-question">
+              <details key={q.localId} className="question-accordion" open={i === 0 ? true : undefined}><summary><span className="question-number">{i+1}</span><span>{q.prompt || "Nueva pregunta"}<small>Nivel {q.level} · {q.answerFormat === "coefficients" ? "Coeficientes" : q.answerFormat === "fraction" ? "Fracción" : "Número"}</small></span><Icon name="gear" size={18}/></summary><fieldset className="editable-question">
                 <legend>Pregunta {i + 1}</legend>
                 <input type="hidden" name="image" value={q.image ?? ""} />
                 <input type="hidden" name="imageAlt" value={q.imageAlt ?? ""} />
@@ -333,7 +335,8 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
                     Quitar pregunta {i + 1}
                   </button>
                 )}
-              </fieldset>
+                <details className="preview-toggle"><summary>Probar como Laura</summary><QuestionPreview question={q}/></details>
+              </fieldset></details>
             ))}
             <button
               type="button"
@@ -389,7 +392,7 @@ export function SkillEditor({ skill }: { skill?: Skill }) {
         <button className="primary save-skill" disabled={pending}>
           {pending
             ? "Guardando…"
-            : skill
+            : skill || state.id
               ? "Guardar cambios"
               : "Crear habilidad"}
           <Icon name="check" />

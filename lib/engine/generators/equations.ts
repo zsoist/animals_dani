@@ -1,7 +1,7 @@
 import type {Exercise,Level} from '../types';
 import {random,integer,canonical,signatures} from '../random';
 export function equations(skillId:string,level:Level,seed:string):Exercise{
- const rng=random(seed),x=integer(rng,2,15),a=integer(rng,2,8),b=integer(rng,2,12),c=integer(rng,2,6);
+ const rng=random(seed),x=integer(rng,2,15),a=integer(rng,2,8),b=integer(rng,2,12),c=[2,4,5][integer(rng,0,2)];
  let prompt:string;let errors:[number,string][];let hints:Exercise['hints'];
  if(level===1){const total=x+b;prompt=`Despeja x: x + ${b} = ${total}`;errors=[[total+b,'SIGNO_AL_TRANSPONER'],[x+1,'ARITMETICA']];hints=['Para dejar sola a x, deshaz la suma.',`Resta ${b} en ambos lados.`,`x = ${total} − ${b} = ${x}.`];}
  else if(level===2){const total=a*x+b;prompt=`Despeja x: ${a}x + ${b} = ${total}`;errors=[[(total+b)/a,'SIGNO_AL_TRANSPONER'],[(total-b)*a,'OPERACION_INVERSA'],[total/a-b,'ORDEN_OPERACIONES'],[x+1,'ARITMETICA']];hints=['Deshaz primero la suma y después la multiplicación.',`${a}x = ${total} − ${b} = ${a*x}.`,`x = (${total} − ${b}) / ${a} = ${x}.`];}

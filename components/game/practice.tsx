@@ -42,6 +42,7 @@ export function Practice({
   const [skillResults, setSkillResults] = useState<
     Record<string, { correct: number; total: number }>
   >({});
+  const [coachBusy, setCoachBusy] = useState(false);
   const [aiHelp, setAiHelp] = useState(false);
   const gate = useRef(false);
   const field = useRef<HTMLInputElement>(null);
@@ -54,7 +55,7 @@ export function Practice({
   );
   const activeTime = useActiveTime(
     question?.seed ?? "complete",
-    busy || solved || Boolean(result),
+    busy || coachBusy || solved || Boolean(result),
   );
   const sessionTime = useActiveTime(sessionId, Boolean(result));
   useEffect(() => {
@@ -68,7 +69,7 @@ export function Practice({
       };
   };
   const edit = (key: string) => {
-    if (solved || busy) return;
+    if (solved || busy || coachBusy) return;
     const selection = cursor.current ?? {
       start: answer.length,
       end: answer.length,
@@ -357,7 +358,7 @@ export function Practice({
               key={key}
               onPointerDown={(e) => e.preventDefault()}
               onClick={() => edit(key)}
-              disabled={busy}
+              disabled={busy || coachBusy}
             >
               {key === "clear" ? "Limpiar" : key === "-" ? "−" : key}
             </button>
@@ -380,7 +381,7 @@ export function Practice({
         <button
           className="primary"
           onClick={() => void advance()}
-          disabled={busy}
+          disabled={busy || coachBusy}
         >
           {busy
             ? "Guardando…"
@@ -394,7 +395,7 @@ export function Practice({
           <button
             className="primary"
             onClick={() => void check()}
-            disabled={busy || !answer}
+            disabled={busy || coachBusy || !answer}
           >
             {busy ? "Guardando…" : "Comprobar"}
             <Icon name="check" />
@@ -402,7 +403,7 @@ export function Practice({
           <div className="question-options">
             <button
               className="quiet"
-              disabled={busy}
+              disabled={busy || coachBusy}
               onClick={() => {
                 setMessage(exercise.hints[Math.min(hint, 2)]);
                 setHint((n) => Math.min(3, n + 1));
@@ -420,6 +421,8 @@ export function Practice({
         </>
       )}
       <AICoach
+        key={exercise.seed}
+        onBusyChange={setCoachBusy}
         context={{
           sessionId,
           skillId: skill.id,

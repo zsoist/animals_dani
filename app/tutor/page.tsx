@@ -1,3 +1,7 @@
+import { CatalogBrowser } from "@/components/tutor/catalog-browser";
+import Image from "next/image";
+import { TutorWorkspace } from "@/components/tutor/workspace";
+import { PracticeLab } from "@/components/tutor/practice-lab";
 import Link from "next/link";
 import { requireTutor } from "@/lib/data/session";
 import { getTutorSummary } from "@/lib/data/student";
@@ -35,21 +39,18 @@ export default async function Tutor() {
       </header>
       <div className="admin-heading">
         <div>
-          <h1>Diseña su próxima aventura</h1>
+          <h1>Pequeños pasos.<br/>Grandes descubrimientos.</h1>
           <p>
-            Un tema al día. Tus materiales, sus desafíos y todo su progreso.
+            Tu espacio para entender cómo aprende Laura y preparar lo que sigue.
           </p>
         </div>
+        <Image className="admin-mascot" src="/art/numa.webp" width={160} height={160} alt="Numa listo para preparar una práctica"/>
         <a href="#new-skill" className="primary">
           <Icon name="plus" />
           Nueva habilidad
         </a>
       </div>
-      <nav className="admin-sections">
-        <a href="#new-skill">Crear práctica · PDF / IA</a>
-        <a href="#catalog">Editar habilidades</a>
-        <a href="#progress">Ver progreso</a>
-      </nav>
+      <TutorWorkspace>
       <section
         id="progress"
         className="admin-stats"
@@ -60,9 +61,9 @@ export default async function Tutor() {
           ["Días practicados", new Set(completed.map((s) => s.date)).size],
           [
             "Racha actual",
-            streak ? `${visibleStreak(streak, dayKey())} días` : "0 días",
+            streak ? `${visibleStreak(streak, dayKey())} ${visibleStreak(streak, dayKey()) === 1 ? "día" : "días"}` : "0 días",
           ],
-          ["Mejor racha", `${streak?.best ?? 0} días`],
+          ["Mejor racha", `${streak?.best ?? 0} ${streak?.best === 1 ? "día" : "días"}`],
           ["Intentos", data.attempts.length],
           [
             "Tiempo de práctica",
@@ -88,6 +89,7 @@ export default async function Tutor() {
           Abre una habilidad para editar sus preguntas, prioridad, dificultad y
           notas.
         </p>
+        <CatalogBrowser skills={data.skills}>
         {data.skills.map((skill) => {
           const attempts = data.attempts.filter((a) => a.skill_id === skill.id);
           const hits = attempts.filter((a) => a.correct);
@@ -257,15 +259,12 @@ export default async function Tutor() {
             </details>
           );
         })}
+        </CatalogBrowser>
       </section>
       <section className="new-skill-section" id="new-skill">
-        <h2>Crea su próxima aventura</h2>
-        <p>
-          Escribe tus problemas y pistas o usa uno de los tres generadores
-          disponibles.
-        </p>
-        <SkillEditor />
+        <PracticeLab skills={data.skills}/>
       </section>
+      </TutorWorkspace>
     </main>
   );
 }

@@ -25,3 +25,11 @@
 - Un solo tema vigente al día también se comunica al tutor. La corrección académica permanece determinista y la ayuda IA cuenta como pista.
 - RLS en las cuatro tablas nuevas, reservas de uso atómicas y cuotas para controlar gasto. Migración aplicada mediante el editor SQL autenticado de Supabase porque el conector no tenía permisos.
 - El admin revisa los borradores generados: validamos formato y respuesta numérica, sin prometer que un modelo nunca comete errores matemáticos.
+
+## Refinamiento Impeccable y laboratorio pedagógico
+- Se conserva la dirección 2D fijada por el usuario; el cambio usa ilustración original de OpenAI optimizada y gatos con transparencia, sin nueva exploración conceptual ni promesa de modelo «2.5».
+- Tres espacios del profe: comprender el progreso, preparar una práctica y administrar habilidades. La generación incorpora errores reales de la habilidad seleccionada y una estrategia explícita.
+- La práctica generada se guarda desactivada por defecto; el profe prueba, edita y activa. Repetir Guardar actualiza la misma habilidad. Se conserva una copia local del borrador generado, sin prometer autoguardado de posteriores ediciones.
+- Se pausa el reloj activo mientras Numa responde y se impide avanzar durante esa consulta para mantener la ayuda vinculada al ejercicio correcto.
+- Las ecuaciones generadas de nivel 3 usan denominadores que permiten representar el enunciado exactamente con decimales cortos.
+- Animaciones de transformaciones y opacidad, con reducción de movimiento persistente y preferencia del sistema. No se afirma rendimiento físico sin medirlo.

@@ -23,6 +23,7 @@ export function learningEvidence(
       if (!a.correct && a.error_type)
         errors[a.error_type] = (errors[a.error_type] ?? 0) + 1;
     return {
+      skillId: skill.id,
       skill: skill.name,
       level:
         masteries.find((m) => m.skill_id === skill.id)?.current_level ?? null,
