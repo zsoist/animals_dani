@@ -11,5 +11,5 @@ await appendFile('.env.local',`\nLAURA_EMAIL=${laura.email}\nLAURA_PASSWORD=${la
 process.loadEnvFile('.env.local');
 for(const name of ['NEXT_PUBLIC_SUPABASE_URL','NEXT_PUBLIC_SUPABASE_ANON_KEY','SUPABASE_SERVICE_ROLE_KEY','LAURA_EMAIL','LAURA_PASSWORD']){
  const value=process.env[name];if(!value)throw new Error(`Falta ${name}`);
- run('vercel',['env','add',name,'production','--force'],value);
+ run('vercel',['env','add',name,'production','--force','--yes'],value);
 }

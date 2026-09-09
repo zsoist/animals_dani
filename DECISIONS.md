@@ -9,3 +9,6 @@
 - Complejidad y seguridad ligeras por instrucción posterior del usuario: sin servicios extra, auditorías extensas ni flujos de aprobación añadidos. Solo autenticación, separación de roles, RLS y secretos del servidor.
 - TypeScript 6 y ESLint 9 se fijan por compatibilidad declarada con eslint-config-next; TypeScript 7 y ESLint 10 aún generan conflictos de pares en las dependencias actuales.
 - La última instrucción sustituye el login de estudiante: la ruta / abre el único refugio compartido de Laura, sin credenciales visibles. Admin es el único acceso con usuario y contraseña. El servidor utiliza las credenciales privadas de Laura para las operaciones de estudiante, sometidas a RLS. Quien tenga la URL puede usar este refugio; no se implementan cuentas adicionales ni aislamiento entre visitantes.
+- Proyecto definitivo suministrado por el usuario: pwcvskguqyhbhlwnsmmy (DAN GPT, Free). La conexión vía ChatGPT permitió aplicar la migración sin crear proyectos adicionales.
+- Claves legacy anon/service_role utilizadas conforme al contrato original. El servidor accede como estudiante para el refugio; la clave privilegiada se reserva al aprovisionamiento.
+- La configuración de variables de Vercel usa su API oficial autenticada, con secretos privados y clave anon pública. Las claves no aparecen en comandos ni commits.

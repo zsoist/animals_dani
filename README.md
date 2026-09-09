@@ -4,7 +4,9 @@ Aplicación Next.js con React Three Fiber, Supabase y acceso directo al refugio 
 
 ## Estado
 
-Fase 1 en preparación. El proyecto Vercel está conectado. La nueva cuenta gratuita de Supabase aún no está disponible en el conector; no se han aplicado migraciones ni creado usuarios remotos. Las fases 2–4 se implementan después de verificar esta base.
+Fase 1 desplegada y conectada al proyecto Supabase `pwcvskguqyhbhlwnsmmy`. Laura entra directamente al refugio. Admin usa el usuario `admin` y la contraseña creada durante la instalación. Esquema, catálogo, roles y acceso real verificados. Las fases 2–4 siguen pendientes.
+
+Producción: https://animals-dani.vercel.app
 
 ## Instalación y despliegue en tres comandos
 
