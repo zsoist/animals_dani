@@ -29,7 +29,7 @@ Las fases 1–4 tienen implementación. La última petición reemplaza 3D por 2D
 
 ## Revisión posterior: centro de rescate y estudio de preguntas
 
-Implementación terminada, pendiente verificar publicación de esta revisión.
+Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLvSArBbPySnA`: página y worker PDF responden HTTP 200; acceso Admin y estudio de preguntas comprobados en producción. Typecheck, lint, 41 pruebas y build final aprobados.
 
 - Escena amplia de centro de rescate con paleta intensa; preguntas en tarjetas centradas sobre el fondo atenuado.
 - Comedor, pelota, limpieza y día/noche con respuestas visuales. Juego y limpieza persisten cuidado sin alterar aciertos.
