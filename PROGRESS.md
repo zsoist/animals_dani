@@ -1,6 +1,6 @@
 # Refugio — progreso
 
-## Estado: rediseño 2D implementado, publicación en curso
+## Estado: rediseño 2D publicado y verificado
 
 Las fases 1–4 tienen implementación. La última petición reemplaza 3D por 2D y permite habilidades nuevas del tutor.
 
@@ -17,7 +17,7 @@ Las fases 1–4 tienen implementación. La última petición reemplaza 3D por 2D
 - Sesión completa de diez ejercicios contra Supabase: respuesta incorrecta produce pista y reinyección tres posiciones después; respuestas correctas guardadas; Bruno rescatado y racha de un día conservados tras recarga.
 - Admin: login real, creación de habilidad «Fracciones equivalentes», prioridad, pistas y nota guardadas. La práctica nueva apareció en la siguiente selección. Habilidad temporal de prueba eliminada al terminar.
 - La sesión de verificación permanece en el refugio compartido: dos gatos (Milo y Bruno). No se borraron intentos previos.
-- Pendiente de cierre: build final, publicación y verificación HTTP de producción.
+- Build final aprobado. Publicado en https://animals-dani.vercel.app: HTTP 200 verificado y habitación 2D comprobada en navegador de producción. Despliegue `dpl_2yvqpMN2HxFjqbVvPMK5eBfsCAf7`.
 
 ## Límites honestos
 
