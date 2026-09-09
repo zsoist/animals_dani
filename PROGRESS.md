@@ -66,4 +66,4 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - 16 fórmulas simbólicas en cuatro niveles, teclado de letras y operaciones, pistas y firmas algebraicas. Editor e IA aceptan expresiones.
 - 55 pruebas: equivalencias exactas, sintaxis inválida, clasificación de errores, 100 semillas por familia/nivel con sustitución independiente y bloqueo del comedor mediante pruebas de la acción del servidor.
 - Móvil 390 × 844: fórmula x = s+v*t, respuesta equivalente (x-s)/(v) aceptada y guardada realmente; teclado, ficha de Milo y colores comprobados.
-- Despliegue pendiente de verificar.
+- Publicado en https://animals-dani.vercel.app, despliegue `dpl_BeS1oPDjhZjRYrjrBPoGBM2aMj2o`, código `372419b`. HTTP 200 y nueva misión simbólica con teclado de letras comprobados en producción. Typecheck, lint, 55 pruebas y build pasan.
