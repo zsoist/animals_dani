@@ -30,3 +30,13 @@
 - Cambio solicitado: Laura accede a / sin login; solo el botón Admin requiere usuario y contraseña.
 - Esquema SQL y catálogo inicial preparados; no aplicados porque la cuenta Supabase nueva no está conectada.
 - El refugio muestra la habitación real en 3D; los gatos se cargan desde Supabase y aún no aparecen hasta completar esa conexión.
+
+## Despliegue de la base — 2026-09-09
+- URL real: https://animals-dani.vercel.app — GET devuelve HTTP 200.
+- Habitación WebGL comprobada visualmente a 390 × 844: suelo, paredes, ventana, alfombra y luz cálida.
+- /tutor sin sesión devuelve HTTP 307 hacia /auth.
+- Las cuatro comprobaciones locales pasan; hay tres pruebas de configuración, no de aprendizaje.
+- Fase 1 NO completada: falta proyecto Supabase nuevo, migración aplicada, usuarios reales, verificación de RLS y gato inicial cargado de la base.
+- Criterios cumplidos: 1, 2, 10 (3/10 para la base existente). Criterios 3–8 pendientes por Supabase y fases 2–4; 9 pendiente de Lighthouse.
+- Nota de rendimiento: no se ha medido el presupuesto de draw calls con seis gatos ni fps/4G. Three emite una advertencia interna de deprecación de Clock; no es un error TypeScript.
+- Próximo paso: conectar la cuenta/proyecto Supabase gratuito, completar .env.local y ejecutar la instalación remota descrita en README.md. Después verificar Fase 1 y avanzar en orden.
