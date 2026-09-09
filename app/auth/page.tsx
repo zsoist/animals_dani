@@ -1,5 +1,20 @@
-import Link from 'next/link';
-import {Shelter} from '@/components/scene/shelter';
-import {Login} from '@/components/game/login';
-import {isConfigured} from '@/lib/data/config';
-export default function Auth(){return <main className="shelter"><Shelter cats={[]}/><header className="masthead"><span className="eyebrow">El refugio de Laura</span><h1>Admin.</h1></header><section className="panel"><h2>Acceso del tutor</h2>{isConfigured()?<Login/>:<p role="status">Falta conectar Supabase para habilitar el acceso del administrador.</p>}<Link href="/" className="quiet inline-flex min-h-12 items-center">Volver al refugio</Link></section></main>}
+import Link from "next/link";
+import { Login } from "@/components/game/login";
+import { CatArt } from "@/components/scene/cat-art";
+import { Icon } from "@/components/game/icons";
+export default function Auth() {
+  return (
+    <main className="auth-shell">
+      <Link href="/" className="secondary">
+        <Icon name="back" size={18} />
+        Volver al refugio
+      </Link>
+      <section className="auth-panel">
+        <CatArt />
+        <h1>Hola, tutor.</h1>
+        <p>Un espacio para preparar las aventuras de Laura.</p>
+        <Login />
+      </section>
+    </main>
+  );
+}

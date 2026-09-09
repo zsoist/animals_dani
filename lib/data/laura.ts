@@ -1,5 +1,27 @@
-import 'server-only';
-import {createClient} from '@supabase/supabase-js';
-import {publicConfig} from './config';
-import type {ShelterCat} from './shelter';
-export async function openLauraShelter():Promise<ShelterCat[]>{const {url,key}=publicConfig();const email=process.env.LAURA_EMAIL;const password=process.env.LAURA_PASSWORD;if(!email||!password)throw new Error('Falta configurar el acceso del refugio de Laura.');const db=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}});const {data:auth,error:authError}=await db.auth.signInWithPassword({email,password});if(authError||!auth.user)throw new Error('No se pudo abrir el refugio de Laura.');const {data,error}=await db.from('cat_unlocks').select('unlocked_at,cats(id,name,personality,story,palette)').eq('user_id',auth.user.id);if(error)throw new Error('No pudimos cargar a los gatos.');return (data??[]).flatMap(row=>{const raw:unknown=row.cats;return (Array.isArray(raw)?raw:[raw]).map((entry:unknown)=>{if(!entry||typeof entry!=='object')throw new Error('Gato inválido');const c=entry as Record<string,unknown>;const p=c.palette as Record<string,unknown>;return {id:String(c.id),name:String(c.name),story:String(c.story),personality:String(c.personality),palette:{body:String(p.body),belly:String(p.belly)},unlockedAt:String(row.unlocked_at)}})})}
+import "server-only";
+import { studentClient } from "./student";
+import type { ShelterCat } from "./shelter";
+export async function openLauraShelter(): Promise<ShelterCat[]> {
+  const { db, userId } = await studentClient();
+  const { data, error } = await db
+    .from("cat_unlocks")
+    .select("unlocked_at,cats(id,name,personality,story,palette)")
+    .eq("user_id", userId);
+  if (error) throw new Error("No pudimos cargar a los gatos.");
+  return (data ?? []).flatMap((row) => {
+    const raw: unknown = row.cats;
+    return (Array.isArray(raw) ? raw : [raw]).map((entry: unknown) => {
+      if (!entry || typeof entry !== "object") throw new Error("Gato inválido");
+      const c = entry as Record<string, unknown>;
+      const p = c.palette as Record<string, unknown>;
+      return {
+        id: String(c.id),
+        name: String(c.name),
+        story: String(c.story),
+        personality: String(c.personality),
+        palette: { body: String(p.body), belly: String(p.belly) },
+        unlockedAt: String(row.unlocked_at),
+      };
+    });
+  });
+}

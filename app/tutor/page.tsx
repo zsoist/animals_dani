@@ -1,7 +1,254 @@
-import {requireTutor} from '@/lib/data/session';
-import {signOut} from '@/lib/data/auth';
-import {getTutorSummary} from '@/lib/data/student';
-import {band} from '@/lib/engine/mastery';
-import {createSkill, deleteSkill, updateSkill} from '@/lib/data/tutor-actions';
-export const dynamic='force-dynamic';
-export default async function Tutor(){const profile=await requireTutor();const data=await getTutorSummary();const total=data.attempts.length;const correct=data.attempts.filter(a=>a.correct).length;const failures=data.attempts.filter(a=>!a.correct);const counts=failures.reduce<Record<string,number>>((acc,a)=>{const key=a.error_type??'UNKNOWN';acc[key]=(acc[key]??0)+1;return acc},{});const dominant=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];return <main className="min-h-screen bg-[#f4e4d0] p-6 text-[#4a5859] md:p-10"><div className="mx-auto max-w-5xl"><div className="flex items-center justify-between"><div><p className="eyebrow">Refugio · admin</p><h1 className="mt-3 font-serif text-4xl">Hola, {profile.alias}.</h1></div><form action={signOut}><button className="quiet">Cerrar sesión</button></form></div><section className="mt-8 grid gap-3 sm:grid-cols-4">{[['Sesiones',data.sessions.length],['Ejercicios',total],['Aciertos',total?`${Math.round(correct/total*100)}%`:'—'],['Racha',data.sessions.length?'Activa':'—']].map(([label,value])=><div className="rounded-2xl bg-white/70 p-5" key={String(label)}><p className="eyebrow">{label}</p><strong className="mt-2 block text-3xl">{value}</strong></div>)}</section><section className="mt-8 rounded-3xl bg-white/70 p-6"><h2 className="font-serif text-2xl">Por habilidad</h2><div className="mt-4 grid gap-3">{data.skills.map(skill=>{const m=data.mastery.find(x=>x.skill_id===skill.id);const attempts=data.attempts.filter(x=>x.skill_id===skill.id);const hits=attempts.filter(x=>x.correct).length;return <article className="rounded-2xl border border-[#e1d3bf] p-4" key={skill.id}><div className="flex justify-between"><strong>{skill.name}</strong><span>{band(Number(m?.mastery_score??0))}</span></div><p className="mt-2 text-sm">{hits}/{attempts.length||0} aciertos · Nivel {m?.current_level??skill.base_difficulty} · Dominio {Math.round(Number(m?.mastery_score??0))}</p><form action={updateSkill} className="mt-3 flex flex-wrap items-center gap-3 text-sm"><input type="hidden" name="id" value={skill.id}/><label>Prioridad <input className="w-16 rounded border p-2" type="number" name="priority" min="1" max="10" defaultValue={skill.priority}/></label><label className="flex items-center gap-2"><input type="checkbox" name="active" defaultChecked={skill.active}/> Activa</label><button className="quiet rounded border" type="submit">Guardar</button><button className="quiet rounded border" formAction={deleteSkill} type="submit">Borrar</button></form></article>})}</div></section><section className="mt-6 rounded-3xl bg-white/70 p-6"><h2 className="font-serif text-2xl">Nueva habilidad</h2><form action={createSkill} className="mt-4 grid gap-3 sm:grid-cols-3"><input className="rounded-xl border p-3" name="name" placeholder="Nombre" required/><select className="rounded-xl border p-3" name="subject" defaultValue="matematicas"><option value="matematicas">Matemáticas</option><option value="fisica">Física</option><option value="quimica">Química</option></select><input className="rounded-xl border p-3 sm:col-span-3" name="description" placeholder="Qué practica Laura" required/><button className="primary sm:col-span-3" type="submit">Crear habilidad</button></form></section><section className="mt-6 rounded-3xl bg-white/70 p-6"><h2 className="font-serif text-2xl">Qué observar</h2><p className="mt-3">{dominant?`El error principal es ${dominant[0]}, con ${dominant[1]} intentos.`:'Todavía no hay suficientes fallos para detectar un patrón.'}</p><p className="mt-2 text-sm">Las observaciones se generan a partir de los intentos reales de Laura.</p></section></div></main>}
+import Link from "next/link";
+import { requireTutor } from "@/lib/data/session";
+import { getTutorSummary } from "@/lib/data/student";
+import { signOut } from "@/lib/data/auth";
+import { band, visibleStreak, dayKey } from "@/lib/engine/mastery";
+import { SkillEditor, NoteForm } from "@/components/tutor/skill-editor";
+import { Icon } from "@/components/game/icons";
+export default async function Tutor() {
+  await requireTutor();
+  const data = await getTutorSummary();
+  const completed = data.sessions.filter((s) => s.completed);
+  const streak = data.streaks[0];
+  const now = new Date().getTime();
+  return (
+    <main className="admin-shell">
+      <header className="admin-header">
+        <Link className="brand" href="/">
+          <span className="brand-mark">
+            <Icon name="paw" />
+          </span>
+          refugio.
+        </Link>
+        <nav>
+          <Link className="secondary" href="/">
+            <Icon name="home" size={19} />
+            Ver refugio
+          </Link>
+          <form action={signOut}>
+            <button className="quiet">Salir</button>
+          </form>
+        </nav>
+      </header>
+      <div className="admin-heading">
+        <div>
+          <h1>El aprendizaje de Laura</h1>
+          <p>
+            Prepara sus próximas aventuras y descubre dónde necesita una mano.
+          </p>
+        </div>
+        <a href="#new-skill" className="primary">
+          <Icon name="plus" />
+          Nueva habilidad
+        </a>
+      </div>
+      <section className="admin-stats" aria-label="Resumen de práctica">
+        {[
+          ["Misiones completadas", completed.length],
+          ["Días practicados", new Set(completed.map((s) => s.date)).size],
+          [
+            "Racha actual",
+            streak ? `${visibleStreak(streak, dayKey())} días` : "0 días",
+          ],
+          ["Mejor racha", `${streak?.best ?? 0} días`],
+          ["Intentos", data.attempts.length],
+          [
+            "Tiempo de práctica",
+            `${Math.round(completed.reduce((n, s) => n + s.duration_ms, 0) / 60000)} min`,
+          ],
+        ].map(([label, value]) => (
+          <div key={label}>
+            <span>{label}</span>
+            <strong>{value}</strong>
+          </div>
+        ))}
+      </section>
+      <section className="admin-catalog">
+        <h2>
+          Habilidades de práctica <span>{data.skills.length}</span>
+        </h2>
+        <p>
+          Abre una habilidad para editar sus preguntas, prioridad, dificultad y
+          notas.
+        </p>
+        {data.skills.map((skill) => {
+          const attempts = data.attempts.filter((a) => a.skill_id === skill.id);
+          const hits = attempts.filter((a) => a.correct);
+          const fails = attempts.filter((a) => !a.correct);
+          const mastery = data.mastery.find((m) => m.skill_id === skill.id);
+          const counts = fails.reduce<Record<string, number>>((acc, a) => {
+            const key = a.error_type ?? "UNKNOWN";
+            acc[key] = (acc[key] ?? 0) + 1;
+            return acc;
+          }, {});
+          const dominant = Object.entries(counts).sort(
+            (a, b) => b[1] - a[1],
+          )[0];
+          const recent = attempts.filter(
+            (a) => now - Date.parse(a.created_at) < 7 * 86400000,
+          );
+          const previous = attempts.filter(
+            (a) =>
+              now - Date.parse(a.created_at) >= 7 * 86400000 &&
+              now - Date.parse(a.created_at) < 14 * 86400000,
+          );
+          const accuracy = (list: typeof attempts) =>
+            list.length
+              ? Math.round(
+                  (list.filter((a) => a.correct).length / list.length) * 100,
+                )
+              : 0;
+          const delta = accuracy(recent) - accuracy(previous);
+          return (
+            <details className="admin-skill" key={skill.id}>
+              <summary>
+                <Icon name="book" />
+                <div>
+                  <strong>{skill.name}</strong>
+                  <span>
+                    {skill.family === "custom"
+                      ? `${skill.questions?.length ?? 0} preguntas propias`
+                      : "Ejercicios automáticos"}{" "}
+                    · {band(mastery?.mastery_score ?? 0)}
+                  </span>
+                </div>
+                <span
+                  className={skill.active ? "active-label" : "inactive-label"}
+                >
+                  {skill.active ? "Activa" : "Pausada"}
+                </span>
+                <b>
+                  {attempts.length ? `${accuracy(attempts)}%` : "Sin práctica"}
+                </b>
+                <Icon name="plus" size={20} />
+              </summary>
+              <div className="admin-skill-body">
+                <div className="skill-metrics">
+                  <span>
+                    Nivel{" "}
+                    <b>{mastery?.current_level ?? skill.base_difficulty}</b>
+                  </span>
+                  <span>
+                    Dominio <b>{Math.round(mastery?.mastery_score ?? 0)}/100</b>
+                  </span>
+                  <span>
+                    Respuesta media{" "}
+                    <b>
+                      {attempts.length
+                        ? `${Math.round(attempts.reduce((n, a) => n + a.response_ms, 0) / attempts.length / 1000)} s`
+                        : "—"}
+                    </b>
+                  </span>
+                  <span>
+                    Frecuencia{" "}
+                    <b>
+                      {
+                        new Set(attempts.map((a) => a.created_at.slice(0, 10)))
+                          .size
+                      }{" "}
+                      días
+                    </b>
+                  </span>
+                </div>
+                <div className="insights">
+                  <h3>Qué observar</h3>
+                  {!attempts.length && (
+                    <p>
+                      Aún no hay intentos. Los datos aparecerán cuando Laura
+                      practique.
+                    </p>
+                  )}
+                  {recent.length > 0 && previous.length > 0 && (
+                    <p>
+                      Últimos 7 días: {delta >= 0 ? "+" : ""}
+                      {delta} puntos de acierto frente a la semana anterior.
+                    </p>
+                  )}
+                  {dominant && (
+                    <p>
+                      {dominant[1] / fails.length >= 0.4
+                        ? "Error dominante"
+                        : "Error más frecuente"}
+                      : <b>{dominant[0]}</b> · {dominant[1]} de {fails.length}{" "}
+                      errores.
+                    </p>
+                  )}
+                  {hits.length > 0 &&
+                    hits.filter((a) => a.hint_level > 0).length / hits.length >=
+                      0.5 && (
+                      <p>
+                        Al menos la mitad de los aciertos necesitó pistas.
+                        Conviene repetir con menos ayuda.
+                      </p>
+                    )}
+                  {mastery &&
+                    mastery.mastery_score >= 60 &&
+                    mastery.mastery_score < 75 &&
+                    new Set(
+                      attempts
+                        .filter((a) => a.level === mastery.current_level)
+                        .map((a) => a.created_at.slice(0, 10)),
+                    ).size >= 5 && (
+                      <p>
+                        Lleva al menos 5 días practicados en este nivel:
+                        conviene revisar el procedimiento juntos.
+                      </p>
+                    )}
+                  <div className="weekly-trend">
+                    {[2, 1, 0].map((week) => {
+                      const list = attempts.filter((a) => {
+                        const age = now - Date.parse(a.created_at);
+                        return (
+                          age >= week * 7 * 86400000 &&
+                          age < (week + 1) * 7 * 86400000
+                        );
+                      });
+                      return (
+                        <span key={week}>
+                          {week === 0
+                            ? "Esta semana"
+                            : `Hace ${week} ${week === 1 ? "semana" : "semanas"}`}
+                          <b>
+                            {list.length ? `${accuracy(list)}%` : "Sin datos"}
+                          </b>
+                        </span>
+                      );
+                    })}
+                  </div>
+                  {fails.slice(0, 4).map((a) => (
+                    <div className="attempt-example" key={a.id}>
+                      <strong>{a.prompt_text}</strong>
+                      <p>
+                        Respondió: {a.given_answer} · Esperado:{" "}
+                        {a.expected_answer}
+                      </p>
+                      <small>{a.error_type ?? "UNKNOWN"}</small>
+                    </div>
+                  ))}
+                </div>
+                <SkillEditor skill={skill} />
+                <h3>Notas del tutor</h3>
+                {data.notes
+                  .filter((n) => n.skill_id === skill.id)
+                  .map((n) => (
+                    <p className="saved-note" key={n.id}>
+                      {n.body}
+                    </p>
+                  ))}
+                <NoteForm skillId={skill.id} userId={data.userId} />
+              </div>
+            </details>
+          );
+        })}
+      </section>
+      <section className="new-skill-section" id="new-skill">
+        <h2>Crea su próxima aventura</h2>
+        <p>
+          Escribe tus problemas y pistas o usa uno de los tres generadores
+          disponibles.
+        </p>
+        <SkillEditor />
+      </section>
+    </main>
+  );
+}

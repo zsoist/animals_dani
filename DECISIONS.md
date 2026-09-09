@@ -1,15 +1,11 @@
-# Decisiones
+# Decisiones vigentes
 
-- La nueva cuenta gratuita de Supabase aún no está conectada. Los proyectos Trophe y Trophe-QA pertenecen a otro producto y no se reutilizan. No se crea un proyecto con coste ni se alteran sus datos.
-- Se respeta el orden de fases: no se declara terminada la Fase 1 sin autenticación y RLS verificadas contra el proyecto real.
-- El refugio usa geometría procedural y una escena 2D vectorial equivalente cuando WebGL no está disponible.
-- Los roles se leen de profiles; la estudiante no puede modificar su perfil ni asignarse el rol tutor.
-- Los usuarios se crean con la API administrativa de Auth durante la instalación, con contraseñas aleatorias; las credenciales no se incluyen en Git.
-- Se conservan tres familias de generadores. El CRUD posterior solo podrá crear habilidades hasta el máximo de tres activas y deberá elegir una familia compatible.
-- Complejidad y seguridad ligeras por instrucción posterior del usuario: sin servicios extra, auditorías extensas ni flujos de aprobación añadidos. Solo autenticación, separación de roles, RLS y secretos del servidor.
-- TypeScript 6 y ESLint 9 se fijan por compatibilidad declarada con eslint-config-next; TypeScript 7 y ESLint 10 aún generan conflictos de pares en las dependencias actuales.
-- La última instrucción sustituye el login de estudiante: la ruta / abre el único refugio compartido de Laura, sin credenciales visibles. Admin es el único acceso con usuario y contraseña. El servidor utiliza las credenciales privadas de Laura para las operaciones de estudiante, sometidas a RLS. Quien tenga la URL puede usar este refugio; no se implementan cuentas adicionales ni aislamiento entre visitantes.
-- Proyecto definitivo suministrado por el usuario: pwcvskguqyhbhlwnsmmy (DAN GPT, Free). La conexión vía ChatGPT permitió aplicar la migración sin crear proyectos adicionales.
-- Claves legacy anon/service_role utilizadas conforme al contrato original. El servidor accede como estudiante para el refugio; la clave privilegiada se reserva al aprovisionamiento.
-- La configuración de variables de Vercel usa su API oficial autenticada, con secretos privados y clave anon pública. Las claves no aparecen en comandos ni commits.
-- En móvil, la tarjeta de práctica conserva el teclado propio y desplaza el encuadre 3D hacia arriba para que el gato siga visible durante las respuestas; el input no abre el teclado nativo.
+- La petición del 9 de septiembre sustituye la escena 3D por una habitación 2D original, inspirada en las proporciones de la referencia: turquesa, coral, amarillo y lavanda. SVG y CSS permiten gatos animados sin WebGL ni imágenes remotas.
+- Laura entra directamente en el único refugio compartido. Admin pide usuario y contraseña, valida su rol en el servidor y conserva RLS. Quien tenga la URL puede practicar en el refugio de Laura; esto es intencional.
+- Supabase sigue siendo el proyecto autorizado `pwcvskguqyhbhlwnsmmy`. No se crean servicios ni cuentas adicionales y las claves permanecen fuera de Git.
+- El tutor puede añadir habilidades con preguntas, respuesta, nivel y tres pistas propios. Se guardan como contenido estructurado en `skill_levels.description`, reutilizando esquema y permisos existentes. El motor puro recibe los datos ya decodificados.
+- Se mantienen las tres familias de ejercicios generados y se permiten nuevas habilidades de contenido escrito por el tutor. Una habilidad nueva no inventa ejercicios: necesita al menos una pregunta válida. Si faltan preguntas de un nivel, reutiliza las disponibles; el editor permite ampliar el banco.
+- Respuestas numéricas con coma, punto y fracciones equivalentes; coeficientes con varias comas. Una entrada inválida no se registra como error académico. El teclado permite borrar, limpiar y editar en la posición seleccionada sin abrir el teclado móvil.
+- La escena permanece visible durante la práctica. Se avanza con un botón después de cada respuesta, sin temporizadores que interrumpan la lectura. Comida, mantas, lámparas, gatos rescatados y racha se guardan en Supabase.
+- El servidor reconstruye el ejercicio y comprueba la respuesta antes de persistirla. El cierre calcula el resultado desde intentos guardados y evita duplicar el rescate al repetir la finalización.
+- Tipografía Nunito servida localmente. Sin trackers ni generación por LLM en ejecución.

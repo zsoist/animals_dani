@@ -1,10 +1,12 @@
 # El refugio de Laura
 
-Aplicación Next.js con React Three Fiber, Supabase y acceso directo al refugio de Laura. Solo Admin pide usuario y contraseña.
+Juego educativo en Next.js, con refugio 2D ilustrado, Supabase y acceso directo para Laura. Solo Admin pide usuario y contraseña.
 
 ## Estado
 
-Fase 1 desplegada y conectada al proyecto Supabase `pwcvskguqyhbhlwnsmmy`. Laura entra directamente al refugio. Admin usa el usuario `admin` y la contraseña creada durante la instalación. Esquema, catálogo, roles y acceso real verificados. Las fases 2–4 siguen pendientes.
+Las cuatro áreas están implementadas: acceso y persistencia, motor adaptativo, misión de diez desafíos con rescates y panel de tutor. La revisión visual incluye habitación 2D, gatos interactivos, racha con calendario y ejercicios grandes.
+
+En `/tutor`, el usuario `admin` usa la contraseña existente. Desde «Nueva habilidad» se crean prácticas con enunciados, respuestas y pistas propias; también se editan prioridades, niveles, activación y notas. Las tres familias originales generan ejercicios automáticamente. Las prácticas personalizadas admiten números, fracciones y coeficientes.
 
 Producción: https://animals-dani.vercel.app
 
@@ -30,4 +32,4 @@ Todos los visitantes de la URL usan el mismo refugio de Laura, por petición exp
 
 - [Supabase SSR](https://supabase.com/docs/guides/auth/server-side/creating-a-client)
 - [Next.js App Router](https://nextjs.org/docs/app)
-- [React Three Fiber](https://r3f.docs.pmnd.rs/getting-started/installation)
+- La escena actual usa SVG y CSS; los componentes 3D anteriores no se cargan en la aplicación.

@@ -1,31 +1,28 @@
 # Refugio — progreso
 
-## Fase 1 — completada
-Esquema Supabase, RLS, catálogo, usuarios, escena 3D, acceso directo de Laura y botón Admin desplegados.
+## Estado: rediseño 2D implementado, publicación en curso
 
-## Fase 2 — completada
-- Generadores deterministas para despejes, unidades y química, cuatro niveles.
-- Normalización de respuestas, firmas de errores, pistas progresivas y clasificación UNKNOWN.
-- Mastery, decaimiento, bandas, subida/bajada de nivel, selector adaptativo y reinyección.
-- 100 semillas por generador/nivel verificadas: 1200 ejercicios correctos en Vitest.
+Las fases 1–4 tienen implementación. La última petición reemplaza 3D por 2D y permite habilidades nuevas del tutor.
 
-## Fase 3 — completada
-- Misión diaria de diez preguntas superpuesta a la escena.
-- Teclado numérico propio con coma decimal, borrado carácter a carácter y botón para limpiar; feedback, pista, reinyección y persistencia de intentos.
-- Recompensa persistente en shelter_state, sesión completada y racha.
-- Milo permanece visible después de recargar.
-- En móvil, el encuadre de práctica eleva la escena para mantener a Milo visible sobre la tarjeta de preguntas.
+- Refugio ilustrado original, colores turquesa/coral/lavanda, gatos animados e interactivos, escena visible en práctica.
+- Problemas grandes, teclado propio con coma/punto/fracciones, borrado y selección, feedback y avance manual.
+- Racha legible con calendario de siete días, récord y estado de hoy.
+- Admin con estadísticas, tendencias, errores reales, pistas, notas y editor de habilidades y preguntas propias.
+- Verificación de respuestas y rescates en servidor; persistencia en el proyecto Supabase autorizado.
 
-## Fase 4 — completada
-- Panel Admin con resumen, dominio por habilidad, aciertos, nivel y error dominante basado en intentos reales.
-- Acceso de tutor validado en servidor; estudiante redirige al refugio.
+## Verificación del 9 de septiembre de 2026
 
-## Verificación
-- `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build`: pasan.
-- Producción: https://animals-dani.vercel.app responde HTTP 200.
-- Inicio de misión real comprobado en móvil; primera pregunta generada desde Supabase.
-- RLS verificada previamente: Laura no ve perfil/intentos de Tutor y no puede escribir registros ajenos.
+- `pnpm typecheck`, `pnpm lint`, `pnpm test`: pasan. 33 pruebas; 100 semillas por familia y nivel (1.200), con solucionadores independientes de ecuaciones, conversiones y conteo de átomos.
+- Navegador móvil 390 × 844: refugio y ejercicio legibles; teclado, coma, borrado y coeficientes comprobados.
+- Sesión completa de diez ejercicios contra Supabase: respuesta incorrecta produce pista y reinyección tres posiciones después; respuestas correctas guardadas; Bruno rescatado y racha de un día conservados tras recarga.
+- Admin: login real, creación de habilidad «Fracciones equivalentes», prioridad, pistas y nota guardadas. La práctica nueva apareció en la siguiente selección. Habilidad temporal de prueba eliminada al terminar.
+- La sesión de verificación permanece en el refugio compartido: dos gatos (Milo y Bruno). No se borraron intentos previos.
+- Pendiente de cierre: build final, publicación y verificación HTTP de producción.
 
 ## Límites honestos
-- No se midió Lighthouse móvil, FPS real en 4G ni draw calls.
-- No se ejecutó una sesión completa de diez respuestas en navegador automatizado; el inicio de sesión y la tarjeta de práctica sí se comprobaron en móvil.
+
+- Lighthouse y rendimiento en un dispositivo físico con 4G no medidos; no se afirma una puntuación.
+- No se reanudan sesiones incompletas al recargar; los intentos y recompensas ya guardados se conservan.
+- Las preguntas personalizadas tienen clasificación genérica UNKNOWN; las firmas específicas corresponden a las tres familias generadas.
+- El resumen del tutor consulta los últimos 1.000 intentos. No hay contenido de texto libre evaluado por IA.
+- Los criterios originales exclusivamente 3D quedan sustituidos por la última decisión explícita del usuario.
