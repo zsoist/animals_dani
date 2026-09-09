@@ -12,3 +12,4 @@
 - Proyecto definitivo suministrado por el usuario: pwcvskguqyhbhlwnsmmy (DAN GPT, Free). La conexión vía ChatGPT permitió aplicar la migración sin crear proyectos adicionales.
 - Claves legacy anon/service_role utilizadas conforme al contrato original. El servidor accede como estudiante para el refugio; la clave privilegiada se reserva al aprovisionamiento.
 - La configuración de variables de Vercel usa su API oficial autenticada, con secretos privados y clave anon pública. Las claves no aparecen en comandos ni commits.
+- En móvil, la tarjeta de práctica conserva el teclado propio y desplaza el encuadre 3D hacia arriba para que el gato siga visible durante las respuestas; el input no abre el teclado nativo.

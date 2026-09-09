@@ -44,4 +44,5 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #7c98
 @keyframes sway{to{transform:rotate(12deg)}}
 @keyframes breathe{to{transform:scaleY(1.025)}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(max-width:799px){.practice-mode .scene{height:calc(100% + 140px);transform:translateY(-140px)}}
 @media(min-width:800px){.masthead{top:48px;left:52px}.masthead h1{font-size:52px}}
