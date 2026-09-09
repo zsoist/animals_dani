@@ -1,4 +1,4 @@
 import 'server-only';
-import {database} from './server';
+import {openLauraShelter} from './laura';
 export type ShelterCat={id:string;name:string;personality:string;story:string;palette:{body:string;belly:string};unlockedAt:string};
-export async function getShelter(userId:string):Promise<ShelterCat[]>{const db=await database();const {data,error}=await db.from('cat_unlocks').select('unlocked_at,cats(id,name,personality,story,palette)').eq('user_id',userId);if(error)throw new Error('No pudimos abrir el refugio.');return (data??[]).flatMap(row=>{const raw:unknown=row.cats;const cats=Array.isArray(raw)?raw:[raw];return cats.map((entry:unknown)=>{if(typeof entry!=='object'||entry===null)throw new Error('Gato inválido');const c=entry as Record<string,unknown>;const p=c.palette as Record<string,unknown>;return {id:String(c.id),name:String(c.name),personality:String(c.personality),story:String(c.story),palette:{body:String(p.body),belly:String(p.belly)},unlockedAt:String(row.unlocked_at)}})})}
+export async function getShelter():Promise<ShelterCat[]>{return openLauraShelter()}
