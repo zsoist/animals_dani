@@ -141,3 +141,6 @@ El patio conserva su arte. Los gatos usan el recurso original sin rotación de c
 
 ### Refinamiento del patio y la práctica — septiembre 2026
 La cabecera recupera «Refugio de Laura». Los nombres de gatos son texto oscuro sin placa, con sombra suave para legibilidad. Los objetos ilustrados comparten volumen, luz cálida y perspectiva del patio; los elementos decorativos permanentes se distinguen del cuidado desbloqueado. La bienvenida es un diálogo de una sola misión y una acción principal. Las tarjetas alternan reconocimiento A/B/C y respuesta abierta, con escala métrica contextual y calculadora desplegable. Se conserva el refugio y sus gatos, con movimiento reducido respetado.
+
+### Secciones y convivencia del patio
+«Mis gatos» contiene únicamente la colección con retratos e historias. «Mis habilidades» reduce cada fila a icono temático, nombre, nivel y progreso; los accesos a reto y práctica libre pertenecen a «Mi refugio». El patio se pausa al ocultarse. Las huellas de navegación incluyen el nombre del gato; objetos y residentes reservan espacio y las rutas ceden el paso. La pelota gira sobre su lugar, separado de la cesta.
