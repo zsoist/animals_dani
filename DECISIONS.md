@@ -94,3 +94,10 @@
 - Calendario interpretado como días de reto logrados acumulados: 1, 3, 4, 5, 6, 7, 8, 9 y 10, nueve gatos. No se pierden por romper la racha. El historial previo se conserva; solo se muestran los rescates cuyo día se haya alcanzado.
 - Drive usa una cuenta de servicio de solo lectura y una carpeta compartida privadamente. No hay credenciales de Google disponibles; la integración se entrega sin activar. No se cambian permisos de archivos ni se hacen públicos. Importar y revisar precede a la práctica aleatoria; no se publican automáticamente PDF nuevos.
 - PDF completo: máximo 30 páginas/14.000 caracteres para extracción de texto. Imágenes y escaneos se recortan y revisan manualmente; no se afirma OCR ni lectura visual por DeepSeek.
+
+## Cuidados y adopciones — 2026-09-10
+- Se conserva el arte del patio. Siete cuidados rotan por días logrados: camita, comida, caja, churu, juguete, estambre y vacuna del juego. Se elige al residente con menos cuidados, usando su personalidad para desempatar.
+- La nueva petición especifica racha para los rescates: hitos consecutivos 1,3,4,5,6,7,8,9,10. Se conservan los gatos ya visibles; no se borran desbloqueos históricos ni adopciones al romper una racha.
+- Adopción: reto diario con al menos ocho aciertos iniciales y tres preguntas de nivel interno >=3 (nivel visible 2/3) acertadas sin pistas; residente con tres cuidados, distinto del recién rescatado. Nunca se adopta al último residente. Práctica libre no da estos premios.
+- Adopciones automáticas al cumplir la condición, con despedida y álbum permanente «Ya tienen hogar». Se reutilizan las ilustraciones del refugio para los objetos nuevos.
+- Drive sigue pendiente de credenciales de Google: no se presenta como conectado. Los formatos mixtos ya publicados se conservan.

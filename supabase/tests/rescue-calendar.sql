@@ -3,9 +3,10 @@ select set_config('request.jwt.claim.sub',(select id::text from public.profiles 
 set local role authenticated;
 do $$ declare uid uuid:=auth.uid();today date:=(now() at time zone 'America/Bogota')::date;sk uuid;q jsonb;s jsonb;result jsonb;again jsonb;sid uuid;day int;n int;seed text;expected uuid;begin
 select id into sk from public.skills limit 1;
+update public.cat_unlocks set admitted=false,adopted_at=null,care_count=0 where user_id=uid;
 for day in 1..10 loop
 update public.sessions set date=today-60 where user_id=uid and date=today;
-update public.streaks set current=0,total_days=day-1,last_session_date=today-3 where user_id=uid;
+update public.streaks set current=day-1,total_days=day-1,last_session_date=today-1 where user_id=uid;
 select jsonb_agg(jsonb_build_object('skillId',sk,'family','equations','level',1,'seed','calendar-'||day||'-'||series.value)) into q from generate_series(1,10) as series(value);
 s:=public.start_practice_atomic('daily',q);sid:=(s->>'id')::uuid;
 for n in 1..10 loop

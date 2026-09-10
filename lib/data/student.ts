@@ -53,7 +53,7 @@ export async function loadPractice() {
       db.from("streaks").select("*").eq("user_id", userId).maybeSingle(),
       db
         .from("shelter_state")
-        .select("food,blankets,lamps,clean_zones,affection,boxes,beds,treats,last_care_date,last_reward")
+        .select("food,blankets,lamps,clean_zones,affection,boxes,beds,treats,toys,yarn,vet_visits,last_care_date,last_reward")
         .eq("user_id", userId)
         .maybeSingle(),
       db
@@ -165,7 +165,7 @@ export async function finishSession(sessionId:string,_correctCount:number,durati
   const {db}=await studentClient();
   const saved=await db.rpc("finish_mission_atomic",{p_session:sessionId,p_is_test:process.env.NODE_ENV!=="production" || await isTutorPreview(),p_duration:Math.max(0,Math.min(7200000,Math.round(durationMs)||0))});
   if(saved.error)throw new Error("Aún no se confirmó el reto. Reintenta; conservamos lo que ya guardaste.");
-  const result=saved.data as {streak:Streak;cat:ShelterCat|null;reward:CareReward|null;state:ShelterState;passed:boolean;correct:number;mode:PracticeMode;dailyTry:number};
+  const result=saved.data as {streak:Streak;cat:ShelterCat|null;adopted:ShelterCat|null;careCat:ShelterCat|null;reward:CareReward|null;state:ShelterState;passed:boolean;correct:number;mode:PracticeMode;dailyTry:number};
   return {...result,streak:{...result.streak,current:visibleStreak(result.streak,dayKey())}};
 }
 export async function getTutorSummary() {

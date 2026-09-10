@@ -5,7 +5,7 @@ import type {CareReward} from '@/lib/engine/challenge';
 import {chooseActivity,places,type CatMotion,type Point} from './cat-behavior';
 import {canStand,clearSegment,footprintAt,routeTo,type Obstacle,type Footprint} from './cat-navigation';
 type Resident=CatMotion&{route:Point[];object?:string;blocked:number};
-export function useCatLife(cats:ShelterCat[],hasBed:boolean,selected:string|undefined,paused:boolean,celebration:{reward:CareReward;id:string}|null) {
+export function useCatLife(cats:ShelterCat[],hasBed:boolean,selected:string|undefined,paused:boolean,celebration:{reward:CareReward;id:string;catId?:string}|null) {
  const room=useRef<HTMLDivElement>(null);
  const state=useRef({selected,paused,celebration,hasBed});
  useEffect(()=>{state.current={selected,paused,celebration,hasBed};},[selected,paused,celebration,hasBed]);
@@ -58,7 +58,9 @@ export function useCatLife(cats:ShelterCat[],hasBed:boolean,selected:string|unde
    if(active){
     if(state.current.celebration&&lastGift!==state.current.celebration.id&&motion[0]){
      lastGift=state.current.celebration.id;const reward=state.current.celebration.reward;
-     send(0,objects.get(reward)??places[reward],reward==='bed'?'sleep':reward==='box'?'play':'eat',12,reward);
+     const index=Math.max(0,cats.findIndex(c=>c.id===state.current.celebration?.catId));
+     const target=objects.get(reward)??places.food;
+     send(index,target,reward==='bed'?'sleep':['box','toy','yarn'].includes(reward)?'play':reward==='vet'?'happy':'eat',12,reward);
     }
     if(state.current.selected!==lastSelected){lastSelected=state.current.selected;const i=cats.findIndex(c=>c.id===lastSelected);if(i>=0){motion[i].pose='happy';motion[i].route=[];motion[i].object=undefined;motion[i].remaining=4;}}
     motion.forEach((m,i)=>{
@@ -74,7 +76,7 @@ export function useCatLife(cats:ShelterCat[],hasBed:boolean,selected:string|unde
       }else if(state.current.selected!==cats[i].id){
        m.remaining-=delta;if(m.remaining<=0){
         m.object=undefined;
-        const careObjects=['food','box'].filter(key=>objects.has(key)&&!motion.some(other=>other.object===key));
+        const careObjects=['food','box','toy','yarn'].filter(key=>objects.has(key)&&!motion.some(other=>other.object===key));
         if(careObjects.length&&Math.random()<.2){const key=careObjects[Math.floor(Math.random()*careObjects.length)];send(i,objects.get(key)!,key==='food'?'eat':'play',6,key);return;}
         const action=chooseActivity(cats[i].personality,m.position,motion.filter((_,j)=>j!==i).map(p=>p.position),state.current.hasBed,Math.random);
         const object=action.target===places.ball?'ball':action.target===places.bed?'bed':undefined;

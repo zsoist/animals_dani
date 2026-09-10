@@ -5,11 +5,9 @@ export async function openLauraShelter(): Promise<ShelterCat[]> {
   const { db, userId } = await studentClient();
   const { data, error } = await db
     .from("cat_unlocks")
-    .select("unlocked_at,cats(id,name,personality,story,palette,unlock_day)")
-    .eq("user_id", userId);
+    .select("unlocked_at,adopted_at,care_count,admitted,cats(id,name,personality,story,palette,unlock_day)")
+    .eq("user_id", userId).eq("admitted",true);
   if (error) throw new Error("No pudimos cargar a los gatos.");
-  const {data:streak,error:streakError}=await db.from("streaks").select("total_days").eq("user_id",userId).single();
-  if(streakError)throw new Error("No pudimos cargar los rescates.");
   return (data ?? []).flatMap((row) => {
     const raw: unknown = row.cats;
     return (Array.isArray(raw) ? raw : [raw]).map((entry: unknown) => {
@@ -17,6 +15,8 @@ export async function openLauraShelter(): Promise<ShelterCat[]> {
       const c = entry as Record<string, unknown>;
       const p = c.palette as Record<string, unknown>;
       return {
+        adoptedAt:row.adopted_at as string|null,
+        careCount:Number(row.care_count??0),
         unlockDay:Number(c.unlock_day??1),
         id: String(c.id),
         name: String(c.name),
@@ -26,5 +26,5 @@ export async function openLauraShelter(): Promise<ShelterCat[]> {
         unlockedAt: String(row.unlocked_at),
       };
     });
-  }).filter(cat=>cat.unlockDay<=(streak?.total_days??0)).sort((a,b)=>a.unlockDay-b.unlockDay);
+  }).sort((a,b)=>a.unlockDay-b.unlockDay);
 }

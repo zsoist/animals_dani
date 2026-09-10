@@ -147,3 +147,6 @@ La cabecera recupera «Refugio de Laura». Los nombres de gatos son texto oscuro
 
 ### Formatos de preguntas
 El profesor elige varios formatos con casillas etiquetadas. Abiertas, opciones, verdadero/falso y parejas pueden acompañarse de una imagen adjunta. Relacionar usa dos columnas y un selector por fila, accesible por teclado y sin exigir arrastre. La carpeta de Drive vive dentro del importador y muestra su estado real de conexión.
+
+### Cuidados y adopciones
+Las reglas de recompensas viven en un desplegable bajo el reto; no añaden ruido al patio. La despedida usa un diálogo breve con el retrato existente y una única acción. «Ya tienen hogar» conserva nombres e historias debajo de los residentes. Los cuidados se dirigen a un gato concreto y los objetos heredan el atlas del refugio.

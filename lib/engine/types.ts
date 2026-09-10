@@ -88,6 +88,9 @@ export type Streak = {
   last_session_date: string | null;
 };
 export type ShelterState = {
+  toys?: number;
+  yarn?: number;
+  vet_visits?: number;
   boxes?: number;
   beds?: number;
   treats?: number;

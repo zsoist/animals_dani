@@ -13,10 +13,11 @@ import type {
   ShelterState,
   Streak,
 } from "@/lib/engine/types";
+import {AdoptionMoment} from "./adoption-moment";
 import {MissionWelcome} from "./mission-welcome";
 import {PropTransparency} from "@/components/scene/refuge-prop";
 import {FreePractice} from "./free-practice";
-import {DAILY_CHANCES, nextCareReward, rewardCopy, type PracticeMode, type CareReward} from "@/lib/engine/challenge";
+import {DAILY_CHANCES, nextCareReward, rewardCopy, careRecipient, RESCUE_DAYS, type PracticeMode, type CareReward} from "@/lib/engine/challenge";
 import type {PracticeSession} from "@/lib/data/student";
 import { startMission } from "@/lib/data/actions";
 import { Practice } from "./practice";
@@ -59,8 +60,13 @@ export function RefugeClient({
   const [liveCats, setLiveCats] = useState(cats);
   const [liveStreak, setLiveStreak] = useState(streak);
   const [tries,setTries]=useState(dailyTries);
-  const [celebration,setCelebration]=useState<{reward:CareReward;id:string}|null>(null);
+  const [celebration,setCelebration]=useState<{reward:CareReward;id:string;catId?:string;catName?:string}|null>(null);
+  const [adoption,setAdoption]=useState<ShelterCat|null>(null);
+  const residents=liveCats.filter(cat=>!cat.adoptedAt);
+  const alumni=liveCats.filter(cat=>cat.adoptedAt);
+  const nextRescue=RESCUE_DAYS[liveCats.length];
   const nextReward=nextCareReward(liveStreak.total_days);
+  const recipient=careRecipient(residents,nextReward);
   const [dates, setDates] = useState(practiceDates);
   useEffect(() => {
     if (!session) return;
@@ -141,7 +147,7 @@ export function RefugeClient({
               </div>
             </div>
           )}
-          <div hidden={view!=="home"&&!session}><Shelter today={today} lastCare={liveStreak.last_session_date} feedingUnlocked={dates.includes(today)} cats={liveCats} state={liveState} celebration={celebration} paused={Boolean(session)||view!=="home"} /></div>
+          <div hidden={view!=="home"&&!session}><Shelter today={today} lastCare={liveStreak.last_session_date} feedingUnlocked={dates.includes(today)} cats={residents} state={liveState} celebration={celebration} paused={Boolean(session)||view!=="home"} /></div>
           {!session && (
             <>
               <nav className="world-tabs" aria-label="Explorar el refugio">
@@ -167,10 +173,11 @@ export function RefugeClient({
                   <h2>Tu pequeña familia</h2>
                   {liveCats.length===0&&<p>El primer reto logrado abre las puertas para Milo.</p>}
                   <div className="cat-list">
-                    {liveCats.map((cat) => (
-                      <article key={cat.id}><div className="family-portrait"><CatArt body={cat.palette.body} sleeping={cat.personality==="dormilón"}/></div><div className="family-story"><h3>{cat.name}</h3><span>{cat.personality}</span><p>{cat.story}</p></div></article>
+                    {residents.map((cat) => (
+                      <article key={cat.id}><div className="family-portrait"><CatArt body={cat.palette.body} sleeping={cat.personality==="dormilón"}/></div><div className="family-story"><h3>{cat.name}</h3><span>{cat.personality}</span><p>{cat.story}</p><small>{cat.careCount??0} cuidados recibidos</small></div></article>
                     ))}
                   </div>
+                  {alumni.length>0&&<div className="adoption-album"><h3><Icon name="home"/>Ya tienen hogar</h3><p>Tu ayuda sigue siendo parte de su historia.</p><div className="cat-list">{alumni.map(cat=><article key={cat.id}><div className="family-portrait"><CatArt body={cat.palette.body} belly={cat.palette.belly}/></div><div className="family-story"><h3>{cat.name}</h3><span>Adoptado el {new Intl.DateTimeFormat('es-CO',{day:'numeric',month:'long',timeZone:'America/Bogota'}).format(new Date(cat.adoptedAt!))}</span><p>{cat.story}</p><small>Encontró un hogar gracias a tus retos y cuidados.</small></div></article>)}</div></div>}
                 </section>
               )}
               {view === "skills" && (
@@ -231,7 +238,10 @@ export function RefugeClient({
                   setTries(result.dailyTry);
                   if(result.passed)setDates(previous=>[...previous,today]);
                 }
-                if(result.reward)setCelebration({reward:result.reward,id:session.sessionId});
+                setLiveState(result.state);
+                if(result.reward)setCelebration({reward:result.reward,id:session.sessionId,catId:result.careCat?.id,catName:result.careCat?.name});
+                if(result.careCat)setLiveCats(previous=>previous.map(cat=>cat.id===result.careCat?.id?result.careCat:cat));
+                if(result.adopted){setAdoption(result.adopted);setLiveCats(previous=>previous.map(cat=>cat.id===result.adopted?.id?result.adopted:cat));}
                 if (result.cat)
                   setLiveCats((previous) =>
                     previous.some((c) => c.id === result.cat?.id)
@@ -252,7 +262,7 @@ export function RefugeClient({
                 <p>
                   {dates.includes(today) ? "Puedes seguir practicando a tu ritmo." : `${topic?.name ?? "Tu próxima habilidad"} · 7 de 10 al primer intento. Las pistas están disponibles.`}
                 </p>
-                <MissionWelcome today={today} completed={dates.includes(today)} reward={nextReward} busy={busy} available={tries<DAILY_CHANCES&&queue.length>0} onStart={()=>void begin("daily")}/>
+                <MissionWelcome recipient={recipient?.name} today={today} completed={dates.includes(today)} reward={nextReward} busy={busy} available={tries<DAILY_CHANCES&&queue.length>0} onStart={()=>void begin("daily")}/>
                 <div className="mission-perks">
                   <span>
                     <Icon name="book" size={18} />
@@ -279,11 +289,13 @@ export function RefugeClient({
                   <p>Activa una habilidad desde Admin para empezar.</p>
                 )}
               </section>
+              <details className="care-journey"><summary><Icon name="heart" size={18}/>{recipient?`Hoy cuidamos a ${recipient.name}`:'Tu primer rescate te espera'}</summary><div><p><b>Cada reto logrado:</b> comida, churu, juguetes, caja, camita, estambre o visita veterinaria.</p><p><b>Rescates:</b> {nextRescue?`próximo hito a los ${nextRescue} días de racha.`:'Ya alcanzaste todos los hitos de rescate.'} Hitos: 1, 3, 4… 10 días.</p><p><b>Un nuevo hogar:</b> un gato con tres cuidados puede ser adoptado al lograr 8/10 y acertar tres preguntas difíciles (nivel 2 o 3) sin pistas. Siempre queda compañía en el refugio.</p></div></details>
               <FreePractice skills={skills} busy={busy} onStart={(id,level)=>void begin("free",id,level)}/>
             </>
           )}
         </div>
       </div>
+      <AdoptionMoment cat={adoption} onClose={()=>setAdoption(null)}/>
     </main>
   );
 }
