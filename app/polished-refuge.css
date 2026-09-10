@@ -37,3 +37,5 @@
 @keyframes yarn-touch{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(18deg)}}
 @media(prefers-reduced-motion:reduce){.painted-world .cat-ball>.refuge-prop{animation:none!important}}
 .painted-world[data-motion=off] .cat-ball>.refuge-prop{animation-play-state:paused!important}
+
+.painted-world .cat-ball{left:60%;top:92%;z-index:92}

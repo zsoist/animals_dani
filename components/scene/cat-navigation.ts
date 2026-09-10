@@ -1,9 +1,9 @@
 import type {Point} from './cat-behavior';
-export type Footprint={width:number;height:number};
+export type Footprint={width:number;height:number;bottom?:number};
 export type Obstacle={x:number;y:number;width:number;height:number};
-export const footprintAt=(p:Point,size:Footprint):Obstacle=>({x:p.x-size.width/2,y:p.y-size.height,width:size.width,height:size.height});
+export const footprintAt=(p:Point,size:Footprint):Obstacle=>({x:p.x-size.width/2,y:p.y-size.height,width:size.width,height:size.height+(size.bottom??0)});
 export function overlaps(a:Obstacle,b:Obstacle){return a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;}
-export function canStand(p:Point,size:Footprint,obstacles:Obstacle[]){return p.x-size.width/2>=.025&&p.x+size.width/2<=.975&&p.y>=.53&&p.y<=.96&&!obstacles.some(o=>overlaps(footprintAt(p,size),o));}
+export function canStand(p:Point,size:Footprint,obstacles:Obstacle[]){return p.x-size.width/2>=.025&&p.x+size.width/2<=.975&&p.y>=.53&&p.y+(size.bottom??0)<=.98&&!obstacles.some(o=>overlaps(footprintAt(p,size),o));}
 export function clearSegment(a:Point,b:Point,size:Footprint,obstacles:Obstacle[]){
  const steps=Math.max(1,Math.ceil(Math.hypot(a.x-b.x,a.y-b.y)/.008));
  for(let i=1;i<=steps;i++)if(!canStand({x:a.x+(b.x-a.x)*i/steps,y:a.y+(b.y-a.y)*i/steps},size,obstacles))return false;

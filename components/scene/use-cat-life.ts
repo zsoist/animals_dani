@@ -19,7 +19,7 @@ export function useCatLife(cats:ShelterCat[],hasBed:boolean,selected:string|unde
   function measure(){
    if(!root||!root.clientWidth||!root.clientHeight)return;
    width=root.clientWidth;height=root.clientHeight;const bounds=root.getBoundingClientRect();
-   sizes=nodes.map(node=>({width:node.offsetWidth*.78/width,height:node.offsetHeight*.82/height}));
+   sizes=nodes.map(node=>({width:node.offsetWidth*.78/width,height:node.offsetHeight*.82/height,bottom:22/height}));
    furniture=[];objects=new Map();
    root.querySelectorAll<HTMLElement>('[data-object]').forEach(node=>{
     const rect=node.getBoundingClientRect(),w=rect.width*.68/width,h=rect.height*.55/height;
