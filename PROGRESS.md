@@ -118,9 +118,11 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - Figuras proporcionales, mosaicos triangulares, figuras en L, instrumentos, escalera métrica y vista escrita. Corrección y diagnóstico reutilizan el motor real.
 - 89 pruebas pasan, incluyendo 100 semillas por nueva familia/nivel, áreas por fórmula de polígonos y perímetros por distancias independientes, rotación de unidades y compatibilidad de sesiones previas. Primera compilación, tipos y lint pasan.
 - QA móvil detectó claves React duplicadas entre diagrama y calculadora; corregidas con identidades separadas. Figura y escalera verificadas en Chrome; ajustado texto largo para reducir altura.
-- Pendiente: comprobación final, publicación, alta persistente de habilidades y revisión de geometría en producción.
+- Completadas la comprobación final, publicación, alta persistente de habilidades y revisión de geometría en producción.
 - Primera publicación `9ea9721`, despliegue `dpl_4uugrn3tv1SHHYJ1HWDsVHfyoJm1`, HTTP 200. Tres habilidades activas, cada una con cuatro niveles, creadas mediante el RPC del tutor y leídas de vuelta. No se necesitó migración de esquema.
 - Producción: figura en L 8×4 menos 2×2; respuesta 24 guardada como CONFUNDE_AREA_PERIMETRO, pista de restar hueco, corrección 28 guardada con hint_level 1. Reducida pregunta visible; el enunciado completo sigue en historial y descripción escrita.
 - Admin autenticado: nuevas habilidades y ejemplos de sus cuatro niveles visibles; guardado de perímetros conserva family=perimeter en los cuatro niveles. Identificación de presión aceptada y persistida con given_answer=presion. Panel muestra CONFUNDE_AREA_PERIMETRO y la pista del intento real.
 - QA final móvil: figura de triángulo proporcional, pregunta breve y vista «En palabras» con base/altura correctas. Viewport restablecido. Refinadas firmas: confusión área/perímetro usa la magnitud real de cada figura (verificada independientemente), y conversión parcial de densidad solo se atribuye cuando cambia también el denominador.
 - Tipos, lint, 89 pruebas y build finales pasan. Sin cambios al refugio ni recompensas; no se midieron FPS en esta entrega.
+
+- Publicación final: código `f9a702e`, despliegue `dpl_ApG18fqhKHLeEZ8JxbeoW7EAgWfc`, https://animals-dani.vercel.app responde HTTP 200. Tres microhabilidades disponibles en práctica libre y Admin; seis familias generadas activas en total.
