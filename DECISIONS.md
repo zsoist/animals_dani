@@ -54,3 +54,10 @@
 - Comida en días impares de racha y caja en pares; un rescate nuevo solo en cada múltiplo de cinco días consecutivos. La racha no quita gatos ya rescatados. El cuidado se entrega por completar, no por acertar todo.
 - Los días sin completar reducen suavemente energía hasta un mínimo de 55/100; completar recupera 100. Se calcula desde fechas persistidas, sin tareas programadas ni lenguaje culpabilizador.
 - Tema por microhabilidad guardado dentro de su configuración existente; propuestas IA revisables, sin activar contenido automáticamente. Comparaciones basadas en días y niveles coincidentes, con tamaño de muestra visible.
+
+## Reto con oportunidades y gatos vivos — 2026-09-09
+- Umbral: siete de diez primeras respuestas válidas correctas; las pistas están permitidas. Corregir un error sirve para aprender, pero no convierte el primer intento en acierto. La reinyección conserva su propio enunciado y puntuación.
+- Hasta tres retos diarios. Reabrir uno pendiente recupera preguntas, respuestas y pasos sin gastar otra oportunidad. La fecha del reto queda fija; un reto de ayer no entrega cuidados de hoy.
+- Práctica libre ilimitada: diez preguntas de una habilidad y nivel elegido, guardadas en el historial, sin recompensas ni racha. Solo se ofrecen niveles presentes en bancos subidos.
+- Recompensas rotan por días logrados: camita, comida, caja, galleta. Se conserva todo lo ganado anteriormente; rescates solo en múltiplos de cinco días.
+- Misma ilustración de gatos, sin filtros rosa/verde: partes articuladas, parpadeo y gestos. Comportamiento variable en el patio, con destino a objetos y vecinos; no se usa IA en cada fotograma.

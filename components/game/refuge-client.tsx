@@ -13,6 +13,9 @@ import type {
   ShelterState,
   Streak,
 } from "@/lib/engine/types";
+import {FreePractice} from "./free-practice";
+import {DAILY_CHANCES, nextCareReward, rewardCopy, type PracticeMode, type CareReward} from "@/lib/engine/challenge";
+import type {PracticeSession} from "@/lib/data/student";
 import { startMission } from "@/lib/data/actions";
 import { Practice } from "./practice";
 import { Icon } from "./icons";
@@ -29,6 +32,7 @@ export function RefugeClient({
   practiceDates,
   today,
   masteries,
+  dailyTries,
 }: {
   cats: ShelterCat[];
   skills: Skill[];
@@ -39,10 +43,11 @@ export function RefugeClient({
   practiceDates: string[];
   today: string;
   masteries: Mastery[];
+  dailyTries:number;
 }) {
   const router = useRouter();
   const topic = skills.find((s) => s.id === queue[0]?.skillId);
-  const [session, setSession] = useState<string | null>(null);
+  const [session, setSession] = useState<PracticeSession | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [step, setStep] = useState(0);
@@ -50,6 +55,9 @@ export function RefugeClient({
   const [liveState, setLiveState] = useState(state);
   const [liveCats, setLiveCats] = useState(cats);
   const [liveStreak, setLiveStreak] = useState(streak);
+  const [tries,setTries]=useState(dailyTries);
+  const [celebration,setCelebration]=useState<{reward:CareReward;id:string}|null>(null);
+  const nextReward=nextCareReward(liveStreak.total_days);
   const [dates, setDates] = useState(practiceDates);
   useEffect(() => {
     if (!session) return;
@@ -71,17 +79,17 @@ export function RefugeClient({
             : step < 10
               ? "Unos pasos más"
               : "¡Reto completado!";
-  const begin = async () => {
+  const begin = async (mode:PracticeMode="daily",skillId?:string,level?:Skill["base_difficulty"]) => {
     setBusy(true);
     setError("");
     try {
-      const id = await startMission();
-      track("mission_started",{}, {sessionId:id,skillId:topic?.id});
-      setSession(id);
-      setStep(0);
+      const started = await startMission(mode,skillId,level);
+      track("mission_started",{}, {sessionId:started.sessionId,skillId:started.queue[0]?.skillId});
+      setSession(started);
+      setStep(started.completedSeeds.length);
       window.scrollTo({ top: 0 });
-    } catch {
-      setError("No pudimos iniciar la misión. Vuelve a intentarlo.");
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "No pudimos abrir la práctica. Inténtalo otra vez.");
     } finally {
       setBusy(false);
     }
@@ -129,7 +137,7 @@ export function RefugeClient({
               </div>
             </div>
           )}
-          <Shelter today={today} lastCare={liveStreak.last_session_date} feedingUnlocked={dates.includes(today)} cats={liveCats} state={liveState} />
+          <Shelter today={today} lastCare={liveStreak.last_session_date} feedingUnlocked={dates.includes(today)} cats={liveCats} state={liveState} celebration={celebration} paused={Boolean(session)} />
           {!session && (
             <>
               <nav className="world-tabs" aria-label="Explorar el refugio">
@@ -155,11 +163,7 @@ export function RefugeClient({
                   <h2>Tu pequeña familia</h2>
                   <div className="cat-list">
                     {liveCats.map((cat) => (
-                      <article key={cat.id}><CatArt body={cat.palette.body} sleeping={cat.personality==="dormilón"}/>
-                        <strong>{cat.name}</strong>
-                        <span>{cat.personality}</span>
-                        <p>{cat.story}</p>
-                      </article>
+                      <article key={cat.id}><div className="family-portrait"><CatArt body={cat.palette.body} sleeping={cat.personality==="dormilón"}/></div><div className="family-story"><h3>{cat.name}</h3><span>{cat.personality}</span><p>{cat.story}</p></div></article>
                     ))}
                   </div>
                 </section>
@@ -199,26 +203,31 @@ export function RefugeClient({
           className="action-column"
           role={session ? "dialog" : undefined}
           aria-modal={session ? true : undefined}
-          aria-label={session ? "Práctica del día" : undefined}
+          aria-label={session ? (session.mode==="free" ? "Práctica libre" : "Práctica del día") : undefined}
         >
           {session && (
-            <button className="practice-close" onClick={() => {track("mission_left",{step},{sessionId:session});setSession(null);}}>
+            <button className="practice-close" onClick={() => {track("mission_left",{step},{sessionId:session.sessionId});setSession(null);}}>
               <Icon name="close" />
               Volver al refugio
             </button>
           )}
           {session ? (
             <Practice
-              key={session}
-              sessionId={session}
-              queue={queue}
+              key={session.sessionId}
+              sessionId={session.sessionId}
+              resumed={session}
+              queue={session.queue}
               skills={skills}
               userId={userId}
               onStep={setStep}
               onReward={setLiveState}
               onDone={(result) => {
                 setLiveStreak(result.streak);
-                setDates((previous) => [...previous, today]);
+                if(result.mode==="daily") {
+                  setTries(result.dailyTry);
+                  if(result.passed)setDates(previous=>[...previous,today]);
+                }
+                if(result.reward)setCelebration({reward:result.reward,id:session.sessionId});
                 if (result.cat)
                   setLiveCats((previous) =>
                     previous.some((c) => c.id === result.cat?.id)
@@ -235,9 +244,9 @@ export function RefugeClient({
                 <div className="mission-icon">
                   <Icon name="star" size={30} />
                 </div>
-                <h2>{topic?.name ?? "Prepara una aventura"}</h2>
+                <h2>{dates.includes(today) ? "¡Reto de hoy logrado!" : rewardCopy[nextReward].title}</h2>
                 <p>
-                  {dates.includes(today) ? "Tus gatos ya recibieron su cuidado de hoy." : "Diez pasos para cuidar a tus gatos."}
+                  {dates.includes(today) ? "Puedes seguir practicando a tu ritmo." : `${topic?.name ?? "Tu próxima habilidad"} · 7 de 10 al primer intento. Las pistas están disponibles.`}
                 </p>
                 <div className="mission-perks">
                   <span>
@@ -250,10 +259,10 @@ export function RefugeClient({
                 </div>
                 <button
                   className="primary"
-                  onClick={() => void begin()}
-                  disabled={busy || queue.length === 0 || dates.includes(today)}
+                  onClick={() => void begin("daily")}
+                  disabled={busy || queue.length === 0 || dates.includes(today) || tries>=DAILY_CHANCES}
                 >
-                  {busy ? "Preparando…" : dates.includes(today) ? "¡Reto de hoy completo!" : "Empezar reto"}
+                  {busy ? "Preparando…" : dates.includes(today) ? "¡Reto de hoy completo!" : tries>=DAILY_CHANCES ? "Mañana hay un nuevo reto" : tries>0 ? `Volver a intentarlo · ${tries+1}/3` : "Empezar reto · 1/3"}
                   <Icon name="arrow" />
                 </button>
                 {error && (
@@ -265,8 +274,7 @@ export function RefugeClient({
                   <p>Activa una habilidad desde Admin para empezar.</p>
                 )}
               </section>
-
-
+              <FreePractice skills={skills} busy={busy} onStart={(id,level)=>void begin("free",id,level)}/>
             </>
           )}
         </div>

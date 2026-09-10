@@ -89,3 +89,14 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - Laboratorio permite indicar tema, pedir tres microhabilidades a DeepSeek, preparar una y guardar tema en la habilidad. Sugerencias reales verificadas y contextos solicitados guardados para Despejar ecuaciones. Informe IA movido al final y abreviado.
 - Typecheck, lint, 65 pruebas y build pasan. Chrome en escritorio y 390 × 844: refugio simplificado, historia de Milo, tres pestañas de Admin, progreso semanal y laboratorio comprobados. Análisis real breve de despejes guardado.
 - Publicación verificada en https://animals-dani.vercel.app: HTTP 200, refugio sin tutor ni controles manuales, cuidado diario y reto completado persistidos. Admin autenticado muestra las tres pestañas, resumen reducido, tema guardado y análisis breve. No se midieron FPS ni Lighthouse; no se afirma rendimiento de 60 fps.
+
+## Gatos vivos, práctica libre y tres oportunidades — 2026-09-09
+- Conservado el patio y el recurso original de gatos, ahora sin filtros fantásticos. Cabeza, cola, patitas y párpados articulados; actividades variables, pelota, acicalado, estiramiento, saludos entre vecinos y descanso. Pausa fuera de vista, durante ejercicios y con movimiento reducido.
+- «Hola, Laura» en blanco dentro del patio, frases breves, carga con huellas y colección familiar con filas legibles.
+- Reto diario: siete de diez primeras respuestas válidas correctas, tres oportunidades. Guardado de cola y pasos para recuperar una oportunidad abierta sin gastarla otra vez. Las pistas siguen disponibles.
+- Práctica libre: habilidad y nivel elegibles, diez ejercicios reales y guardado de intentos; sin modificar racha ni cuidados.
+- Recompensas persistentes rotativas: camita, comida, caja y galleta. Al volver al patio tras ganar, aparece el objeto y un gato se dirige a él. Rescates cada cinco días consecutivos; todo lo ganado antes se conserva.
+- Migración aplicada y registrada. SQL real con rollback: umbral 6/10 no pasa y 7/10 sí; correcciones no inflan primera respuesta; tres oportunidades; recuperación; práctica libre sin recompensa; idempotencia; rescate día cinco. Pruebas SQL anteriores de cuidados, atomicidad y RLS también pasan.
+- Chrome móvil completó una práctica real: 9/10 al primer intento, diez pasos guardados, un ejercicio reinyectado, recompensa nula. Pista y respuesta con coma verificadas. Capturas móvil/escritorio revisadas en dos rondas acotadas.
+- Typecheck, lint, 70 pruebas y build pasan. Detector de diseño: avisos sobre sombras interiores de caja/plato (geometría del objeto, no paneles) y nuevos tonos/tamaños; no se cambiaron esos objetos por advertencias genéricas. Sin medición de FPS.
+- Pendiente: despliegue y comprobación en producción.

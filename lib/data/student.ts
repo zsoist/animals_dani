@@ -8,8 +8,11 @@ import type {
   Attempt,
   Mastery,
   Streak,
+  Question,
+  Level,
   ShelterState,
 } from "@/lib/engine/types";
+import { freeQueue, type PracticeMode, type CareReward } from "@/lib/engine/challenge";
 import { selectDaily } from "@/lib/engine/selector";
 import {
   dayKey,
@@ -50,19 +53,19 @@ export async function loadPractice() {
       db.from("streaks").select("*").eq("user_id", userId).maybeSingle(),
       db
         .from("shelter_state")
-        .select("food,blankets,lamps,clean_zones,affection")
+        .select("food,blankets,lamps,clean_zones,affection,boxes,beds,treats,last_care_date,last_reward")
         .eq("user_id", userId)
         .maybeSingle(),
       db
         .from("sessions")
-        .select("date")
+        .select("date,passed,mode,daily_try,completed")
         .eq("user_id", userId)
-        .eq("completed", true)
         .order("date", { ascending: false })
         .limit(60),
       db
         .from("attempts")
-        .select("skill_id")
+        .select("skill_id,sessions!inner(mode)")
+        .eq("sessions.mode", "daily")
         .eq("user_id", userId)
         .gte("created_at", `${dayKey()}T00:00:00-05:00`)
         .order("created_at", { ascending: true })
@@ -94,11 +97,7 @@ export async function loadPractice() {
     practiced.data?.[0]?.skill_id,
   );
   return {
-    skills: prepared.map((skill) =>
-      skill.id === queue[0]?.skillId
-        ? skill
-        : { ...skill, questions: undefined },
-    ),
+    skills: prepared,
     masteries: (masteries.data ?? []) as Mastery[],
     queue,
     streak: { ...streakData, current: visibleStreak(streakData, dayKey()) },
@@ -110,22 +109,30 @@ export async function loadPractice() {
       affection: 0,
     }) as ShelterState,
     userId,
-    practiceDates: (sessions.data ?? []).map((s) => String(s.date)),
+    practiceDates: (sessions.data ?? []).filter(s=>s.passed && s.mode==="daily").map((s) => String(s.date)),
+    dailyTries: Math.max(0,...(sessions.data??[]).filter(s=>s.mode==="daily" && s.date===dayKey() && s.completed).map(s=>Number(s.daily_try))),
     today: dayKey(),
   };
 }
-export async function createSession() {
-  const { db, userId } = await studentClient();
-  const completed=await db.from("sessions").select("id").eq("user_id",userId).eq("date",dayKey()).eq("completed",true).limit(1);
-  if(completed.error)throw new Error("No pudimos comprobar el reto de hoy.");
-  if(completed.data.length)throw new Error("El reto de hoy ya está completo. Volvemos mañana.");
-  const { data, error } = await db
-    .from("sessions")
-    .insert({ user_id: userId, total_count: 10, date: dayKey() })
-    .select("id")
-    .single();
-  if (error || !data) throw new Error("No pudimos iniciar la misión.");
-  return data.id as string;
+export type PracticeSession = {sessionId:string;queue:Question[];mode:PracticeMode;dailyTry:number;completedSeeds:string[];attempts:Attempt[]};
+export async function createSession(mode:PracticeMode='daily',skillId?:string,level?:Level):Promise<PracticeSession> {
+  if(!['daily','free'].includes(mode))throw new Error("Elige reto o práctica libre.");
+  const {db,userId}=await studentClient();
+  const practice=await loadPractice();
+  const skill=practice.skills.find(s=>s.id===skillId);
+  const queue=mode==='free' ? (skill && level ? freeQueue(skill,level,crypto.randomUUID()) : []) : practice.queue;
+  if(queue.length!==10)throw new Error("Elige una habilidad y un nivel con preguntas.");
+  const saved=await db.rpc('start_practice_atomic',{p_mode:mode,p_queue:queue});
+  if(saved.error)throw new Error(saved.error.message.includes('DAILY_PASSED') ? '¡El reto ya está logrado! Puedes practicar libremente.' : saved.error.message.includes('DAILY_LIMIT') ? 'Hoy usaste tus tres oportunidades. La práctica libre sigue abierta.' : 'No pudimos abrir la práctica. Inténtalo otra vez.');
+  const session=saved.data as {id:string;planned_queue:Question[];mode:PracticeMode;daily_try:number;completed_seeds:string[]};
+  const attempts=await db.from('attempts').select('*').eq('session_id',session.id).eq('user_id',userId).order('created_at');
+  if(attempts.error)throw new Error('No pudimos recuperar tus respuestas. Vuelve a abrir la práctica.');
+  return {sessionId:session.id,queue:session.planned_queue,mode:session.mode,dailyTry:session.daily_try,completedSeeds:session.completed_seeds,attempts:attempts.data as Attempt[]};
+}
+export async function completeQuestion(sessionId:string,seed:string) {
+  const {db}=await studentClient();
+  const saved=await db.rpc('complete_question_atomic',{p_session:sessionId,p_seed:seed});
+  if(saved.error)throw new Error('No se guardó este paso. Toca Siguiente paso otra vez.');
 }
 export async function saveAttempt(input: Omit<Attempt, "id" | "created_at"> & {request_id?:string}) {
   if(![1,2,3,4].includes(input.level)||typeof input.exercise_seed!=="string"||input.exercise_seed.length>200||typeof input.given_answer!=="string"||!Number.isFinite(input.response_ms)||!Number.isInteger(input.hint_level))throw new Error("Revisemos la respuesta antes de guardarla.");
@@ -157,8 +164,9 @@ export async function saveAttempt(input: Omit<Attempt, "id" | "created_at"> & {r
 export async function finishSession(sessionId:string,_correctCount:number,durationMs:number) {
   const {db}=await studentClient();
   const saved=await db.rpc("finish_mission_atomic",{p_session:sessionId,p_is_test:process.env.NODE_ENV!=="production" || await isTutorPreview(),p_duration:Math.max(0,Math.min(7200000,Math.round(durationMs)||0))});
-  if(saved.error)throw new Error("Aún no se confirmó el rescate. Reintenta; conservamos lo que ya guardaste.");
-  return saved.data as {streak:Streak;cat:ShelterCat|null;reward:string|null;state:ShelterState};
+  if(saved.error)throw new Error("Aún no se confirmó el reto. Reintenta; conservamos lo que ya guardaste.");
+  const result=saved.data as {streak:Streak;cat:ShelterCat|null;reward:CareReward|null;state:ShelterState;passed:boolean;correct:number;mode:PracticeMode;dailyTry:number};
+  return {...result,streak:{...result.streak,current:visibleStreak(result.streak,dayKey())}};
 }
 export async function getTutorSummary() {
   const db = await database();

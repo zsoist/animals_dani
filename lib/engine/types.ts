@@ -81,6 +81,9 @@ export type Streak = {
 };
 export type ShelterState = {
   boxes?: number;
+  beds?: number;
+  treats?: number;
+  last_reward?: import("./challenge").CareReward | null;
   last_care_date?: string;
   food: number;
   blankets: number;

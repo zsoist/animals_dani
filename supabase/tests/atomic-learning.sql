@@ -25,6 +25,7 @@ begin
   insert into public.attempts(user_id,skill_id,level,exercise_seed,prompt_text,expected_answer,given_answer,correct,response_ms,hint_level,session_id)
   values(uid,sk,1,'verification-'||n,'Atomic verification','1','1',true,1000,0,sid);
  end loop;
+ update public.sessions set completed_seeds=(select array_agg(exercise_seed) from public.attempts where session_id=sid) where id=sid;
  first:=public.finish_mission_atomic(sid,10000);second:=public.finish_mission_atomic(sid,10000);
  if first<>second then raise exception 'Completion not idempotent';end if;
  if (select count(*) from public.app_events)<>0 then raise exception 'Student can read behavioral records';end if;

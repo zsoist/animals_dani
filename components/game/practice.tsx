@@ -5,14 +5,15 @@ import {expressionSymbols} from "@/lib/engine/algebra";
 import { useActiveTime } from "./use-active-time";
 import { ImageViewer } from "./image-viewer";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { completeMission, recordAttempt } from "@/lib/data/actions";
+import { completeMission, recordAttempt, finishQuestion } from "@/lib/data/actions";
 import { evaluate, exerciseFor } from "@/lib/engine/exercises";
 import { reinforce } from "@/lib/engine/selector";
-import type { Question, ShelterState, Skill, Streak } from "@/lib/engine/types";
-import type { ShelterCat } from "@/lib/data/shelter";
+import type { Question, ShelterState, Skill } from "@/lib/engine/types";
 import { Icon } from "./icons";
+import { DAILY_TARGET, DAILY_CHANCES, rewardCopy } from "@/lib/engine/challenge";
+import type { PracticeSession } from "@/lib/data/student";
 import { CatArt } from "@/components/scene/cat-art";
-type Completion = { streak: Streak; cat: ShelterCat | null; reward?:string|null;state?:ShelterState };
+type Completion = Awaited<ReturnType<typeof completeMission>>;
 export function Practice({
   sessionId,
   queue,
@@ -21,7 +22,9 @@ export function Practice({
   onReward,
   onStep,
   userId,
+  resumed,
 }: {
+  resumed: PracticeSession;
   sessionId: string;
   queue: Question[];
   skills: Skill[];
@@ -31,14 +34,15 @@ export function Practice({
   userId: string;
 }) {
   const [items, setItems] = useState(queue.slice(0, 10));
-  const [index, setIndex] = useState(0);
-  const [answer, setAnswer] = useState("");
-  const [hint, setHint] = useState(0);
+  const [index, setIndex] = useState(Math.min(9,resumed.completedSeeds.length));
+  const currentAttempts=resumed.attempts.filter(a=>a.exercise_seed===queue[Math.min(9,resumed.completedSeeds.length)]?.seed);
+  const [answer, setAnswer] = useState(currentAttempts.at(-1)?.given_answer ?? "");
+  const [hint, setHint] = useState(Math.min(3,Math.max(0,...currentAttempts.map(a=>a.hint_level+(a.correct?0:1)))));
   const [message, setMessage] = useState("");
-  const [correct, setCorrect] = useState(0);
+  const [correct, setCorrect] = useState(resumed.completedSeeds.filter(seed=>resumed.attempts.find(a=>a.exercise_seed===seed)?.correct).length);
   const [busy, setBusy] = useState(false);
-  const [solved, setSolved] = useState(false);
-  const [wrong, setWrong] = useState(false);
+  const [solved, setSolved] = useState(currentAttempts.some(a=>a.correct));
+  const [wrong, setWrong] = useState(currentAttempts.some(a=>!a.correct));
   const [review, setReview] = useState(false);
   const [result, setResult] = useState<Completion | null>(null);
   const [skillResults, setSkillResults] = useState<
@@ -156,11 +160,11 @@ export function Practice({
         },
       }));
       if (evaluated.correct) {
-        setCorrect((n) => n + 1);
+        if(!wrong)setCorrect((n) => n + 1);
         setSolved(true);
         setMessage(
           [
-            "¡Bien! Dejaste la letra sola.",
+            skill.family === "equations" ? "¡Bien! Dejaste la letra sola." : "¡Bien! Resolviste este paso.",
             "¡Ese paso está resuelto!",
             "¡Seguimos avanzando!",
           ][index % 3],
@@ -182,39 +186,18 @@ export function Practice({
     }
   };
   const advance = async () => {
-    if (gate.current) return;
-    if (index === 9) {
-      gate.current = true;
-      setBusy(true);
-      try {
-        const completion = await completeMission(
-          sessionId,
-          correct,
-          sessionTime.read(),
-        );
-        setResult(completion);
-        onReward(completion.state);
-        onStep(10);
-      } catch {
-        setMessage(
-        "No se pudo guardar el reto. Toca «Terminar reto» para reintentar.",
-        );
-      } finally {
-        gate.current = false;
-        setBusy(false);
+    if (gate.current || !question) return;
+    gate.current=true;setBusy(true);
+    try {
+      await finishQuestion(sessionId,question.seed);
+      if(index===9) {
+        const completion=await completeMission(sessionId,correct,sessionTime.read()+resumed.attempts.reduce((sum,a)=>sum+a.response_ms,0));
+        setResult(completion);onReward(completion.state);onStep(10);
+      } else {
+        setIndex(n=>n+1);onStep(index+1);setAnswer("");cursor.current=null;setHint(0);setMessage("");setSolved(false);setWrong(false);setReview(false);
       }
-      return;
-    }
-    setIndex((n) => n + 1);
-    onStep(index + 1);
-    setAnswer("");
-    cursor.current = null;
-    setHint(0);
-    setMessage("");
-    setSolved(false);
-    setWrong(false);
-    setReview(false);
-
+    } catch {setMessage("Tu avance sigue aquí. Toca el botón de nuevo para guardarlo.");}
+    finally {gate.current=false;setBusy(false);}
   };
   if (result)
     return (
@@ -231,15 +214,15 @@ export function Practice({
         <h1>
           {result.cat
             ? `¡${result.cat.name} está en casa!`
-            : "¡Cuidado del día entregado!"}
+            : result.mode === "free" ? "¡Una práctica más para ti!" : result.passed ? "¡Reto logrado!" : "Ya sabes qué practicar"}
         </h1>
         <p>
           {result.cat?.story ??
-            (result.reward === "box" ? "Milo recibió una caja nueva para explorar." : result.reward === "food" ? "Milo recibió su comida de hoy." : "El cuidado de hoy ya estaba entregado. Mañana seguimos.")}
+            (result.reward ? rewardCopy[result.reward].delivered : result.mode === "free" ? "Cada práctica hace más fácil el siguiente paso." : !result.passed ? `La meta es ${DAILY_TARGET} de 10 al primer intento. ${result.dailyTry<DAILY_CHANCES ? `Te quedan ${DAILY_CHANCES-result.dailyTry} oportunidades hoy. Puedes repasar antes de volver a intentarlo.` : "Hoy puedes seguir practicando libremente. Mañana tienes tres oportunidades nuevas."}` : "Tu progreso quedó guardado.")}
         </p>
         <div className="completion-stats">
           <strong>
-            {correct}/10<span>respuestas resueltas</span>
+            {result.correct}/10<span>correctas al primer intento</span>
           </strong>
           <strong>
             <Icon name="fire" />
@@ -247,7 +230,7 @@ export function Practice({
             <span>{result.streak.current === 1 ? "día" : "días"} de racha</span>
           </strong>
         </div>
-        <p>
+        <p hidden={!Object.keys(skillResults).length}>
           {Object.entries(skillResults).some(
             ([, value]) => value.correct < value.total,
           )
@@ -255,7 +238,7 @@ export function Practice({
             : `¡Gran práctica! ${Object.keys(skillResults).join(", ")}: hoy resolviste todos sus desafíos.`}
         </p>
         <button className="primary" onClick={() => onDone(result)}>
-          Ver mi refugio
+          {result.reward ? "Ver la recompensa en mi refugio" : "Volver al refugio"}
           <Icon name="arrow" />
         </button>
       </section>
@@ -283,7 +266,7 @@ export function Practice({
           {index + 1} de 10{question.reinforced ? " · Repaso" : ""}
         </span>
       </div>
-      <p className="practice-level">Nivel {exercise.level - 1}{question.reinforced ? " · Reforzamos este paso" : ""}</p>
+      <p className="practice-level">{resumed.mode === "free" ? "Práctica libre · " : `Oportunidad ${resumed.dailyTry}/3 · `}Nivel {exercise.level - 1}{question.reinforced ? " · Reforzamos este paso" : ""}</p>
       <h2 className="question-instruction">
         {skill.family === "equations"
           ? `Deja ${exercise.target ?? "la incógnita"} sola`
@@ -405,7 +388,7 @@ export function Practice({
           {busy
             ? "Guardando…"
             : index === 9
-              ? "Terminar reto"
+              ? (resumed.mode === "free" ? "Terminar práctica" : "Terminar reto")
               : "Siguiente paso"}
           <Icon name="arrow" />
         </button>

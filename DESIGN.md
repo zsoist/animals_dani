@@ -64,14 +64,14 @@ components:
 
 **Creative North Star: "Refugio · Centro de rescate"**
 
-Este registro actualiza la dirección ya fijada: un refugio 2D colorido, ilustrado y divertido para Laura. Turquesa, naranja y amarillo solar construyen un centro de animales con enfermería, adopción, transportadoras, patio y comedor. Los gatos pequeños, con colores fantásticos, son personajes interactivos; el lugar conserva su carácter de rescate, sin sofá ni decoración de casa.
+Este registro actualiza la dirección ya fijada: un refugio 2D colorido, ilustrado y divertido para Laura. Turquesa, naranja y amarillo solar construyen un centro de animales con enfermería, adopción, transportadoras, patio y comedor. Los gatos pequeños, con colores naturales, son personajes interactivos; el lugar conserva su carácter de rescate, sin sofá ni decoración de casa.
 
 El arte original local mantiene una ilustración pictórica con contornos suaves. Numa, gato naranja con gafas cobalto y cuaderno, acompaña el aprendizaje en español. El espacio del profe comparte el personaje y la tipografía, con papel claro e índigo para leer, preparar y revisar contenido. Es un refinamiento del mundo existente, no una nueva propuesta visual.
 
 **Key Characteristics:**
-- Refugio 2D saturado con gatos ilustrados pequeños y colores fantásticos.
+- Refugio 2D saturado con gatos ilustrados pequeños y colores naturales.
 - Nunito redondeada, texto oscuro y superficies claras para aprender.
-- Numa como compañero reconocible entre juego y preparación.
+- Numa acompaña la preparación del profe; las pistas de Laura son deterministas.
 - Movimiento de respuesta y ambiente con reducción disponible.
 
 ## Colors
@@ -135,3 +135,6 @@ Las esquinas suaves distinguen controles compactos, paneles y escenario según l
 - **Don't** representar progreso inventado como evidencia de aprendizaje.
 
 No canonizado: los valores heredados de estilos que quedan sobrescritos, posibles defectos de componentes fuera de las capturas revisadas y cualquier afirmación de rendimiento o modelo de imagen no verificada.
+
+## Movimiento y práctica libre — septiembre 2026
+El patio conserva su arte. Los gatos usan el recurso original sin rotación de color, articulado en cabeza, cuerpo, cola y patas, con párpados. Sus actividades alternan destinos variables, juego con pelota, acicalado, estiramiento, descanso y cercanía; las recompensas cambian su destino. El movimiento se pausa fuera de vista, con la práctica abierta y según preferencias del sistema. La cabecera interior dice «Hola, Laura» en blanco. Mis gatos usa retratos y relatos en filas legibles. La práctica libre se descubre bajo el reto con un selector de habilidad y nivel.
