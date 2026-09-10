@@ -1,0 +1,13 @@
+import{beforeEach,expect,it,vi}from'vitest';
+const m=vi.hoisted(()=>({deepseek:vi.fn(),reserve:vi.fn(),complete:vi.fn()}));
+vi.mock('server-only',()=>({}));
+vi.mock('./tutor-auth',()=>({tutorDatabase:async()=>({auth:{getUser:async()=>({data:{user:{id:'tutor'}}})}})}));
+vi.mock('./ai',()=>({reserveAI:m.reserve,completeAI:m.complete,learnerEvidence:vi.fn(),aiStore:()=>({from:()=>({update:()=>({eq:()=>({eq:async()=>({error:null})})})})})}));
+vi.mock('@/lib/ai/deepseek',()=>({deepseek:m.deepseek}));
+import{generateQuestions}from'./generate-questions';
+const q={prompt:'¿Cuántos lados tiene un cuadrado?',answer:4,answerFormat:'number',level:1,hints:['Observa el borde','Cuenta cada lado','Tiene cuatro lados.']};
+const result=(questions:unknown)=>({json:{questions},model:'test',tokens:10});
+beforeEach(()=>vi.clearAllMocks());
+it('acepta números JSON tras revisión y conserva el número solicitado',async()=>{m.deepseek.mockResolvedValue(result([q]));expect((await generateQuestions({prompt:'Contar lados',count:1,level:1})).questions[0].answer).toBe('4');expect(m.deepseek).toHaveBeenCalledTimes(2);expect(m.complete).toHaveBeenCalledWith(expect.any(String),'completed','test',20);});
+it('repara un esquema conceptual mal representado y después lo valida',async()=>{const malformed={...q,prompt:'¿Qué calor cambia la temperatura?',answer:'Calor sensible',answerFormat:'expression'};m.deepseek.mockResolvedValueOnce(result([malformed])).mockResolvedValueOnce(result([malformed])).mockResolvedValueOnce(result([{...malformed,answerFormat:'text'}]));expect((await generateQuestions({prompt:'Reconocer calor',count:1,level:1})).questions[0].answerFormat).toBe('text');expect(m.deepseek).toHaveBeenCalledTimes(3);});
+it('no declara éxito ni publica una revisión incompleta',async()=>{m.deepseek.mockResolvedValue(result([]));await expect(generateQuestions({prompt:'Contar lados',count:1,level:1})).rejects.toThrow();expect(m.complete).toHaveBeenCalledWith(expect.any(String),'failed');});

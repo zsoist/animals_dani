@@ -295,7 +295,7 @@ export function Practice({
       {exercise.image && (
         <ImageViewer src={exercise.image} alt={exercise.imageAlt} />
       )}
-      {presentationChoices ? <fieldset className="answer-choices" disabled={busy||solved||review}><legend>Elige la respuesta correcta</legend>{presentationChoices.map((choice,i)=><label key={choice.value} className={answer===choice.value?'choice-selected':''}><input type="radio" name={`choice-${exercise.seed}`} value={choice.value} checked={answer===choice.value} onChange={()=>{setAnswer(choice.value);track('control_used',{control:'answer_choice',format:'choice',step:index},{sessionId,skillId:skill.id});}}/><span className="choice-letter">{['A','B','C'][i]}</span><span className="choice-value">{choice.label}</span><Icon name="check" size={18}/></label>)}</fieldset> : <>
+      {presentationChoices ? <fieldset className="answer-choices" disabled={busy||solved||review}><legend>Elige la respuesta correcta</legend>{presentationChoices.map((choice,i)=><label key={choice.value} className={answer===choice.value?'choice-selected':''}><input type="radio" name={`choice-${exercise.seed}`} value={choice.value} checked={answer===choice.value} onChange={()=>{setAnswer(choice.value);track('control_used',{control:'answer_choice',format:'choice',step:index},{sessionId,skillId:skill.id});}}/><span className="choice-letter">{String.fromCharCode(65+i)}</span><span className="choice-value">{choice.label}</span><Icon name="check" size={18}/></label>)}</fieldset> : <>
       <label className="answer-label" htmlFor="answer">
         {exercise.answerFormat === "coefficients"
           ? "Coeficientes, separados por comas"
@@ -305,8 +305,9 @@ export function Practice({
         <input
           ref={field}
           id="answer"
-          readOnly
-          inputMode="none"
+          readOnly={exercise.answerFormat!=="text"||busy||solved||review}
+          inputMode={exercise.answerFormat==="text"?"text":"none"}
+          onChange={e=>{if(exercise.answerFormat==="text"&&!busy&&!solved&&!review)setAnswer(e.target.value.slice(0,100));}}
           value={answer}
           aria-label="Respuesta"
           placeholder={
@@ -315,6 +316,7 @@ export function Practice({
           onSelect={capture}
           onClick={capture}
           onKeyDown={(event) => {
+            if(exercise.answerFormat==="text")return;
             if ((exercise.answerFormat === "expression" ? /^[A-Za-z0-9+*()/\-]$/ : /^[0-9.,/\-]$/).test(event.key)) {
               event.preventDefault();
               edit(event.key);
@@ -341,7 +343,7 @@ export function Practice({
           <Icon name="erase" />
         </button>
       </div>
-      {!solved && !review && (
+      {!solved && !review && exercise.answerFormat!=="text" && (
         <div className="keypad" aria-label="Teclado de respuesta">
           {(exercise.answerFormat === "expression" ? [...new Set([...expressionSymbols(exercise.formula ?? exercise.answer).filter(s=>s!==exercise.target), ...(exercise.answer.match(/\d/g) ?? []), "1", "2"]), "+", "-", "*", "/", "(", ")", "clear"] : [
             "1",

@@ -5,6 +5,7 @@ import "./refinement.css";
 import "./cat-life.css";
 import "./polished-refuge.css";
 import "./learning-visuals.css";
+import "./admin-creation.css";
 export const metadata: Metadata = {
   title: "Refugio",
   description: "Un lugar pequeño para crecer juntos.",

@@ -126,3 +126,11 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - Tipos, lint, 89 pruebas y build finales pasan. Sin cambios al refugio ni recompensas; no se midieron FPS en esta entrega.
 
 - Publicación final: código `f9a702e`, despliegue `dpl_ApG18fqhKHLeEZ8JxbeoW7EAgWfc`, https://animals-dani.vercel.app responde HTTP 200. Tres microhabilidades disponibles en práctica libre y Admin; seis familias generadas activas en total.
+
+## Reparación de creación del administrador — 2026-09-09
+- Unificada la validación de preguntas manuales e IA. Respuestas conceptuales tienen formatos Texto corto y Opciones, sin interpretarse como productos de letras. Se conservan opciones al guardar; números JSON válidos se normalizan.
+- Creación manual con pistas opcionales y errores de formato accionables. Tres entradas claras: IA, escribir e importar. Borradores nuevos desactivados por defecto.
+- IA por lotes de hasta tres preguntas, revisión independiente, reparación de formato y mensajes de conexión comprensibles. Se preserva el borrador ante errores; registro de fallo con etapa.
+- Los fallos históricos tenían error genérico y no permiten atribuir una causa exacta. Reproducción actual encontró conceptos generados como expresiones matemáticas; corregido y cubierto por regresión.
+- Chrome con servidor local de producción y Supabase real: generación de seis preguntas conceptuales con opciones y guardado exitoso; creación manual de texto sin descripción ni pistas y guardado exitoso. Dos bancos desactivados para revisión del profesor.
+- Typecheck, lint, 98 pruebas y build pasan. Pendiente: publicar y revisar producción.

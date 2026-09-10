@@ -1,5 +1,5 @@
 "use client";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useState, useRef } from "react";
 import type { Skill, CustomQuestion, Level } from "@/lib/engine/types";
 import {familyLabels,generatedFamilies,subjectFamily} from "@/lib/engine/families";
 import {ExerciseDiagram} from "@/components/game/exercise-visual";
@@ -19,7 +19,9 @@ const blank = (): DraftQuestion => ({
   level: 3,
   answerFormat: "number",
 });
-export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; skill?: Skill; draft?: { name:string; description:string; classTopic?:string; subject:string; questions:CustomQuestion[] } }) {
+export function SkillEditor({ skill, draft, onSaved, importOpen=false }: { importOpen?:boolean; onSaved?: () => void; skill?: Skill; draft?: { name:string; description:string; classTopic?:string; subject:string; questions:CustomQuestion[] } }) {
+  const notified=useRef("");
+  const [validationNotice,setValidationNotice]=useState("");
   const [clientId]=useState(()=>crypto.randomUUID());
   const [mode, setMode] = useState(
     skill?.family === "custom" ? "custom" : skill ? "generated" : "custom",
@@ -43,11 +45,12 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
       ].slice(0, 60),
     );
   const [state, action, pending] = useActionState(saveSkill, empty);
-  useEffect(()=>{if(state.success && state.id)onSaved?.();},[state.success,state.id,onSaved]);
+  useEffect(()=>{if(state.success && state.id && notified.current!==state.id){notified.current=state.id;onSaved?.();}},[state.success,state.id,onSaved]);
   const [deletion, deleteAction, deleting] = useActionState(removeSkill, empty);
   return (
     <div className="skill-editor">
-      <form data-track="skill_save" action={action} onReset={e=>e.preventDefault()} onInvalidCapture={e=>{const element=e.target as HTMLElement;const details=element.closest("details");if(details)details.open=true;}}>
+      <form data-track="skill_save" action={action} onReset={e=>e.preventDefault()} onInvalidCapture={e=>{setValidationNotice("Completa el campo señalado antes de guardar. Tu trabajo sigue aquí.");const element=e.target as HTMLElement;const details=element.closest("details");if(details)details.open=true;}}>
+        {(validationNotice||state.error)&&<p role="alert" className="error">{state.error||validationNotice}</p>}
         <input type="hidden" name="clientId" value={clientId}/><input type="hidden" name="id" value={skill?.id ?? state.id ?? ""} />
         <div className="form-grid">
           <label>
@@ -76,7 +79,6 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
             Qué quieres que practique Laura
             <textarea
               name="description"
-              required
               defaultValue={skill?.description ?? draft?.description}
               placeholder="Describe el objetivo de esta práctica."
               rows={2}
@@ -121,7 +123,7 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
           <input
             type="checkbox"
             name="active"
-            defaultChecked={skill?.active ?? !draft}
+            defaultChecked={skill?.active ?? false}
           />{" "}
           Incluir en las misiones de Laura
         </label>
@@ -141,7 +143,7 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
         {mode === "generated"&&<label>Microhabilidad del generador<select name="family" value={family} onChange={e=>setFamily(e.target.value as Exclude<Skill["family"],"custom">)}>{generatedFamilies.map(f=><option key={f} value={f}>{familyLabels[f]}</option>)}</select></label>}
         {mode === "custom" ? (
           <div className="question-bank">
-            <QuestionStudio onAdd={addImported} />
+            <details className="editor-import" open={importOpen}><summary>Añadir desde PDF, imagen o IA</summary><QuestionStudio onAdd={addImported}/></details>
             <div className="bank-toolbar">
               <h3>
                 Banco · {questions.length}{" "}
@@ -171,14 +173,12 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
               </button>
             </div>
             <p>
-              Laura practicará estas preguntas. Añade varias por nivel para
-              darle variedad. Aceptamos números, fracciones y coeficientes
-              químicos.
+              Escribe el enunciado y su respuesta. También puedes usar palabras u opciones.
             </p>
             {questions.map((q, i) => (
-              <details key={q.localId} className="question-accordion" open={i === 0 ? true : undefined}><summary><span className="question-number">{i+1}</span><span>{q.prompt || "Nueva pregunta"}<small>Nivel {q.level-1} · {q.answerFormat === "coefficients" ? "Coeficientes" : q.answerFormat === "fraction" ? "Fracción" : q.answerFormat === "expression" ? "Expresión" : "Número"}</small></span><Icon name="gear" size={18}/></summary><fieldset className="editable-question">
+              <details key={q.localId} className="question-accordion" open={i === 0 || i===questions.length-1 ? true : undefined}><summary><span className="question-number">{i+1}</span><span>{q.prompt || "Nueva pregunta"}<small>Nivel {q.level-1} · {q.answerFormat === "coefficients" ? "Coeficientes" : q.answerFormat === "fraction" ? "Fracción" : q.answerFormat === "expression" ? "Expresión" : q.answerFormat === "text" ? "Texto" : q.answerFormat === "choice" ? "Opciones" : "Número"}</small></span><Icon name="gear" size={18}/></summary><fieldset className="editable-question">
                 <legend>Pregunta {i + 1}</legend>
-                <input type="hidden" name="image" value={q.image ?? ""} />
+                <input type="hidden" name="choices" value={JSON.stringify(q.choices??[])}/><input type="hidden" name="image" value={q.image ?? ""} />
                 <input type="hidden" name="imageAlt" value={q.imageAlt ?? ""} />
                 {q.image && (
                   <div className="attached-image">
@@ -210,18 +210,19 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
                     placeholder="Escribe el problema completo."
                   />
                 </label>
+                {q.answerFormat==='choice'&&<label>Opciones (una por línea)<textarea rows={3} value={q.choices?.map(c=>c.label).join('\n')??''} onChange={e=>update(q.localId,{choices:e.target.value.split('\n').slice(0,6).map(label=>({value:label,label}))})} placeholder="Calor sensible&#10;Calor latente&#10;Trabajo"/></label>}
                 <div className="form-grid">
                   <label>
                     Respuesta correcta
-                    <input
+                    {q.answerFormat==='choice'?<select name="answer" required value={q.answer} onChange={e=>update(q.localId,{answer:e.target.value})}><option value="">Elige la opción correcta</option>{q.choices?.filter(c=>c.value.trim()).map((c,i)=><option key={i} value={c.value}>{c.label}</option>)}</select>:<input
                       name="answer"
                       required
                       value={q.answer}
                       onChange={(e) =>
                         update(q.localId, { answer: e.target.value })
                       }
-                      placeholder="Ej. 0,5 o 1/2"
-                    />
+                      placeholder={q.answerFormat==="text"?"Ej. Calor sensible":"Ej. 0,5 o 1/2"}
+                    />}
                   </label>
                   <label>
                     Formato
@@ -235,7 +236,7 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
                         })
                       }
                     >
-                      <option value="number">Número</option>
+                      <option value="text">Texto corto</option><option value="choice">Opciones de respuesta</option><option value="number">Número</option>
                       <option value="fraction">Fracción</option><option value="expression">Expresión con letras</option>
                       <option value="coefficients">Coeficientes: 2,1,2</option>
                     </select>
@@ -259,7 +260,7 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
                     </select>
                   </label>
                 </div>
-                {[1, 2, 3].map((n) => (
+                <details className="optional-hints"><summary>Pistas personalizadas (opcional)</summary><p>Si las dejas vacías, habrá ayudas generales y la respuesta.</p>{[1, 2, 3].map((n) => (
                   <label key={n}>
                     Pista {n}:{" "}
                     {
@@ -269,7 +270,6 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
                     }
                     <input
                       name={`hint${n}`}
-                      required
                       value={q.hints[n - 1]}
                       onChange={(e) => {
                         const hints = [...q.hints] as CustomQuestion["hints"];
@@ -278,7 +278,7 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
                       }}
                     />
                   </label>
-                ))}
+                ))}</details>
                 <div className="question-actions">
                   <button
                     type="button"
@@ -361,7 +361,8 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
       </form>
       {skill && (
         <form data-track="skill_delete" action={deleteAction} className="delete-form">
-          <input type="hidden" name="clientId" value={clientId}/><input type="hidden" name="id" value={skill.id} />
+          {(validationNotice||state.error)&&<p role="alert" className="error">{state.error||validationNotice}</p>}
+        <input type="hidden" name="clientId" value={clientId}/><input type="hidden" name="id" value={skill.id} />
           <button className="quiet danger" disabled={deleting}>
             Eliminar habilidad sin historial
           </button>

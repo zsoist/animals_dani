@@ -56,11 +56,17 @@ function numeric(raw: string): number | null {
 export type Evaluation =
   | { valid: false; message: string }
   | { valid: true; correct: boolean; errorType: string | null };
+export const normalizedText=(text:string)=>text.normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase().replace(/\s+/g," ").replace(/[.!?]+$/,"");
 export function evaluate(exercise: Exercise, input: string): Evaluation {
   if (input.length > 100)
     return { valid: false, message: "La respuesta es demasiado larga." };
+  if(exercise.answerFormat === "text"){
+    if(!input.trim())return {valid:false,message:"Escribe una respuesta corta."};
+    const correct=normalizedText(input)===normalizedText(exercise.answer);
+    return {valid:true,correct,errorType:correct?null:"RESPUESTA_CONCEPTUAL"};
+  }
   if(exercise.answerFormat === "choice"){
-    const value=input.trim().toLowerCase();
+    const value=exercise.choices?.find(c=>normalizedText(c.value)===normalizedText(input))?.value;
     if(!exercise.choices?.some(c=>c.value===value))return {valid:false,message:"Elige una de las opciones."};
     return {valid:true,correct:value===exercise.answer,errorType:value===exercise.answer?null:exercise.errorSignatures.find(s=>s.value===value)?.errorType??"UNKNOWN"};
   }

@@ -77,3 +77,8 @@
 - Figura, escalera (cuando corresponde) y texto muestran los mismos datos, sin resolver automáticamente la pregunta. Figuras vectoriales proporcionales con medidas; mosaico de cuatro triángulos, no se presenta como tangram tradicional de siete piezas.
 - Semillas v2 solo en sesiones nuevas; las conversiones de colas anteriores conservan el generador legado para que una sesión abierta no cambie de pregunta o respuesta al publicar.
 - Identificar qué medir es selección de magnitud con respuestas semánticas persistidas y errores específicos, no letras A/B/C ni errores numéricos artificiales.
+
+## Creación de preguntas del administrador
+- Los conceptos se evalúan como texto normalizado u opciones explícitas, nunca como álgebra. El texto ignora mayúsculas, tildes y puntuación final; no pretende evaluar sinónimos mediante IA.
+- Las pistas manuales son opcionales; si faltan, se ofrecen ayudas generales identificables, no un procedimiento inventado.
+- Generación de hasta diez preguntas en lotes de tres con revisión y una reparación estructural. El profesor revisa y activa el borrador; generar no publica automáticamente.

@@ -1,9 +1,9 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { tutorDatabase } from "./tutor-auth";
-import type { CustomQuestion, Level } from "@/lib/engine/types";
+import type { CustomQuestion } from "@/lib/engine/types";
 import {isGeneratedFamily,subjectFamily} from "@/lib/engine/families";
-import { evaluate } from "@/lib/engine/exercises";
+import {validateQuestions} from "@/lib/engine/import-questions";
 type ActionState = { error: string; success: string; id?: string };
 export async function saveSkill(
   _previous: ActionState,
@@ -13,7 +13,7 @@ export async function saveSkill(
     const db = await tutorDatabase();
     const id = String(form.get("id") ?? "");
     const name = String(form.get("name") ?? "").trim();
-    const description = String(form.get("description") ?? "").trim();
+    const description = String(form.get("description") ?? "").trim() || name;
     const subject = String(form.get("subject") ?? "");
     const mode = String(form.get("mode") ?? "generated");
     const family=String(form.get("family")??subjectFamily(subject));
@@ -52,59 +52,11 @@ export async function saveSkill(
         const hints = [1, 2, 3].map((n) =>
           String(form.getAll(`hint${n}`)[i] ?? "").trim(),
         ) as [string, string, string];
-        if (
-          !prompt ||
-          !answer ||
-          hints.some((h) => !h) ||
-          !["number", "fraction", "coefficients", "expression"].includes(format) ||
-          !Number.isInteger(level) ||
-          level < 1 ||
-          level > 4
-        )
-          return {
-            error: `Completa la pregunta ${i + 1}, su respuesta y sus tres pistas.`,
-            success: "",
-          };
-        const question = {
-          prompt,
-          answer,
-          hints,
-          level: level as Level,
-          answerFormat: format as CustomQuestion["answerFormat"],
-        };
-        const evaluation = evaluate(
-          {
-            ...question,
-            skillId: "validation",
-            seed: "validation",
-            errorSignatures: [],
-          },
-          answer,
-        );
-        if (!evaluation.valid)
-          return {
-            error: `Pregunta ${i + 1}: ${evaluation.message}`,
-            success: "",
-          };
-        const image = String(form.getAll("image")[i] ?? "");
-        if (
-          image &&
-          (!/^data:image\/(webp|png|jpeg);base64,[A-Za-z0-9+/=]+$/.test(
-            image,
-          ) ||
-            image.length > 450000)
-        )
-          return {
-            error: `Imagen ${i + 1}: usa una imagen de menos de 330 KB.`,
-            success: "",
-          };
-        questions.push({
-          ...question,
-          image: image || undefined,
-          imageAlt: String(
-            form.getAll("imageAlt")[i] ?? "Ilustración del ejercicio",
-          ).slice(0, 300),
-        });
+        let choices:unknown=[];
+        try{choices=JSON.parse(String(form.getAll("choices")[i]??"[]"));}catch{return {error:`Pregunta ${i+1}: revisa las opciones.`,success:""};}
+        try{
+          questions.push(...validateQuestions([{prompt,answer,hints,level,answerFormat:format,choices,image:String(form.getAll("image")[i]??""),imageAlt:String(form.getAll("imageAlt")[i]??"")}],true));
+        }catch(error){return {error:`Pregunta ${i+1}: ${error instanceof Error?error.message.replace(/^Pregunta 1: /,""):"revisa su contenido."}`,success:""};}
       }
       if (!questions.length)
         return { error: "Añade al menos una pregunta propia.", success: "" };
@@ -142,9 +94,7 @@ export async function saveSkill(
     return {
       error: "",
       id: String(saved.data),
-      success: id
-        ? "Cambios guardados."
-        : values.active ? "Habilidad creada. Ya está disponible para la próxima misión." : "Borrador guardado. Actívalo cuando termines de revisarlo.",
+      success: values.active ? "Preguntas guardadas. Disponibles para Laura." : "Borrador guardado. Puedes activarlo cuando quieras.",
     };
   } catch (error) {
     return {

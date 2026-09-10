@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- Locally rendered document pages and user-owned data URLs are already resized. */
 "use client";
+import {askQuestions} from "./ask-questions";
 import {track} from "@/components/telemetry/client";
 import { useRef, useState, useEffect } from "react";
 import type { PDFDocumentProxy, PDFDocumentLoadingTask } from "pdfjs-dist";
@@ -53,7 +54,7 @@ export function QuestionStudio({
     "Crea problemas de grado octavo que requieran varios pasos y razonamiento. Usa cantidades realistas y evita ejercicios triviales.",
   );
 
-  const [count, setCount] = useState(10);
+  const [count, setCount] = useState(6);
   const [level, setLevel] = useState(3);
   const [json, setJson] = useState("");
   const loading = useRef<PDFDocumentLoadingTask | null>(null);
@@ -196,21 +197,7 @@ export function QuestionStudio({
     setError("");
     setNotice("");
     try {
-      const res = await fetch("/api/tutor/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: prompt + (text ? `\nMaterial de referencia:\n${text}` : ""),
-
-          count,
-          level,
-        }),
-      });
-      const body = (await res.json()) as {
-        error?: string;
-        questions?: unknown;
-      };
-      if (!res.ok) throw new Error(body.error || "No pudimos generar.");
+      const body=await askQuestions({prompt:prompt+(text?`\nMaterial de referencia:\n${text}`:''),count,level});
       const questions = validateQuestions(body.questions);
       track("generation_completed",{count:questions.length,level});
       onAdd(questions);
@@ -383,7 +370,7 @@ export function QuestionStudio({
               <input
                 type="number"
                 min="1"
-                max="20"
+                max="10"
                 value={count}
                 onChange={(e) => setCount(Number(e.target.value))}
               />
@@ -396,7 +383,7 @@ export function QuestionStudio({
               >
                 {[1, 2, 3, 4].map((n) => (
                   <option key={n} value={n}>
-                    {n} ·{" "}
+                    {n-1} ·{" "}
                     {
                       ["Fundamentos", "Aplicación", "Varios pasos", "Reto"][
                         n - 1
@@ -408,9 +395,7 @@ export function QuestionStudio({
             </label>
           </div>
           <p>
-            DeepSeek está conectado desde el servidor. La clave no aparece en
-            este formulario. Revisa los borradores y sus respuestas antes de
-            publicarlos.
+            Pide preguntas numéricas, de texto o de opción múltiple. Revisa las respuestas antes de guardar.
           </p>
           {text && (
             <details>
