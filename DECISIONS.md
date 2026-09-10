@@ -87,3 +87,10 @@
 - Mantener la escena montada pero oculta y pausada al consultar gatos o habilidades. Las acciones de práctica solo están disponibles en Mi refugio.
 - Aproximar colisiones con huellas rectangulares del arte, medidas en cada tamaño del patio. Planificar rutas al elegir actividad, no en cada fotograma; comprobar cruces durante el movimiento y ceder el paso.
 - La pelota gira dentro de su espacio reservado en vez de desplazarse libremente bajo gatos y etiquetas.
+
+## Formatos, banco privado y calendario de rescates — septiembre 2026
+- Elegir múltiples formatos significa mezclar tipos de pregunta; opción múltiple sigue teniendo una sola respuesta correcta. Se añaden verdadero/falso y parejas (2–5), junto a abiertas y opciones. Las imágenes son un apoyo compatible con cada formato.
+- Las parejas se mezclan al presentarse, con selección accesible por fila en lugar de arrastre obligatorio. Las respuestas incompletas no cuentan como error académico.
+- Calendario interpretado como días de reto logrados acumulados: 1, 3, 4, 5, 6, 7, 8, 9 y 10, nueve gatos. No se pierden por romper la racha. El historial previo se conserva; solo se muestran los rescates cuyo día se haya alcanzado.
+- Drive usa una cuenta de servicio de solo lectura y una carpeta compartida privadamente. No hay credenciales de Google disponibles; la integración se entrega sin activar. No se cambian permisos de archivos ni se hacen públicos. Importar y revisar precede a la práctica aleatoria; no se publican automáticamente PDF nuevos.
+- PDF completo: máximo 30 páginas/14.000 caracteres para extracción de texto. Imágenes y escaneos se recortan y revisan manualmente; no se afirma OCR ni lectura visual por DeepSeek.

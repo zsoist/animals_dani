@@ -32,7 +32,8 @@ function baseExerciseFor(skill: Skill, question: Question): Exercise {
   const base = match?.[1] ?? question.seed;
   const offset = Math.floor(random(base)() * choices.length);
   const index = Number(match?.[2] ?? 0) + (match?.[3] ? 3 : 0);
-  const picked = choices[(offset + index) % choices.length];
+  const ordered=question.seed.startsWith("v3:")?choices.map(q=>({q,order:random(base+JSON.stringify(q))()})).sort((a,b)=>a.order-b.order).map(item=>item.q):choices;
+  const picked = ordered[((question.seed.startsWith("v3:")?0:offset) + index) % ordered.length];
   return {
     ...picked,
     skillId: skill.id,
@@ -65,7 +66,12 @@ export function evaluate(exercise: Exercise, input: string): Evaluation {
     const correct=normalizedText(input)===normalizedText(exercise.answer);
     return {valid:true,correct,errorType:correct?null:"RESPUESTA_CONCEPTUAL"};
   }
-  if(exercise.answerFormat === "choice"){
+  if(exercise.answerFormat === "match"){
+    const values=input.split(","); const count=exercise.matches?.length??0;
+    if(!count||values.length!==count||new Set(values).size!==count||values.some(v=>!/^\d+$/.test(v)||Number(v)>=count))return {valid:false,message:"Relaciona cada elemento con una opción diferente."};
+    const correct=values.every((v,i)=>Number(v)===i);return {valid:true,correct,errorType:correct?null:"ASOCIACION_INCORRECTA"};
+  }
+  if(exercise.answerFormat === "choice" || exercise.answerFormat === "boolean"){
     const value=exercise.choices?.find(c=>normalizedText(c.value)===normalizedText(input))?.value;
     if(!exercise.choices?.some(c=>c.value===value))return {valid:false,message:"Elige una de las opciones."};
     return {valid:true,correct:value===exercise.answer,errorType:value===exercise.answer?null:exercise.errorSignatures.find(s=>s.value===value)?.errorType??"UNKNOWN"};

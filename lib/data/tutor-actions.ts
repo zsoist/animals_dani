@@ -52,10 +52,10 @@ export async function saveSkill(
         const hints = [1, 2, 3].map((n) =>
           String(form.getAll(`hint${n}`)[i] ?? "").trim(),
         ) as [string, string, string];
-        let choices:unknown=[];
-        try{choices=JSON.parse(String(form.getAll("choices")[i]??"[]"));}catch{return {error:`Pregunta ${i+1}: revisa las opciones.`,success:""};}
+        let choices:unknown=[],matches:unknown=[];
+        try{choices=JSON.parse(String(form.getAll("choices")[i]??"[]"));matches=JSON.parse(String(form.getAll("matches")[i]??"[]"));}catch{return {error:`Pregunta ${i+1}: revisa las opciones.`,success:""};}
         try{
-          questions.push(...validateQuestions([{prompt,answer,hints,level,answerFormat:format,choices,image:String(form.getAll("image")[i]??""),imageAlt:String(form.getAll("imageAlt")[i]??"")}],true));
+          questions.push(...validateQuestions([{prompt,answer,hints,level,answerFormat:format,choices,matches,image:String(form.getAll("image")[i]??""),imageAlt:String(form.getAll("imageAlt")[i]??"")}],true));
         }catch(error){return {error:`Pregunta ${i+1}: ${error instanceof Error?error.message.replace(/^Pregunta 1: /,""):"revisa su contenido."}`,success:""};}
       }
       if (!questions.length)

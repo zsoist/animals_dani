@@ -12,3 +12,4 @@ insert into public.cats(id,name,personality,story,trait_tags,palette) values
 ('20000000-0000-0000-0000-000000000004','Nube','dormilón','Dormía junto a una panadería. Aquí encontró su rincón de sol favorito.',array['sol','siesta'],'{"body":"#ddd8cb","belly":"#fff7e9"}'),
 ('20000000-0000-0000-0000-000000000005','Bruno','gruñón','Cuidaba un jardín abandonado. Protesta bajito, pero siempre espera a sus amigos.',array['jardin','leal'],'{"body":"#756c66","belly":"#c4b8a6"}'),
 ('20000000-0000-0000-0000-000000000006','Miel','cariñoso','Se acercó buscando una mano amiga. Su ronroneo acompaña cada regreso a casa.',array['compañia','ronroneo'],'{"body":"#ceab6a","belly":"#f4e4d0"}') on conflict(id) do nothing;
+update public.cats set unlock_day=case name when 'Milo' then 1 when 'Bruno' then 3 when 'Luna' then 4 when 'Pipa' then 5 when 'Nube' then 6 when 'Miel' then 7 when 'Coco' then 8 when 'Oliva' then 9 when 'Simón' then 10 end;

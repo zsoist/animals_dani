@@ -176,9 +176,9 @@ export function SkillEditor({ skill, draft, onSaved, importOpen=false }: { impor
               Escribe el enunciado y su respuesta. También puedes usar palabras u opciones.
             </p>
             {questions.map((q, i) => (
-              <details key={q.localId} className="question-accordion" open={i === 0 || i===questions.length-1 ? true : undefined}><summary><span className="question-number">{i+1}</span><span>{q.prompt || "Nueva pregunta"}<small>Nivel {q.level-1} · {q.answerFormat === "coefficients" ? "Coeficientes" : q.answerFormat === "fraction" ? "Fracción" : q.answerFormat === "expression" ? "Expresión" : q.answerFormat === "text" ? "Texto" : q.answerFormat === "choice" ? "Opciones" : "Número"}</small></span><Icon name="gear" size={18}/></summary><fieldset className="editable-question">
+              <details key={q.localId} className="question-accordion" open={i === 0 || i===questions.length-1 ? true : undefined}><summary><span className="question-number">{i+1}</span><span>{q.prompt || "Nueva pregunta"}<small>Nivel {q.level-1} · {q.answerFormat === "coefficients" ? "Coeficientes" : q.answerFormat === "fraction" ? "Fracción" : q.answerFormat === "expression" ? "Expresión" : q.answerFormat === "boolean" ? "Verdadero/falso" : q.answerFormat === "match" ? "Parejas" : q.answerFormat === "text" ? "Texto" : q.answerFormat === "choice" ? "Opciones" : "Número"}</small></span><Icon name="gear" size={18}/></summary><fieldset className="editable-question">
                 <legend>Pregunta {i + 1}</legend>
-                <input type="hidden" name="choices" value={JSON.stringify(q.choices??[])}/><input type="hidden" name="image" value={q.image ?? ""} />
+                <input type="hidden" name="matches" value={JSON.stringify(q.matches??[])}/><input type="hidden" name="choices" value={JSON.stringify(q.choices??[])}/><input type="hidden" name="image" value={q.image ?? ""} />
                 <input type="hidden" name="imageAlt" value={q.imageAlt ?? ""} />
                 {q.image && (
                   <div className="attached-image">
@@ -210,11 +210,12 @@ export function SkillEditor({ skill, draft, onSaved, importOpen=false }: { impor
                     placeholder="Escribe el problema completo."
                   />
                 </label>
+                {q.answerFormat==='match'&&<label>Parejas correctas (una por línea, separadas por =)<textarea rows={5} value={q.matches?.map(p=>`${p.left} = ${p.right}`).join('\n')??''} onChange={e=>{const matches=e.target.value.split('\n').slice(0,5).map(line=>{const [left,...right]=line.split('=');return {left,right:right.join('=')};});update(q.localId,{matches,answer:matches.map((_,i)=>i).join(',')});}} placeholder={'Presión = Pa\nMasa = kg\nVolumen = m³'}/></label>}
                 {q.answerFormat==='choice'&&<label>Opciones (una por línea)<textarea rows={3} value={q.choices?.map(c=>c.label).join('\n')??''} onChange={e=>update(q.localId,{choices:e.target.value.split('\n').slice(0,6).map(label=>({value:label,label}))})} placeholder="Calor sensible&#10;Calor latente&#10;Trabajo"/></label>}
                 <div className="form-grid">
                   <label>
                     Respuesta correcta
-                    {q.answerFormat==='choice'?<select name="answer" required value={q.answer} onChange={e=>update(q.localId,{answer:e.target.value})}><option value="">Elige la opción correcta</option>{q.choices?.filter(c=>c.value.trim()).map((c,i)=><option key={i} value={c.value}>{c.label}</option>)}</select>:<input
+                    {q.answerFormat==='match'?<><input type="hidden" name="answer" value={q.answer}/><span>Las parejas de arriba son la solución.</span></>:q.answerFormat==='boolean'?<select name="answer" value={q.answer} onChange={e=>update(q.localId,{answer:e.target.value})}><option value="">Elige la respuesta</option><option value="verdadero">Verdadero</option><option value="falso">Falso</option></select>:q.answerFormat==='choice'?<select name="answer" required value={q.answer} onChange={e=>update(q.localId,{answer:e.target.value})}><option value="">Elige la opción correcta</option>{q.choices?.filter(c=>c.value.trim()).map((c,i)=><option key={i} value={c.value}>{c.label}</option>)}</select>:<input
                       name="answer"
                       required
                       value={q.answer}
@@ -236,7 +237,7 @@ export function SkillEditor({ skill, draft, onSaved, importOpen=false }: { impor
                         })
                       }
                     >
-                      <option value="text">Texto corto</option><option value="choice">Opciones de respuesta</option><option value="number">Número</option>
+                      <option value="boolean">Verdadero o falso</option><option value="match">Relacionar parejas</option><option value="text">Texto corto</option><option value="choice">Opciones de respuesta</option><option value="number">Número</option>
                       <option value="fraction">Fracción</option><option value="expression">Expresión con letras</option>
                       <option value="coefficients">Coeficientes: 2,1,2</option>
                     </select>

@@ -144,3 +144,6 @@ La cabecera recupera «Refugio de Laura». Los nombres de gatos son texto oscuro
 
 ### Secciones y convivencia del patio
 «Mis gatos» contiene únicamente la colección con retratos e historias. «Mis habilidades» reduce cada fila a icono temático, nombre, nivel y progreso; los accesos a reto y práctica libre pertenecen a «Mi refugio». El patio se pausa al ocultarse. Las huellas de navegación incluyen el nombre del gato; objetos y residentes reservan espacio y las rutas ceden el paso. La pelota gira sobre su lugar, separado de la cesta.
+
+### Formatos de preguntas
+El profesor elige varios formatos con casillas etiquetadas. Abiertas, opciones, verdadero/falso y parejas pueden acompañarse de una imagen adjunta. Relacionar usa dos columnas y un selector por fila, accesible por teclado y sin exigir arrastre. La carpeta de Drive vive dentro del importador y muestra su estado real de conexión.

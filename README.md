@@ -85,3 +85,10 @@ Admin mantiene Progreso / Laboratorio IA / Habilidades. El antiguo panel de uso 
 Los niveles visibles 0–3 se almacenan como 1–4 para conservar compatibilidad. Los generadores de despeje usan veinte fórmulas y constantes enteras 10/25, sin decimales. El tema filtra familias de fórmulas cuando coincide con gases, termodinámica, Arquímedes, presión/densidad o matemáticas; otros temas se preparan con preguntas propias o IA. Una pregunta de repaso conserva su dificultad. Un banco propio sin todos los niveles usa los disponibles: no se inventan niveles que el contenido no tiene.
 
 `supabase/tests/daily-care.sql` verifica reglas de racha y cuidado con rollback. No borra progreso real ni deja filas de prueba.
+
+## Bancos mixtos y Drive
+Admin permite combinar abiertas, opción múltiple, verdadero/falso y parejas. Las imágenes se adjuntan desde PDF o archivo y pueden acompañar cualquier formato. El banco se guarda desactivado para revisión; las nuevas sesiones mezclan sus preguntas por nivel.
+
+La conexión privada de Drive necesita dos variables de servidor y compartir una carpeta como lector: ver [DRIVE_SETUP.md](DRIVE_SETUP.md). No está conectada hasta configurar esas credenciales; carga local de PDF disponible sin Google. La importación exige revisión: no hay OCR automático de escaneos ni sincronización desatendida.
+
+Rescates por días logrados acumulados: 1, 3, 4, 5, 6, 7, 8, 9 y 10 (nueve gatos). Los gatos anteriores que todavía no corresponden al calendario se conservan en el historial y vuelven a mostrarse al alcanzar su día.

@@ -165,6 +165,7 @@ export function RefugeClient({
               {view === "cats" && (
                 <section className="collection">
                   <h2>Tu pequeña familia</h2>
+                  {liveCats.length===0&&<p>El primer reto logrado abre las puertas para Milo.</p>}
                   <div className="cat-list">
                     {liveCats.map((cat) => (
                       <article key={cat.id}><div className="family-portrait"><CatArt body={cat.palette.body} sleeping={cat.personality==="dormilón"}/></div><div className="family-story"><h3>{cat.name}</h3><span>{cat.personality}</span><p>{cat.story}</p></div></article>

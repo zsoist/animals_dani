@@ -7,7 +7,8 @@ export type Exercise = {
   prompt: string;
   displayPrompt?: string;
   answer: string;
-  answerFormat: "number" | "fraction" | "coefficients" | "expression" | "choice" | "text";
+  answerFormat: "number" | "fraction" | "coefficients" | "expression" | "choice" | "text" | "boolean" | "match";
+  matches?: {left:string;right:string}[];
   choices?: {value:string;label:string}[];
   unitScale?: {units:string[];source:string;target:string;stepFactor:number};
   visual?: ExerciseVisual;
@@ -22,6 +23,7 @@ export type Exercise = {
   hints: [string, string, string];
 };
 export type CustomQuestion = {
+  matches?: {left:string;right:string}[];
   choices?: {value:string;label:string}[];
   image?: string;
   imageAlt?: string;

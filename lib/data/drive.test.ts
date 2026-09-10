@@ -1,0 +1,12 @@
+import{afterEach,beforeEach,expect,it,vi}from'vitest';
+const mocks=vi.hoisted(()=>({auth:vi.fn(),fetch:vi.fn()}));
+vi.mock('server-only',()=>({}));
+vi.mock('./tutor-auth',()=>({tutorDatabase:mocks.auth}));
+vi.mock('google-auth-library',()=>({GoogleAuth:class{async getAccessToken(){return 'test-token';}}}));
+import{driveBank}from'./drive';
+beforeEach(()=>{vi.clearAllMocks();mocks.auth.mockResolvedValue({});vi.stubGlobal('fetch',mocks.fetch);vi.stubEnv('GOOGLE_DRIVE_SERVICE_ACCOUNT_JSON',JSON.stringify({client_email:'reader@example.test',private_key:'test-key'}));vi.stubEnv('GOOGLE_DRIVE_FOLDER_ID','allowed-folder');});
+afterEach(()=>{vi.unstubAllGlobals();vi.unstubAllEnvs();});
+it('requires tutor access before exposing configuration',async()=>{mocks.auth.mockRejectedValue(new Error('Acceso reservado'));await expect(driveBank()).rejects.toThrow('Acceso reservado');expect(mocks.fetch).not.toHaveBeenCalled();});
+it('reports an unconfigured integration without pretending it is connected',async()=>{vi.stubEnv('GOOGLE_DRIVE_FOLDER_ID','');expect(await driveBank()).toEqual({configured:false});expect(mocks.fetch).not.toHaveBeenCalled();});
+it('rejects files outside the configured folder before downloading',async()=>{mocks.fetch.mockResolvedValue(new Response(JSON.stringify({name:'other.pdf',mimeType:'application/pdf',size:'1000',parents:['other-folder']})));await expect(driveBank('file-12345')).rejects.toThrow('carpeta conectada');expect(mocks.fetch).toHaveBeenCalledTimes(1);});
+it('rejects oversized files',async()=>{mocks.fetch.mockResolvedValue(new Response(JSON.stringify({name:'large.pdf',mimeType:'application/pdf',size:String(16*1024*1024),parents:['allowed-folder']})));await expect(driveBank('file-12345')).rejects.toThrow('15 MB');expect(mocks.fetch).toHaveBeenCalledTimes(1);});

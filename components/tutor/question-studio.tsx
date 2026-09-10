@@ -1,5 +1,8 @@
 /* eslint-disable @next/next/no-img-element -- Locally rendered document pages and user-owned data URLs are already resized. */
 "use client";
+import {DriveBank} from "./drive-bank";
+import {QuestionKinds} from "./question-kinds";
+import type {QuestionKind} from "@/lib/engine/question-kinds";
 import {askQuestions} from "./ask-questions";
 import {track} from "@/components/telemetry/client";
 import { useRef, useState, useEffect } from "react";
@@ -54,6 +57,8 @@ export function QuestionStudio({
     "Crea problemas de grado octavo que requieran varios pasos y razonamiento. Usa cantidades realistas y evita ejercicios triviales.",
   );
 
+  const [includeImage,setIncludeImage]=useState(false);
+  const [kinds,setKinds]=useState<QuestionKind[]>(["open","choice"]);
   const [count, setCount] = useState(6);
   const [level, setLevel] = useState(3);
   const [json, setJson] = useState("");
@@ -183,7 +188,7 @@ export function QuestionStudio({
         },
       ]);
       setNotice(
-        "Imagen añadida. Completa la respuesta y las pistas en el banco antes de guardar.",
+        "Imagen añadida. Completa la respuesta y revisa las pistas en el banco antes de guardar.",
       );
     } catch (e) {
       setError(
@@ -191,16 +196,24 @@ export function QuestionStudio({
       );
     }
   }
+  async function wholeDocument(){
+    if(!pdf.current)return;setBusy(true);setError("");
+    try{let extracted='';const limit=Math.min(pdf.current.numPages,30);for(let i=1;i<=limit;i++){const p=await pdf.current.getPage(i);const c=await p.getTextContent();extracted+=`\nPágina ${i}:\n`+c.items.map(item=>'str' in item?item.str:'').join(' ');if(extracted.length>14000)throw new Error('El banco es muy largo. Usa páginas individuales o divide el PDF en partes.');}
+     if(pdf.current.numPages>30)throw new Error('Usa un PDF de hasta 30 páginas para importar el banco completo.');
+     if(extracted.replace(/Página \d+:/g,'').trim().length<30)throw new Error('Este PDF es escaneado. Recorta cada pregunta como imagen y añade su respuesta.');
+     setText(extracted);setPrompt('Importa preguntas del material, conserva su objetivo y datos. No inventes preguntas adicionales. Resuelve y revisa cada respuesta.');setTab('ai');setNotice(`Texto de ${limit} páginas listo. Elige tipos y cantidad; revisa el borrador antes de guardar.`);
+    }catch(e){setError(e instanceof Error?e.message:'No pudimos leer el banco.');}finally{setBusy(false);}
+  }
   async function generate() {
     track("generation_started",{count,level});
     setBusy(true);
     setError("");
     setNotice("");
     try {
-      const body=await askQuestions({prompt:prompt+(text?`\nMaterial de referencia:\n${text}`:''),count,level});
+      const body=await askQuestions({kinds,prompt:prompt+(includeImage?" Las preguntas se presentarán junto con la imagen de esta página. Usa únicamente el material textual extraído, no inventes detalles visuales.":"")+(text?`\nMaterial de referencia:\n${text}`:''),count,level});
       const questions = validateQuestions(body.questions);
       track("generation_completed",{count:questions.length,level});
-      onAdd(questions);
+      onAdd(questions.map(q=>includeImage&&preview?{...q,image:preview,imageAlt:`Material de referencia: ${name}`} : q));
       setNotice(
         `${questions.length} borradores añadidos. Revisa sus soluciones y guarda la habilidad.`,
       );
@@ -247,7 +260,7 @@ export function QuestionStudio({
       </div>
       {tab === "pdf" && (
         <>
-          <label className="upload-zone">
+          <DriveBank onOpen={openFile}/><label className="upload-zone">
             <Icon name="plus" />
             <strong>Abre tu PDF o imagen</strong>
             <span>PDF, JPG, PNG y WebP · hasta 15 MB</span>
@@ -264,6 +277,7 @@ export function QuestionStudio({
             ejercicio y añade su respuesta. También funciona con páginas
             escaneadas.
           </p>
+          {pages>0&&<button type="button" className="secondary" disabled={busy} onClick={()=>void wholeDocument()}>Preparar preguntas de todo el PDF</button>}
           {preview && (
             <div className="document-workspace">
               <div>
@@ -354,7 +368,7 @@ export function QuestionStudio({
         </>
       )}
       {tab === "ai" && (
-        <div className="ai-workspace">
+        <div className="ai-workspace"><QuestionKinds value={kinds} onChange={setKinds} image={includeImage} onImage={()=>{if(!preview){setError("Abre primero una imagen o página PDF en PDF e imágenes.");setTab("pdf");}else setIncludeImage(v=>!v);}}/>
           <label>
             Qué quieres que practique Laura
             <textarea

@@ -1,4 +1,5 @@
 "use client";
+import {MatchAnswer} from "./match-answer";
 import {Calculator} from "./calculator";
 import {ExerciseDiagram} from "./exercise-visual";
 import {track} from "@/components/telemetry/client";
@@ -295,7 +296,7 @@ export function Practice({
       {exercise.image && (
         <ImageViewer src={exercise.image} alt={exercise.imageAlt} />
       )}
-      {presentationChoices ? <fieldset className="answer-choices" disabled={busy||solved||review}><legend>Elige la respuesta correcta</legend>{presentationChoices.map((choice,i)=><label key={choice.value} className={answer===choice.value?'choice-selected':''}><input type="radio" name={`choice-${exercise.seed}`} value={choice.value} checked={answer===choice.value} onChange={()=>{setAnswer(choice.value);track('control_used',{control:'answer_choice',format:'choice',step:index},{sessionId,skillId:skill.id});}}/><span className="choice-letter">{String.fromCharCode(65+i)}</span><span className="choice-value">{choice.label}</span><Icon name="check" size={18}/></label>)}</fieldset> : <>
+      {exercise.answerFormat==="match"?<MatchAnswer exercise={exercise} value={answer} onChange={setAnswer} disabled={busy||solved||review}/>:presentationChoices ? <fieldset className="answer-choices" disabled={busy||solved||review}><legend>Elige la respuesta correcta</legend>{presentationChoices.map((choice,i)=><label key={choice.value} className={answer===choice.value?'choice-selected':''}><input type="radio" name={`choice-${exercise.seed}`} value={choice.value} checked={answer===choice.value} onChange={()=>{setAnswer(choice.value);track('control_used',{control:'answer_choice',format:'choice',step:index},{sessionId,skillId:skill.id});}}/><span className="choice-letter">{String.fromCharCode(65+i)}</span><span className="choice-value">{choice.label}</span><Icon name="check" size={18}/></label>)}</fieldset> : <>
       <label className="answer-label" htmlFor="answer">
         {exercise.answerFormat === "coefficients"
           ? "Coeficientes, separados por comas"

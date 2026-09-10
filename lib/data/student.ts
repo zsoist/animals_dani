@@ -122,7 +122,7 @@ export async function createSession(mode:PracticeMode='daily',skillId?:string,le
   const skill=practice.skills.find(s=>s.id===skillId);
   const queue=mode==='free' ? (skill && level ? freeQueue(skill,level,crypto.randomUUID()) : []) : practice.queue;
   if(queue.length!==10)throw new Error("Elige una habilidad y un nivel con preguntas.");
-  const saved=await db.rpc('start_practice_atomic',{p_mode:mode,p_queue:queue});
+  const saved=await db.rpc('start_practice_atomic',{p_mode:mode,p_queue:queue.map(q=>q.family==='custom'?{...q,seed:q.seed.replace(/^v2:/,'v3:')}:q)});
   if(saved.error)throw new Error(saved.error.message.includes('DAILY_PASSED') ? '¡El reto ya está logrado! Puedes practicar libremente.' : saved.error.message.includes('DAILY_LIMIT') ? 'Hoy usaste tus tres oportunidades. La práctica libre sigue abierta.' : 'No pudimos abrir la práctica. Inténtalo otra vez.');
   const session=saved.data as {id:string;planned_queue:Question[];mode:PracticeMode;daily_try:number;completed_seeds:string[]};
   const attempts=await db.from('attempts').select('*').eq('session_id',session.id).eq('user_id',userId).order('created_at');
