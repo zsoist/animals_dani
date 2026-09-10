@@ -53,7 +53,7 @@ export function units(skillId:string,level:Level,seed:string):Exercise {
  const prompt=mode===0?`Convierte ${value} ${source} a ${target}.`:mode===1?`${context} indica ${value} ${source}. ¿Qué número escribirías en ${target}?`:`Dos etiquetas, una misma cantidad: ${value} ${source} = ___ ${target}. Completa la etiqueta.`;
  const errors:[number,string][]=[[value/factor,'FACTOR_INVERTIDO'],[value*factor*10,'CORRIMIENTO_DECIMAL'],[value*factor/10,'CORRIMIENTO_DECIMAL']];
  if(pair.power&&pair.power>1)errors.unshift([value*Math.pow(factor,1/pair.power),pair.power===2?'FACTOR_LINEAL_EN_AREA':'FACTOR_LINEAL_EN_VOLUMEN']);
- if(pair.instrument==='density'&&factor!==1)errors.unshift([value*(reverse?1000:.001),'SOLO_CONVIERTE_MASA']);
+ if(pair.source==='g/cm³'&&pair.target==='kg/m³')errors.unshift([value*(reverse?1000:.001),'SOLO_CONVIERTE_MASA']);
  const description=`${context}: ${value} ${source}. La etiqueta nueva debe expresar la misma cantidad en ${target}. ${pair.equivalence}.`;
  return {skillId,level,seed,prompt,answer,answerFormat:'number',tolerance:1e-8,conversion:{value,source,target,factor},
  visual:{kind:'conversion',instrument:pair.instrument,value,source,target,equivalence:pair.equivalence,description},

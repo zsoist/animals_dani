@@ -19,6 +19,8 @@ describe('Visual micro-skills',()=>{
     let perimeter=0,area=0;
     vertices.forEach(([x,y],j)=>{const [a,b]=vertices[(j+1)%vertices.length];perimeter+=Math.hypot(a-x,b-y);area+=x*b-a*y;});
     expect(Number(e.answer)).toBeCloseTo(family==='area'?Math.abs(area)/2:perimeter,8);
+    const confusion=e.errorSignatures.find(s=>s.errorType==='CONFUNDE_AREA_PERIMETRO');
+    if(confusion)expect(Number(confusion.value)).toBeCloseTo(family==='area'?perimeter:Math.abs(area)/2,8);
    }else{
     expect(e.choices).toHaveLength(3);expect(e.choices?.filter(c=>evaluate(e,c.value).valid&&c.value===e.answer)).toHaveLength(1);
     expect(evaluate(e,'no soy una opción')).toMatchObject({valid:false});

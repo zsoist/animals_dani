@@ -30,5 +30,9 @@ export function geometry(skillId:string,level:Level,seed:string,family:'perimete
  const action=area?(variant===0?'Queremos cubrir el suelo con una manta.':'Queremos pintar toda la superficie.'):(variant===0?'Queremos poner una cerca alrededor.':'Queremos decorar todo el borde con cinta.');
  const prompt=`${description} ${action} ¿Cuántos ${area?'cm²':'cm'} necesitamos?`;
  const canonicalAnswer=canonical(answer);
- return {skillId,level,seed,prompt,displayPrompt:area?(variant===0?"¿Cuántos cm² de manta cubren esta figura?":"¿Qué área debemos pintar, en cm²?"):"¿Cuánta cinta rodea la figura, en cm?",answer:canonicalAnswer,answerFormat:'number',visual:{kind:'geometry',shape,width:w,height:h,cut,unit:'cm',highlight:area?'surface':'border',description},errorSignatures:signatures(canonicalAnswer,[[area?2*(w+h):w*h,'CONFUNDE_AREA_PERIMETRO'],[area?w+h:w+h,'SUMA_INCOMPLETA'],[area&&shape==='triangle'?w*h:answer+2,'FORMULA_INCORRECTA'],[area&&shape==='cutout'?w*h:answer-1,'OMITE_PARTE_FIGURA']]),hints:[concept,`Usa ${method}.`,`${method} = ${canonicalAnswer} ${area?'cm²':'cm'}.`]};
+ const actualArea=shape==='triangle'?w*h/2:shape==='cutout'?w*h-(cut??0)**2:w*h;
+ const actualPerimeter=shape==='triangle'?w+h+Math.hypot(w,h):2*(w+h);
+ const otherMeasure=area?actualPerimeter:actualArea;
+ const confusion:[number,string][]=Number.isInteger(otherMeasure)?[[otherMeasure,'CONFUNDE_AREA_PERIMETRO']]:[];
+ return {skillId,level,seed,prompt,displayPrompt:area?(variant===0?"¿Cuántos cm² de manta cubren esta figura?":"¿Qué área debemos pintar, en cm²?"):"¿Cuánta cinta rodea la figura, en cm?",answer:canonicalAnswer,answerFormat:'number',visual:{kind:'geometry',shape,width:w,height:h,cut,unit:'cm',highlight:area?'surface':'border',description},errorSignatures:signatures(canonicalAnswer,[...confusion,[w+h,area?'SUMA_EN_VEZ_DE_MULTIPLICAR':'SUMA_INCOMPLETA'],[area&&shape==='triangle'?w*h:answer+2,'FORMULA_INCORRECTA'],[area&&shape==='cutout'?w*h:answer-1,'OMITE_PARTE_FIGURA']]),hints:[concept,`Usa ${method}.`,`${method} = ${canonicalAnswer} ${area?'cm²':'cm'}.`]};
 }
