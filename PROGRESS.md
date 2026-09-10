@@ -136,3 +136,10 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - Typecheck, lint, 98 pruebas y build pasan. Pendiente: publicar y revisar producción.
 - Publicado: código dcb444b, despliegue dpl_3Q6hiygomc1gGeWU5TUbtLJdQ7xQ, HTTP 200. Chrome en producción generó tres despejes, guardó el banco desactivado y editó su primer enunciado. Lectura independiente de Supabase confirmó tres preguntas y el texto editado; recarga conserva los bancos en el selector.
 - Los dos bancos locales y el banco creado en producción permanecen como borradores útiles para revisión. No se modificó el contenido anterior del profesor. Inspección visual de escritorio realizada; no se afirma medición móvil ni rendimiento en esta corrección.
+
+## Secciones independientes y convivencia del patio — 2026-09-09
+- Mis gatos muestra únicamente retratos e historias. Mis habilidades presenta nombre, icono del tema, nivel y progreso. Reto y práctica libre permanecen exclusivamente en Mi refugio; los paneles ocultos no conservan su distribución ni acciones accesibles.
+- Navegación de gatos con huellas proporcionales al tamaño real, rutas alrededor de muebles y otros gatos, reservas de destinos y espera cuando se cruza otro residente. Los objetos tienen puntos de acercamiento; no se activa la interacción desde un destino inaccesible.
+- Pelota con movimiento contenido y un solo gato por turno. Comida y cajas disponibles también forman parte de sus actividades. Profundidad compartida por posición; se conserva el arte original.
+- Admin: las cuatro generaciones más recientes constan completadas sin error tras la reparación anterior; sin nuevos fallos registrados.
+- 101 pruebas, tipos y lint pasan; primera compilación pasa. Chrome comprobó aislamiento de las tres secciones y distribución de escritorio. El ajuste de viewport del navegador no se aplicó (1225 px medidos), por lo que no se afirma QA visual móvil. Navegación sí se prueba con dimensiones proporcionales de móvil y escritorio. Detector: avisos informativos de tonos/tamaños heredados, sin rediseñarlos.

@@ -21,6 +21,7 @@ import type {PracticeSession} from "@/lib/data/student";
 import { startMission } from "@/lib/data/actions";
 import { Practice } from "./practice";
 import { Icon } from "./icons";
+import { SkillIcon } from "./skill-icon";
 
 
 
@@ -140,7 +141,7 @@ export function RefugeClient({
               </div>
             </div>
           )}
-          <Shelter today={today} lastCare={liveStreak.last_session_date} feedingUnlocked={dates.includes(today)} cats={liveCats} state={liveState} celebration={celebration} paused={Boolean(session)} />
+          <div hidden={view!=="home"&&!session}><Shelter today={today} lastCare={liveStreak.last_session_date} feedingUnlocked={dates.includes(today)} cats={liveCats} state={liveState} celebration={celebration} paused={Boolean(session)||view!=="home"} /></div>
           {!session && (
             <>
               <nav className="world-tabs" aria-label="Explorar el refugio">
@@ -154,7 +155,7 @@ export function RefugeClient({
                   <button
                     key={item.id}
                     className={view === item.id ? "selected" : ""}
-                    data-track={`view_${item.id}`} onClick={() => setView(item.id)}
+                    aria-pressed={view===item.id} data-track={`view_${item.id}`} onClick={() => setView(item.id)}
                   >
                     <Icon name={item.icon} />
                     {item.label}
@@ -173,23 +174,22 @@ export function RefugeClient({
               )}
               {view === "skills" && (
                 <section className="skill-map">
-                  <h2>Cada día, un poquito más fácil</h2>
+                  <h2>Mis habilidades</h2>
                   {skills.map((skill) => {
                     const mastery = masteries.find(
                       (m) => m.skill_id === skill.id,
                     );
                     return (
                       <div className="skill-row" key={skill.id}>
-                        <Icon name="book" />
+                        <SkillIcon skill={skill}/>
                         <div>
                           <strong>{skill.name}</strong>
                           <span>
                             Nivel{" "}
-                            {(mastery?.current_level ?? skill.base_difficulty)-1} ·{" "}
-                            {mastery?.attempts_total ?? 0} intentos
+                            {(mastery?.current_level ?? skill.base_difficulty)-1}
                           </span>
                           <progress
-                            max={100}
+                            aria-label={`Progreso en ${skill.name}`} max={100}
                             value={mastery?.mastery_score ?? 0}
                           />
                         </div>
@@ -203,7 +203,7 @@ export function RefugeClient({
           )}
         </div>
         <div
-          className="action-column"
+          className="action-column" hidden={!session&&view!=="home"}
           role={session ? "dialog" : undefined}
           aria-modal={session ? true : undefined}
           aria-label={session ? (session.mode==="free" ? "Práctica libre" : "Práctica del día") : undefined}

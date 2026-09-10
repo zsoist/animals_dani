@@ -40,13 +40,13 @@ export function Shelter({
       {!compact && <div className="refuge-greeting"><h1>Hola, Laura</h1><p>{feedingUnlocked ? "Un ratito más, un paso más." : "Lo que hoy practicas, mañana será más fácil."}</p></div>}
       <div className="world-atmosphere" aria-hidden="true"><span/><span/><span/></div>
       <div className="shelter-objects" aria-label="Objetos de los gatos">
-       <div className="cat-ball"><RefugeProp kind="ball" label="Pelota de tela para los gatos"/></div>
-       <div className="courtyard-scratcher"><RefugeProp kind="scratcher" label="Rascador del patio"/></div>
-       <div className="courtyard-basket"><RefugeProp kind="basket" label="Cesta de mantas del refugio"/></div>
-       {(state?.beds??0)>0 && <div className={`cat-bed ${celebration?.reward==='bed'?'gift-arrival':''}`}><RefugeProp kind="bed" label="Camita ganada"/></div>}
-       {(state?.boxes??0)>0 && <div className={`cat-box ${celebration?.reward==='box'?'gift-arrival':''}`}><RefugeProp kind="box" label="Caja de Milo"/></div>}
-       {(state?.food??0)>0 && <div className={`cat-bowl ${celebration?.reward==='food'?'gift-arrival':''}`}><RefugeProp kind="food" label="Comida ganada"/></div>}
-       {(state?.treats??0)>0 && <div className={`cat-treat ${celebration?.reward==='treat'?'gift-arrival':''}`} role="img" aria-label="Galletita ganada"/>}
+       <div data-object="ball" className="cat-ball"><RefugeProp kind="ball" label="Pelota de tela para los gatos"/></div>
+       <div data-object="scratcher" className="courtyard-scratcher"><RefugeProp kind="scratcher" label="Rascador del patio"/></div>
+       <div data-object="basket" className="courtyard-basket"><RefugeProp kind="basket" label="Cesta de mantas del refugio"/></div>
+       {(state?.beds??0)>0 && <div data-object="bed" className={`cat-bed ${celebration?.reward==='bed'?'gift-arrival':''}`}><RefugeProp kind="bed" label="Camita ganada"/></div>}
+       {(state?.boxes??0)>0 && <div data-object="box" className={`cat-box ${celebration?.reward==='box'?'gift-arrival':''}`}><RefugeProp kind="box" label="Caja de Milo"/></div>}
+       {(state?.food??0)>0 && <div data-object="food" className={`cat-bowl ${celebration?.reward==='food'?'gift-arrival':''}`}><RefugeProp kind="food" label="Comida ganada"/></div>}
+       {(state?.treats??0)>0 && <div data-object="treat" className={`cat-treat ${celebration?.reward==='treat'?'gift-arrival':''}`} role="img" aria-label="Galletita ganada"/>}
       </div>
       <div className="room-cats">
         {cats.map((cat, index) => (

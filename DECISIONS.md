@@ -82,3 +82,8 @@
 - Los conceptos se evalúan como texto normalizado u opciones explícitas, nunca como álgebra. El texto ignora mayúsculas, tildes y puntuación final; no pretende evaluar sinónimos mediante IA.
 - Las pistas manuales son opcionales; si faltan, se ofrecen ayudas generales identificables, no un procedimiento inventado.
 - Generación de hasta diez preguntas en lotes de tres con revisión y una reparación estructural. El profesor revisa y activa el borrador; generar no publica automáticamente.
+
+## Patio y secciones
+- Mantener la escena montada pero oculta y pausada al consultar gatos o habilidades. Las acciones de práctica solo están disponibles en Mi refugio.
+- Aproximar colisiones con huellas rectangulares del arte, medidas en cada tamaño del patio. Planificar rutas al elegir actividad, no en cada fotograma; comprobar cruces durante el movimiento y ceder el paso.
+- La pelota gira dentro de su espacio reservado en vez de desplazarse libremente bajo gatos y etiquetas.
