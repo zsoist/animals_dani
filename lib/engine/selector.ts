@@ -36,7 +36,7 @@ export function selectDaily(
     skillId: skill.id,
     family: skill.family,
     level: (available.length ? available.filter(l=>l<=([1,1,1,2,2,2,3,3,4,4] as const)[i]).at(-1) ?? available[0] : ([1,1,1,2,2,2,3,3,4,4] as const)[i]),
-    seed: `${sessionSeed}:${i}`,
+    seed: `v2:${sessionSeed}:${i}`,
   }));
 }
 export function reinforce(queue: Question[], index: number): Question[] {

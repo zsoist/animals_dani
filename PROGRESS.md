@@ -111,3 +111,11 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - Dos rondas visuales acotadas. Aviso de dependencias durante Fast Refresh resuelto con carga limpia; no persiste. Detector visual: 26 observaciones informativas, ninguna advertencia. No se midieron FPS/Lighthouse. El registro visual interno anterior puede sincronizarse en un trabajo separado.
 - Ilustraciones generadas con la herramienta integrada; procedencia y prompts en public/art/refuge-objects.json. El generador no entregó alfa real: filtro SVG de presentación elimina el fondo neutro; verificado visualmente en Chrome.
 - Publicado en https://animals-dani.vercel.app, código `8c7f06e`, despliegue `dpl_GyQXggHDE9azxTRDNPcJ5oKDdMau`. HTTP 200 del refugio y del atlas. Chrome en producción comprobó bienvenida real, objetos, escala, opciones A/B/C y calculadora 78×100=7800; se dejó el patio abierto. Viewport temporal restablecido.
+
+## Perímetros, áreas y conversiones visuales — 2026-09-09
+- Implementadas tres microhabilidades generadas con cuatro niveles: perímetros, áreas e identificar qué medir; selector explícito y ejemplos visuales en el editor del tutor.
+- Conversiones variadas por sesión: longitud, masa, capacidad, presión, área, volumen cúbico y densidad. Cada práctica de nivel fijo tiene al menos seis pares de unidades distintos en diez ejercicios; distintas representaciones del mismo dato.
+- Figuras proporcionales, mosaicos triangulares, figuras en L, instrumentos, escalera métrica y vista escrita. Corrección y diagnóstico reutilizan el motor real.
+- 89 pruebas pasan, incluyendo 100 semillas por nueva familia/nivel, áreas por fórmula de polígonos y perímetros por distancias independientes, rotación de unidades y compatibilidad de sesiones previas. Primera compilación, tipos y lint pasan.
+- QA móvil detectó claves React duplicadas entre diagrama y calculadora; corregidas con identidades separadas. Figura y escalera verificadas en Chrome; ajustado texto largo para reducir altura.
+- Pendiente: comprobación final, publicación, alta persistente de habilidades y revisión de geometría en producción.

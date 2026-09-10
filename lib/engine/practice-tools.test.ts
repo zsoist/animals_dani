@@ -9,12 +9,12 @@ describe('Optional calculator',()=>{
 });
 describe('Multiple choice with real diagnosis',()=>{
  it('has one correct choice and two valid distinct diagnostic distractors across 100 seeds per family/level',()=>{
-  for(const family of ['equations','units','chemistry'] as const)for(const level of [1,2,3,4] as Level[])for(let n=0;n<100;n++){
-   const exercise=exerciseFor({...base,family},{skillId:base.id,family,level,seed:`visual-${n}:0`});
+  for(const family of ['equations','units','chemistry','area','perimeter'] as const)for(const level of [1,2,3,4] as Level[])for(let n=0;n<100;n++){
+   const exercise=exerciseFor({...base,family},{skillId:base.id,family,level,seed:`v2:visual-${n}:0`});
    expect(exercise.choices).toHaveLength(3);
    expect(exercise.choices?.filter(c=>{const result=evaluate(exercise,c.value);expect(result.valid).toBe(true);return result.valid&&result.correct;})).toHaveLength(1);
    for(const choice of exercise.choices??[]){const result=evaluate(exercise,choice.value);if(result.valid&&!result.correct)expect(result.errorType).not.toBe('UNKNOWN');}
-   expect(exerciseFor({...base,family},{skillId:base.id,family,level,seed:`visual-${n}:0`})).toEqual(exercise);
+   expect(exerciseFor({...base,family},{skillId:base.id,family,level,seed:`v2:visual-${n}:0`})).toEqual(exercise);
   }
  });
  it('keeps every third exercise open and draws metric steps from the generated units',()=>{

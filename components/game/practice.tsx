@@ -1,6 +1,6 @@
 "use client";
 import {Calculator} from "./calculator";
-import {UnitScale} from "./unit-scale";
+import {ExerciseDiagram} from "./exercise-visual";
 import {track} from "@/components/telemetry/client";
 import {expressionSymbols} from "@/lib/engine/algebra";
 
@@ -281,7 +281,7 @@ export function Practice({
       </h2>
       {exercise.symbolMeaning && <p className="formula-legend">{exercise.symbolMeaning}</p>}
       <p
-        className={`question-prompt ${prompt.length > 75 ? "long-prompt" : ""}`}
+        className={`question-prompt ${prompt.length > (exercise.visual ? 45 : 75) ? "long-prompt" : ""}`}
       >
         {skill.family === "chemistry"
           ? prompt
@@ -291,7 +291,7 @@ export function Practice({
               )
           : exercise.formula ? exercise.formula.replaceAll("*", " · ") : prompt}
       </p>
-      {exercise.unitScale && <UnitScale scale={exercise.unitScale}/>}
+      <ExerciseDiagram key={`visual:${exercise.seed}`} exercise={exercise}/>
       {exercise.image && (
         <ImageViewer src={exercise.image} alt={exercise.imageAlt} />
       )}
@@ -373,7 +373,7 @@ export function Practice({
         </div>
       )}
       </>}
-      <Calculator key={exercise.seed} sessionId={sessionId} skillId={skill.id}/>
+      <Calculator key={`calculator:${exercise.seed}`} sessionId={sessionId} skillId={skill.id}/>
       {message && (
         <div className={`feedback ${solved ? "good" : ""}`} role="status">
           <Icon name={solved ? "check" : "bulb"} size={23} />

@@ -25,6 +25,7 @@ describe('1200 problemas resueltos independientemente',()=>{for(const family of 
  const [lhs,rhs]=exercise.formula!.split('=');expect(calculate(lhs)).toBeCloseTo(calculate(rhs),8);
  }
  }
- if(family==='units'){const match=exercise.prompt.match(/^Convierte (\d+) (.+) a (.+)\.$/);expect(match).not.toBeNull();const si:Record<string,number>={m:1,cm:.01,kg:1,g:.001,L:1,mL:.001,'m²':1,'cm²':.0001,'g/cm³':1000,'kg/m³':1};expect(Number(exercise.answer)).toBeCloseTo(Number(match![1])*si[match![2]]/si[match![3]],7);}
+ if(family==='units'){const c=exercise.conversion;expect(c).toBeDefined();const si:Record<string,number>={km:1000,m:1,cm:.01,mm:.001,t:1000,kg:1,g:.001,mg:.000001,L:.001,mL:.000001,cL:.00001,dL:.0001,'m³':1,'dm³':.001,'cm³':.000001,'m²':1,'dm²':.01,'cm²':.0001,'g/cm³':1000,'kg/m³':1,'kg/L':1000,'g/L':1,Pa:1,kPa:1000,hPa:100,MPa:1000000,atm:101325,mmHg:101325/760};expect(Number(exercise.answer)).toBeCloseTo(c!.value*si[c!.source]/si[c!.target],7);}
+
  if(family==='chemistry'){const formula=exercise.prompt.split(': ')[1].split('. Escribe')[0];const [left,right]=formula.split(' → ');const coefficients=exercise.answer.split(',').map(Number);let position=0;const tally=(side:string)=>{const total:Record<string,number>={};for(const molecule of side.split(' + ')){const coefficient=coefficients[position++];for(const [element,count] of Object.entries(atoms(molecule)))total[element]=(total[element]??0)+count*coefficient;}return total;};expect(tally(left)).toEqual(tally(right));}
  }});});

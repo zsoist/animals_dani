@@ -17,5 +17,5 @@ export function practiceLevels(skill:Skill):Level[] {
 }
 export function freeQueue(skill:Skill,level:Level,seed:string):Question[] {
   if(!practiceLevels(skill).includes(level))throw new Error('Este nivel aún no tiene preguntas. Elige otro.');
-  return Array.from({length:10},(_,i)=>({skillId:skill.id,family:skill.family,level,seed:`${seed}:${i}`}));
+  return Array.from({length:10},(_,i)=>({skillId:skill.id,family:skill.family,level,seed:`v2:${seed}:${i}`}));
 }

@@ -1,6 +1,8 @@
 "use client";
 import { useActionState, useEffect, useState } from "react";
 import type { Skill, CustomQuestion, Level } from "@/lib/engine/types";
+import {familyLabels,generatedFamilies,subjectFamily} from "@/lib/engine/families";
+import {ExerciseDiagram} from "@/components/game/exercise-visual";
 import { generate } from "@/lib/engine/exercises";
 import { saveSkill, removeSkill, saveNote } from "@/lib/data/tutor-actions";
 import { QuestionStudio } from "./question-studio";
@@ -23,6 +25,7 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
     skill?.family === "custom" ? "custom" : skill ? "generated" : "custom",
   );
   const [subject, setSubject] = useState(skill?.subject ?? draft?.subject ?? "matematicas");
+  const [family,setFamily]=useState<Exclude<Skill["family"],"custom">>(skill&&skill.family!=="custom"?skill.family:subjectFamily(skill?.subject??draft?.subject??"matematicas"));
   const [questions, setQuestions] = useState<DraftQuestion[]>(() =>
     (skill?.questions ?? draft?.questions)?.length
       ? (skill?.questions ?? draft?.questions ?? []).map((q) => ({ ...q, localId: crypto.randomUUID() }))
@@ -131,10 +134,11 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
           >
             <option value="custom">Mis propias preguntas y pistas</option>
             <option value="generated">
-              Ejercicios automáticos de la materia
+              Ejercicios automáticos por microhabilidad
             </option>
           </select>
         </label>
+        {mode === "generated"&&<label>Microhabilidad del generador<select name="family" value={family} onChange={e=>setFamily(e.target.value as Exclude<Skill["family"],"custom">)}>{generatedFamilies.map(f=><option key={f} value={f}>{familyLabels[f]}</option>)}</select></label>}
         {mode === "custom" ? (
           <div className="question-bank">
             <QuestionStudio onAdd={addImported} />
@@ -329,32 +333,10 @@ export function SkillEditor({ skill, draft, onSaved }: { onSaved?: () => void; s
         ) : (
           <div className="live-examples">
             <h3>Ejemplos de lo que practicará</h3>
-            <p>
-              {subject === "matematicas"
-                ? "Despejar ecuaciones"
-                : subject === "fisica"
-                  ? "Conversión de unidades"
-                  : "Balanceo químico"}
-              . El nombre de la habilidad no cambia el generador; para otro
-              tema, elige preguntas propias.
-            </p>
-            {([1, 2, 3, 4] as Level[]).map((level) => {
-              const e = generate(
-                subject === "matematicas"
-                  ? "equations"
-                  : subject === "fisica"
-                    ? "units"
-                    : "chemistry",
-                skill?.id ?? "preview",
-                level,
-                "preview",
-              );
-              return (
-                <p key={level}>
-                  <b>Nivel {level-1}</b> {e.prompt}
-                  <span>Respuesta: {e.answer}</span>
-                </p>
-              );
+            <p>{familyLabels[family]}. Figuras y situaciones distintas para practicar una sola microhabilidad.</p>
+            {([1,2,3,4] as Level[]).map(level=>{
+              const e=generate(family,skill?.id??'preview',level,`v2:preview:${level-1}`);
+              return <article key={level}><b>Nivel {level-1}</b><p>{e.prompt}</p><ExerciseDiagram key={`${family}:${level}`} exercise={e}/><small>Respuesta: {e.choices?.find(c=>c.value===e.answer)?.label??e.answer}</small></article>;
             })}
           </div>
         )}

@@ -1,14 +1,16 @@
 export type Level = 1 | 2 | 3 | 4;
-export type Family = "equations" | "units" | "chemistry" | "custom";
+export type Family = "equations" | "units" | "chemistry" | "perimeter" | "area" | "measurement" | "custom";
 export type Exercise = {
   skillId: string;
   level: Level;
   seed: string;
   prompt: string;
   answer: string;
-  answerFormat: "number" | "fraction" | "coefficients" | "expression";
+  answerFormat: "number" | "fraction" | "coefficients" | "expression" | "choice";
   choices?: {value:string;label:string}[];
   unitScale?: {units:string[];source:string;target:string;stepFactor:number};
+  visual?: ExerciseVisual;
+  conversion?: {value:number;source:string;target:string;factor:number};
   formula?: string;
   target?: string;
   symbolMeaning?: string;
@@ -93,3 +95,8 @@ export type ShelterState = {
   clean_zones: number;
   affection: number;
 };
+
+export type ExerciseVisual =
+ | {kind:'geometry';shape:'rectangle'|'triangle'|'cutout'|'mosaic';width:number;height:number;cut?:number;unit:string;highlight:'border'|'surface';description:string}
+ | {kind:'conversion';instrument:'ladder'|'vessel'|'balance'|'gauge'|'density';value:number;source:string;target:string;equivalence:string;description:string}
+ | {kind:'situation';scene:'fence'|'blanket'|'bottle'|'scale'|'pump'|'material';description:string};

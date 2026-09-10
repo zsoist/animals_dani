@@ -2,6 +2,9 @@ import {equivalentExpressions, parseExpression, expressionSymbols} from "./algeb
 import type { Family, Level, Exercise, Skill, Question } from "./types";
 import { random } from "./random";
 import { equations } from "./generators/equations";
+import {legacyUnits} from "./generators/units-legacy";
+import {geometry} from "./generators/geometry";
+import {measurement} from "./generators/measurement";
 import { units } from "./generators/units";
 import { chemistry } from "./generators/chemistry";
 export function generate(
@@ -12,9 +15,11 @@ export function generate(
 ): Exercise {
   if (family === "custom")
     throw new Error("Selecciona una pregunta del tutor.");
-  return { equations, units, chemistry }[family](skillId, level, seed);
+  if(family === "perimeter" || family === "area")return geometry(skillId,level,seed,family);
+  return { equations, units, chemistry, measurement }[family](skillId, level, seed);
 }
 function baseExerciseFor(skill: Skill, question: Question): Exercise {
+  if(skill.family === "units" && !question.seed.startsWith("v2:"))return legacyUnits(skill.id,question.level,question.seed);
   if(skill.family === "equations")return equations(skill.id,question.level,question.seed,skill.classTopic);
   if (skill.family !== "custom")
     return generate(skill.family, skill.id, question.level, question.seed);
@@ -54,6 +59,11 @@ export type Evaluation =
 export function evaluate(exercise: Exercise, input: string): Evaluation {
   if (input.length > 100)
     return { valid: false, message: "La respuesta es demasiado larga." };
+  if(exercise.answerFormat === "choice"){
+    const value=input.trim().toLowerCase();
+    if(!exercise.choices?.some(c=>c.value===value))return {valid:false,message:"Elige una de las opciones."};
+    return {valid:true,correct:value===exercise.answer,errorType:value===exercise.answer?null:exercise.errorSignatures.find(s=>s.value===value)?.errorType??"UNKNOWN"};
+  }
   if (exercise.answerFormat === "expression") {
     const raw=input.trim();
     const pieces=raw.split('=');
@@ -124,7 +134,7 @@ export function evaluate(exercise: Exercise, input: string): Evaluation {
 export function exerciseFor(skill:Skill,question:Question):Exercise {
  const exercise=baseExerciseFor(skill,question);
  const position=Number(question.seed.match(/:(\d+)(?::repaso)?$/)?.[1]??0);
- if(skill.family==='custom' || position%3===2)return exercise;
+ if(exercise.choices || skill.family==='custom' || position%3===2)return exercise;
  const wrong:string[]=[];
  for(const signature of exercise.errorSignatures){
   const result=evaluate(exercise,signature.value);

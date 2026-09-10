@@ -69,3 +69,11 @@
 - Escala para longitud, masa, volumen y área: cada salto es ×10/÷10 o ×100/÷100 según corresponda. La densidad compuesta conserva su enunciado porque no es una sola escalera métrica.
 - Calculadora opcional de cuatro operaciones, paréntesis y coma decimal, sin ejecución de código. No rellena automáticamente respuestas ni altera el nivel de pista. Apertura, uso y formato de pregunta registrados en eventos propios.
 - El generador integrado entregó un atlas opaco tras dos intentos de transparencia. Se conserva el arte y se aplica una máscara cromática en el componente, en lugar de publicar un fondo cuadriculado. No se atribuye a un modelo nominal no expuesto por la herramienta.
+
+## Microhabilidades y variedad visual — 2026-09-09
+- Tres generadores separados: perímetros, áreas e identificación de magnitudes. El tutor elige la microhabilidad explícitamente; ya no se infiere siempre por la materia. Configuración guardada en los niveles existentes, sin nuevas tablas ni permisos.
+- Conversiones rotan pares dentro de diez preguntas; niveles 0–3 incorporan masa, longitud, capacidad, volumen cúbico, presión, área y densidad. Se usan cantidades enteras sencillas y equivalencias explícitas para concentrarse en unidades; calculadora sigue disponible.
+- atm↔Pa usa 101325; atm↔mmHg indica expresamente la aproximación escolar 760. Presión no usa escalera decimal entre atm, Pa y mmHg. Referencia: https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9 . g/kg son masa, no presión ni densidad por sí solas.
+- Figura, escalera (cuando corresponde) y texto muestran los mismos datos, sin resolver automáticamente la pregunta. Figuras vectoriales proporcionales con medidas; mosaico de cuatro triángulos, no se presenta como tangram tradicional de siete piezas.
+- Semillas v2 solo en sesiones nuevas; las conversiones de colas anteriores conservan el generador legado para que una sesión abierta no cambie de pregunta o respuesta al publicar.
+- Identificar qué medir es selección de magnitud con respuestas semánticas persistidas y errores específicos, no letras A/B/C ni errores numéricos artificiales.

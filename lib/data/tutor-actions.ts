@@ -2,6 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { tutorDatabase } from "./tutor-auth";
 import type { CustomQuestion, Level } from "@/lib/engine/types";
+import {isGeneratedFamily,subjectFamily} from "@/lib/engine/families";
 import { evaluate } from "@/lib/engine/exercises";
 type ActionState = { error: string; success: string; id?: string };
 export async function saveSkill(
@@ -15,6 +16,8 @@ export async function saveSkill(
     const description = String(form.get("description") ?? "").trim();
     const subject = String(form.get("subject") ?? "");
     const mode = String(form.get("mode") ?? "generated");
+    const family=String(form.get("family")??subjectFamily(subject));
+    if(mode!=="custom"&&!isGeneratedFamily(family))return {error:"Selecciona un generador disponible.",success:""};
     const priority = Number(form.get("priority"));
     const difficulty = Number(form.get("difficulty"));
     if (
@@ -130,7 +133,7 @@ export async function saveSkill(
     };
     const levels = ([1, 2, 3, 4] as const).map((level) => ({
       level,
-      description: JSON.stringify(mode === "custom" ? {kind:"custom",practiceDays,fixedLevel,classTopic,questions:questions.filter(q=>q.level===level)} : {kind:"generated",practiceDays,fixedLevel,classTopic}),
+      description: JSON.stringify(mode === "custom" ? {kind:"custom",practiceDays,fixedLevel,classTopic,questions:questions.filter(q=>q.level===level)} : {kind:"generated",family,practiceDays,fixedLevel,classTopic}),
     }));
     const saved=await db.rpc("save_skill_atomic",{p_id:id || String(form.get("clientId") || crypto.randomUUID()),p_values:{...values,is_test:process.env.NODE_ENV!=="production"},p_levels:levels});
     if(saved.error)throw new Error("No se guardaron cambios. Tus preguntas siguen aquí; vuelve a intentarlo.");

@@ -1,4 +1,5 @@
 import "server-only";
+import {isGeneratedFamily,subjectFamily} from "@/lib/engine/families";
 import type { CustomQuestion, Skill } from "@/lib/engine/types";
 export function prepareSkill(row: Record<string, unknown>): Skill {
   const levels = Array.isArray(row.skill_levels)
@@ -6,6 +7,7 @@ export function prepareSkill(row: Record<string, unknown>): Skill {
     : [];
   const questions: CustomQuestion[] = [];
   let custom = false;
+  let family:Skill["family"]|undefined;
   let practiceDays: number[] = [];
   let fixedLevel = false;
   let classTopic = "";
@@ -13,11 +15,13 @@ export function prepareSkill(row: Record<string, unknown>): Skill {
     try {
       const parsed = JSON.parse(level.description) as {
         kind?: string;
+        family?: string;
         classTopic?: string;
         practiceDays?: number[];
         fixedLevel?: boolean;
         questions?: CustomQuestion[];
       };
+      if(isGeneratedFamily(parsed.family))family=parsed.family;
       classTopic = parsed.classTopic ?? classTopic;
       practiceDays = parsed.practiceDays ?? practiceDays;
       fixedLevel = parsed.fixedLevel ?? fixedLevel;
@@ -38,13 +42,7 @@ export function prepareSkill(row: Record<string, unknown>): Skill {
     priority: Number(row.priority),
     base_difficulty: Number(row.base_difficulty) as Skill["base_difficulty"],
     created_at: String(row.created_at),
-    family: custom
-      ? "custom"
-      : row.subject === "matematicas"
-        ? "equations"
-        : row.subject === "fisica"
-          ? "units"
-          : "chemistry",
+    family: custom ? "custom" : family ?? subjectFamily(String(row.subject)),
     questions,
     practiceDays,
     fixedLevel,
