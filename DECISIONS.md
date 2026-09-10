@@ -61,3 +61,11 @@
 - Práctica libre ilimitada: diez preguntas de una habilidad y nivel elegido, guardadas en el historial, sin recompensas ni racha. Solo se ofrecen niveles presentes en bancos subidos.
 - Recompensas rotan por días logrados: camita, comida, caja, galleta. Se conserva todo lo ganado anteriormente; rescates solo en múltiplos de cinco días.
 - Misma ilustración de gatos, sin filtros rosa/verde: partes articuladas, parpadeo y gestos. Comportamiento variable en el patio, con destino a objetos y vecinos; no se usa IA en cada fotograma.
+
+## Misión de llegada y formatos visuales — 2026-09-10
+- Nombre elegido: Refugio de Laura. Nombres de gatos sin placa, con sombra de texto suave para leer sobre el patio. Pelota de tejido, rascador y cesta ilustrados; el cuidado ganado usa el mismo conjunto de objetos.
+- Bienvenida con misión real de ese día; si ya está logrado, agradece el cuidado. Se muestra una vez por día y pestaña, puede cerrarse o volver a abrirse. Invitación cercana sin amenazas ni culpa.
+- Dos ejercicios de reconocimiento A/B/C alternan con uno abierto. Los distractores proceden de errores precalculados; se guarda el valor elegido y se conserva la clasificación del servidor. Bancos personalizados conservan sus preguntas originales. Un intento antiguo con respuesta fuera de las opciones conserva la entrada abierta al retomarlo.
+- Escala para longitud, masa, volumen y área: cada salto es ×10/÷10 o ×100/÷100 según corresponda. La densidad compuesta conserva su enunciado porque no es una sola escalera métrica.
+- Calculadora opcional de cuatro operaciones, paréntesis y coma decimal, sin ejecución de código. No rellena automáticamente respuestas ni altera el nivel de pista. Apertura, uso y formato de pregunta registrados en eventos propios.
+- El generador integrado entregó un atlas opaco tras dos intentos de transparencia. Se conserva el arte y se aplica una máscara cromática en el componente, en lugar de publicar un fondo cuadriculado. No se atribuye a un modelo nominal no expuesto por la herramienta.

@@ -138,3 +138,6 @@ No canonizado: los valores heredados de estilos que quedan sobrescritos, posible
 
 ## Movimiento y práctica libre — septiembre 2026
 El patio conserva su arte. Los gatos usan el recurso original sin rotación de color, articulado en cabeza, cuerpo, cola y patas, con párpados. Sus actividades alternan destinos variables, juego con pelota, acicalado, estiramiento, descanso y cercanía; las recompensas cambian su destino. El movimiento se pausa fuera de vista, con la práctica abierta y según preferencias del sistema. La cabecera interior dice «Hola, Laura» en blanco. Mis gatos usa retratos y relatos en filas legibles. La práctica libre se descubre bajo el reto con un selector de habilidad y nivel.
+
+### Refinamiento del patio y la práctica — septiembre 2026
+La cabecera recupera «Refugio de Laura». Los nombres de gatos son texto oscuro sin placa, con sombra suave para legibilidad. Los objetos ilustrados comparten volumen, luz cálida y perspectiva del patio; los elementos decorativos permanentes se distinguen del cuidado desbloqueado. La bienvenida es un diálogo de una sola misión y una acción principal. Las tarjetas alternan reconocimiento A/B/C y respuesta abierta, con escala métrica contextual y calculadora desplegable. Se conserva el refugio y sus gatos, con movimiento reducido respetado.

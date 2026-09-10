@@ -100,3 +100,14 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - Chrome móvil completó una práctica real: 9/10 al primer intento, diez pasos guardados, un ejercicio reinyectado, recompensa nula. Pista y respuesta con coma verificadas. Capturas móvil/escritorio revisadas en dos rondas acotadas.
 - Typecheck, lint, 70 pruebas y build pasan. Detector de diseño: avisos sobre sombras interiores de caja/plato (geometría del objeto, no paneles) y nuevos tonos/tamaños; no se cambiaron esos objetos por advertencias genéricas. Sin medición de FPS.
 - Publicado en https://animals-dani.vercel.app, código `bc93693`, despliegue `dpl_9hLEqwX864Mmh1sT9FmpqG1GU9tU`. HTTP 200; saludo, pelota y práctica libre presentes. Chrome abrió Despejar ecuaciones, nivel visible 3, con fórmula de Arquímedes después de un reto diario ya logrado. Preferencia temporal de viewport restablecida.
+
+## Patio cuidado, bienvenida y preguntas variadas — 2026-09-09
+- Cabecera «Refugio de Laura», nombres de gatos sin placa blanca, nueva pelota de tela, rascador y cesta. Objetos de cuidado conservan el desbloqueo real; se mantiene el arte del patio y de los gatos.
+- Invitación diaria accesible con misión ligada a la próxima recompensa, cierre y reapertura. Si el reto está logrado, reconoce el cuidado real sin pedir completarlo de nuevo.
+- Calculadora opcional con teclado propio, operaciones, paréntesis y coma decimal. No completa la respuesta por la estudiante. Apertura/uso registrados con la telemetría existente.
+- Escala métrica contextual y preguntas A/B/C deterministas intercaladas con respuestas abiertas. Distractores derivados de errores diagnosticables; bancos propios conservados. Respuestas antiguas al recuperar una sesión siguen editables.
+- Typecheck, lint, 74 pruebas y build pasan. Las nuevas pruebas recorren 100 semillas por familia/nivel para opciones inequívocas y diagnóstico, además del parser de calculadora y escalas.
+- Chrome real en móvil 390 × 844 y escritorio: patio, bienvenida, calculadora 90÷100=0,9, opciones, pista y transición al tercer ejercicio abierto verificados. Supabase confirmó respuesta 9 a 90 cm→m como CORRIMIENTO_DECIMAL y corrección 0.9 con pista. No se alteró la racha ni se fabricaron recompensas para la revisión.
+- Dos rondas visuales acotadas. Aviso de dependencias durante Fast Refresh resuelto con carga limpia; no persiste. Detector visual: 26 observaciones informativas, ninguna advertencia. No se midieron FPS/Lighthouse. El registro visual interno anterior puede sincronizarse en un trabajo separado.
+- Ilustraciones generadas con la herramienta integrada; procedencia y prompts en public/art/refuge-objects.json. El generador no entregó alfa real: filtro SVG de presentación elimina el fondo neutro; verificado visualmente en Chrome.
+- Pendiente: publicar y comprobar producción.

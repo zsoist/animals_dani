@@ -1,7 +1,7 @@
 export type CatPose='idle'|'walk'|'play'|'sleep'|'groom'|'stretch'|'social'|'happy'|'eat';
 export type Point={x:number;y:number};
 export type CatMotion={position:Point;target:Point;pose:CatPose;arrival:CatPose;remaining:number;direction:number};
-export const places={ball:{x:.62,y:.78},bed:{x:.23,y:.84},box:{x:.78,y:.72},food:{x:.43,y:.82},treat:{x:.57,y:.88}};
+export const places={ball:{x:.68,y:.87},bed:{x:.23,y:.84},box:{x:.78,y:.72},food:{x:.43,y:.82},treat:{x:.57,y:.88}};
 export function chooseActivity(personality:string,current:Point,peers:Point[],hasBed:boolean,rng:()=>number):Pick<CatMotion,'target'|'pose'|'arrival'|'remaining'> {
  const roll=rng();
  if((personality==='dormilón'&&roll<.6)||(hasBed&&roll<.13))return {target:hasBed?places.bed:current,pose:hasBed?'walk':'sleep',arrival:'sleep',remaining:9+rng()*7};

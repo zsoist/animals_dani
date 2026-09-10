@@ -6,6 +6,7 @@ export function Icon({
   style,
 }: {
   name:
+    | "calculator"
     | "paw"
     | "fire"
     | "star"
@@ -26,6 +27,7 @@ export function Icon({
   style?: CSSProperties;
 }) {
   const paths = {
+    calculator: <><rect x="4" y="2" width="16" height="20" rx="3"/><path d="M8 6h8M8 11h1m6 0h1m-8 4h1m6 0h1m-8 4h1m6 0h1"/></>,
     paw: (
       <>
         <ellipse cx="12" cy="16" rx="6" ry="4" />

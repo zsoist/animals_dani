@@ -7,6 +7,8 @@ export type Exercise = {
   prompt: string;
   answer: string;
   answerFormat: "number" | "fraction" | "coefficients" | "expression";
+  choices?: {value:string;label:string}[];
+  unitScale?: {units:string[];source:string;target:string;stepFactor:number};
   formula?: string;
   target?: string;
   symbolMeaning?: string;

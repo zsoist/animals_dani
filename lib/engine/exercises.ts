@@ -14,7 +14,7 @@ export function generate(
     throw new Error("Selecciona una pregunta del tutor.");
   return { equations, units, chemistry }[family](skillId, level, seed);
 }
-export function exerciseFor(skill: Skill, question: Question): Exercise {
+function baseExerciseFor(skill: Skill, question: Question): Exercise {
   if(skill.family === "equations")return equations(skill.id,question.level,question.seed,skill.classTopic);
   if (skill.family !== "custom")
     return generate(skill.family, skill.id, question.level, question.seed);
@@ -118,4 +118,22 @@ export function evaluate(exercise: Exercise, input: string): Evaluation {
         return v !== null && close(value, v);
       })?.errorType ?? "UNKNOWN",
   };
+}
+
+// Recognition alternates with recall; answer values keep the same server grading and error taxonomy.
+export function exerciseFor(skill:Skill,question:Question):Exercise {
+ const exercise=baseExerciseFor(skill,question);
+ const position=Number(question.seed.match(/:(\d+)(?::repaso)?$/)?.[1]??0);
+ if(skill.family==='custom' || position%3===2)return exercise;
+ const wrong:string[]=[];
+ for(const signature of exercise.errorSignatures){
+  const result=evaluate(exercise,signature.value);
+  if(!result.valid || result.correct)continue;
+  if(wrong.some(answer=>{const comparison=evaluate({...exercise,answer},signature.value);return comparison.valid&&comparison.correct;}))continue;
+  wrong.push(signature.value);if(wrong.length===2)break;
+ }
+ if(wrong.length<2)return exercise;
+ const values=[exercise.answer,...wrong],rng=random(`${question.seed}:choices`);
+ for(let i=values.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[values[i],values[j]]=[values[j],values[i]];}
+ return {...exercise,choices:values.map(value=>({value,label:exercise.answerFormat==='expression'?`${exercise.target??''} = ${value.replaceAll('*',' · ')}`:exercise.answerFormat==='coefficients'?`(${value.split(',').join(', ')})`:value.replace('.',',')}))};
 }

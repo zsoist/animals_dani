@@ -1,4 +1,6 @@
 "use client";
+import {Calculator} from "./calculator";
+import {UnitScale} from "./unit-scale";
 import {track} from "@/components/telemetry/client";
 import {expressionSymbols} from "@/lib/engine/algebra";
 
@@ -61,12 +63,13 @@ export function Practice({
     () => (question && skill ? exerciseFor(skill, question) : null),
     [question, skill],
   );
+  const presentationChoices = exercise && resumed.attempts.some(a=>a.exercise_seed===exercise.seed && !exercise.choices?.some(c=>c.value===a.given_answer)) ? undefined : exercise?.choices;
   useEffect(()=>{
     if(!question)return;
     const context={sessionId,skillId:question.skillId};
-    track('question_viewed',{level:question.level,step:index},context);
+    track('question_viewed',{level:question.level,step:index,format:presentationChoices?'choice':'open'},context);
     return()=>{if(edits.current.edits)track('answer_edited',{...edits.current,step:index},context);edits.current={edits:0,deletes:0,clears:0};};
-  },[question,sessionId,index]);
+  },[question,sessionId,index,exercise,presentationChoices]);
   const activeTime = useActiveTime(
     question?.seed ?? "complete",
     busy || solved || Boolean(result),
@@ -288,9 +291,11 @@ export function Practice({
               )
           : exercise.formula ? exercise.formula.replaceAll("*", " · ") : prompt}
       </p>
+      {exercise.unitScale && <UnitScale scale={exercise.unitScale}/>}
       {exercise.image && (
         <ImageViewer src={exercise.image} alt={exercise.imageAlt} />
       )}
+      {presentationChoices ? <fieldset className="answer-choices" disabled={busy||solved||review}><legend>Elige la respuesta correcta</legend>{presentationChoices.map((choice,i)=><label key={choice.value} className={answer===choice.value?'choice-selected':''}><input type="radio" name={`choice-${exercise.seed}`} value={choice.value} checked={answer===choice.value} onChange={()=>{setAnswer(choice.value);track('control_used',{control:'answer_choice',format:'choice',step:index},{sessionId,skillId:skill.id});}}/><span className="choice-letter">{['A','B','C'][i]}</span><span className="choice-value">{choice.label}</span><Icon name="check" size={18}/></label>)}</fieldset> : <>
       <label className="answer-label" htmlFor="answer">
         {exercise.answerFormat === "coefficients"
           ? "Coeficientes, separados por comas"
@@ -367,6 +372,8 @@ export function Practice({
           ))}
         </div>
       )}
+      </>}
+      <Calculator key={exercise.seed} sessionId={sessionId} skillId={skill.id}/>
       {message && (
         <div className={`feedback ${solved ? "good" : ""}`} role="status">
           <Icon name={solved ? "check" : "bulb"} size={23} />

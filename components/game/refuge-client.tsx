@@ -13,6 +13,8 @@ import type {
   ShelterState,
   Streak,
 } from "@/lib/engine/types";
+import {MissionWelcome} from "./mission-welcome";
+import {PropTransparency} from "@/components/scene/refuge-prop";
 import {FreePractice} from "./free-practice";
 import {DAILY_CHANCES, nextCareReward, rewardCopy, type PracticeMode, type CareReward} from "@/lib/engine/challenge";
 import type {PracticeSession} from "@/lib/data/student";
@@ -96,12 +98,13 @@ export function RefugeClient({
   };
   return (
     <main className={`game-shell ${session ? "is-playing" : ""}`}>
+      <PropTransparency/>
       <header className="game-header" inert={Boolean(session)}>
         <Link href="/" className="brand" aria-label="Refugio, inicio">
           <span className="brand-mark">
             <Icon name="paw" size={25} />
           </span>
-
+          <span className="refuge-brand-name">Refugio <small>de Laura</small></span>
         </Link>
         <div className="header-actions">
           <span
@@ -248,6 +251,7 @@ export function RefugeClient({
                 <p>
                   {dates.includes(today) ? "Puedes seguir practicando a tu ritmo." : `${topic?.name ?? "Tu próxima habilidad"} · 7 de 10 al primer intento. Las pistas están disponibles.`}
                 </p>
+                <MissionWelcome today={today} completed={dates.includes(today)} reward={nextReward} busy={busy} available={tries<DAILY_CHANCES&&queue.length>0} onStart={()=>void begin("daily")}/>
                 <div className="mission-perks">
                   <span>
                     <Icon name="book" size={18} />

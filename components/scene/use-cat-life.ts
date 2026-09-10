@@ -36,7 +36,12 @@ export function useCatLife(cats:ShelterCat[],hasBed:boolean,selected:string|unde
         if(neighbor){neighbor.pose='social';neighbor.remaining=5;m.remaining=5;neighbor.direction=neighbor.position.x<m.position.x?1:-1;}
        }
       }
-      else if(state.current.selected!==cats[i].id){m.remaining-=delta;if(m.remaining<=0)Object.assign(m,chooseActivity(cats[i].personality,m.position,motion.filter((_,j)=>j!==i).map(p=>p.position),state.current.hasBed,Math.random));}
+      else if(state.current.selected!==cats[i].id){m.remaining-=delta;if(m.remaining<=0){
+        const action=chooseActivity(cats[i].personality,m.position,motion.filter((_,j)=>j!==i).map(p=>p.position),state.current.hasBed,Math.random);
+        const occupied=motion.some((other,j)=>j!==i&&Math.hypot(other.position.x-action.target.x,other.position.y-action.target.y)<.12);
+        if(occupied && action.pose==='walk' && action.arrival!=='social')action.target={x:Math.max(.12,Math.min(.86,action.target.x+(action.target.x>.5?-.13:.13))),y:action.target.y};
+        Object.assign(m,action);
+       }}
      } else if(state.current.celebration && i===0) {m.position={...m.target};m.pose=m.arrival;}
      node.style.transform=`translate3d(${width*m.position.x-node.offsetWidth/2}px,${height*m.position.y-node.offsetHeight}px,0)`;
      node.style.zIndex=String(Math.round(m.position.y*100));

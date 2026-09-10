@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./refinement.css";
 import "./cat-life.css";
+import "./polished-refuge.css";
 export const metadata: Metadata = {
   title: "Refugio",
   description: "Un lugar pequeño para crecer juntos.",
