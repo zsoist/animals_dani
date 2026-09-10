@@ -119,3 +119,5 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - 89 pruebas pasan, incluyendo 100 semillas por nueva familia/nivel, áreas por fórmula de polígonos y perímetros por distancias independientes, rotación de unidades y compatibilidad de sesiones previas. Primera compilación, tipos y lint pasan.
 - QA móvil detectó claves React duplicadas entre diagrama y calculadora; corregidas con identidades separadas. Figura y escalera verificadas en Chrome; ajustado texto largo para reducir altura.
 - Pendiente: comprobación final, publicación, alta persistente de habilidades y revisión de geometría en producción.
+- Primera publicación `9ea9721`, despliegue `dpl_4uugrn3tv1SHHYJ1HWDsVHfyoJm1`, HTTP 200. Tres habilidades activas, cada una con cuatro niveles, creadas mediante el RPC del tutor y leídas de vuelta. No se necesitó migración de esquema.
+- Producción: figura en L 8×4 menos 2×2; respuesta 24 guardada como CONFUNDE_AREA_PERIMETRO, pista de restar hueco, corrección 28 guardada con hint_level 1. Reducida pregunta visible; el enunciado completo sigue en historial y descripción escrita.

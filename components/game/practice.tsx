@@ -253,7 +253,7 @@ export function Practice({
         <p>El tutor puede activar una habilidad desde Admin.</p>
       </section>
     );
-  const prompt = exercise.prompt
+  const prompt = (exercise.displayPrompt ?? exercise.prompt)
     .replace(/^Despeja x:\s*/, "")
     .replace(/^Convierte\s*/, "")
     .replace(/^(Balancea|Verifica y completa):?\s*/, "")
@@ -277,7 +277,7 @@ export function Practice({
             ? "Cambia la unidad, conserva la cantidad"
             : skill.family === "chemistry"
               ? "Equilibra la reacción"
-              : "Tu siguiente desafío"}
+              : skill.family === "area" ? "Mide la superficie" : skill.family === "perimeter" ? "Recorre el contorno" : skill.family === "measurement" ? "Elige qué necesitas medir" : "Tu siguiente desafío"}
       </h2>
       {exercise.symbolMeaning && <p className="formula-legend">{exercise.symbolMeaning}</p>}
       <p

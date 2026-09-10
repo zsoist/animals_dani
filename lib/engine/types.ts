@@ -5,6 +5,7 @@ export type Exercise = {
   level: Level;
   seed: string;
   prompt: string;
+  displayPrompt?: string;
   answer: string;
   answerFormat: "number" | "fraction" | "coefficients" | "expression" | "choice";
   choices?: {value:string;label:string}[];
