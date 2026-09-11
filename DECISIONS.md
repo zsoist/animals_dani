@@ -101,3 +101,8 @@
 - Adopción: reto diario con al menos ocho aciertos iniciales y tres preguntas de nivel interno >=3 (nivel visible 2/3) acertadas sin pistas; residente con tres cuidados, distinto del recién rescatado. Nunca se adopta al último residente. Práctica libre no da estos premios.
 - Adopciones automáticas al cumplir la condición, con despedida y álbum permanente «Ya tienen hogar». Se reutilizan las ilustraciones del refugio para los objetos nuevos.
 - Drive sigue pendiente de credenciales de Google: no se presenta como conectado. Los formatos mixtos ya publicados se conservan.
+
+## Claridad del editor manual — 2026-09-10
+- Imagen es un apoyo compatible con cualquier formato; el archivo se adjunta dentro de cada pregunta y no exige importación IA. Opciones nuevas usan identificadores A–D estables, separados del texto editable.
+- El avance de rescates muestra racha; la adopción mantiene cuidados más reto difícil y explica ambas condiciones. No se sustituye silenciosamente el criterio de adopción por una racha.
+- Drive puede alimentar bancos revisados y seleccionados por el motor diario; todavía no hay credenciales Google/carpeta configuradas. No se promete extracción de PDF sin revisión ni errores cero.
