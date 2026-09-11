@@ -5,15 +5,15 @@ import type {CareReward} from '@/lib/engine/challenge';
 import {chooseActivity,places,type CatMotion,type Point} from './cat-behavior';
 import {canStand,clearSegment,footprintAt,routeTo,type Obstacle,type Footprint} from './cat-navigation';
 type Resident=CatMotion&{route:Point[];object?:string;blocked:number};
-export function useCatLife(cats:ShelterCat[],hasBed:boolean,selected:string|undefined,paused:boolean,celebration:{reward:CareReward;id:string;catId?:string}|null) {
+export function useCatLife(cats:ShelterCat[],hasBed:boolean,selected:string|undefined,paused:boolean,celebration:{reward:CareReward;id:string;catId?:string}|null,interaction:{object:string;id:string}|null=null) {
  const room=useRef<HTMLDivElement>(null);
- const state=useRef({selected,paused,celebration,hasBed});
- useEffect(()=>{state.current={selected,paused,celebration,hasBed};},[selected,paused,celebration,hasBed]);
+ const state=useRef({selected,paused,celebration,hasBed,interaction});
+ useEffect(()=>{state.current={selected,paused,celebration,hasBed,interaction};},[selected,paused,celebration,hasBed,interaction]);
  useEffect(()=>{
   const root=room.current;if(!root)return;
   const nodes=Array.from(root.querySelectorAll<HTMLButtonElement>('[data-cat-id]'));
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-  let width=1,height=1,visible=true,frame=0,last=0,lastGift='',lastSelected:string|undefined;
+  let width=1,height=1,visible=true,frame=0,last=0,lastGift='',lastInteraction='',lastSelected:string|undefined;
   let furniture:Obstacle[]=[],sizes:Footprint[]=[],objects=new Map<string,Point>();
   const motion:Resident[]=[];
   function measure(){
@@ -62,6 +62,11 @@ export function useCatLife(cats:ShelterCat[],hasBed:boolean,selected:string|unde
      const target=objects.get(reward)??places.food;
      send(index,target,reward==='bed'?'sleep':['box','toy','yarn'].includes(reward)?'play':reward==='vet'?'happy':'eat',12,reward);
     }
+    if(state.current.interaction&&state.current.interaction.id!==lastInteraction){
+     lastInteraction=state.current.interaction.id;
+     const key=state.current.interaction.object,target=objects.get(key);
+     if(target&&motion.length){const nearest=motion.map((cat,i)=>({i,distance:Math.hypot(cat.position.x-target.x,cat.position.y-target.y)})).sort((a,b)=>a.distance-b.distance)[0];send(nearest.i,target,['bed','basket'].includes(key)?'sleep':['food','treat'].includes(key)?'eat':key==='vet'?'happy':'play',8,key);}
+    }
     if(state.current.selected!==lastSelected){lastSelected=state.current.selected;const i=cats.findIndex(c=>c.id===lastSelected);if(i>=0){motion[i].pose='happy';motion[i].route=[];motion[i].object=undefined;motion[i].remaining=4;}}
     motion.forEach((m,i)=>{
      const node=nodes[i];if(!node)return;
@@ -88,7 +93,7 @@ export function useCatLife(cats:ShelterCat[],hasBed:boolean,selected:string|unde
      node.style.transform=`translate3d(${width*m.position.x-node.offsetWidth/2}px,${height*m.position.y-node.offsetHeight}px,0)`;
      node.style.zIndex=String(Math.round(m.position.y*100));node.dataset.pose=m.pose;node.style.setProperty('--facing',String(m.direction));
     });
-    root!.dataset.ball=motion.some(m=>m.pose==='play'&&m.object==='ball')?'playing':'still';
+    root!.dataset.ball=motion.some(m=>m.pose==='play'&&['ball','yarn'].includes(m.object??''))?'playing':'still';
    }
    frame=requestAnimationFrame(tick);
   }

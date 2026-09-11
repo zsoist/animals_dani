@@ -132,7 +132,7 @@ export default async function Tutor() {
       </section>
       <section className="new-skill-section" id="new-skill">
         <PracticeLab skills={data.skills}/>
-        <AIInsights initial={ai.report} memory={ai.memory} messages={ai.messages}/>
+        <details className="tutor-analysis"><summary>Análisis de Laura (opcional)</summary><AIInsights initial={ai.report} memory={ai.memory} messages={ai.messages}/></details>
       </section>
       </TutorWorkspace>
     </main>

@@ -25,7 +25,7 @@ export function validateQuestions(value:unknown,defaultHints=false):CustomQuesti
   if(q.answerFormat==='choice'){
    if(!Array.isArray(q.choices)||q.choices.length<2||q.choices.length>6)throw new Error(prefix+'añade entre 2 y 6 opciones.');
    question.choices=q.choices.map((c:unknown)=>{if(typeof c==='string')return {value:c.trim(),label:c.trim()};if(c&&typeof c==='object'){const row=c as Record<string,unknown>;if(typeof row.value==='string'&&typeof row.label==='string')return {value:row.value.trim(),label:row.label.trim()};}throw new Error(prefix+'revisa las opciones.');});
-   if(question.choices.some(c=>!c.value||!c.label||c.value.length>100||c.label.length>160)||new Set(question.choices.map(c=>normalizedText(c.value))).size!==question.choices.length)throw new Error(prefix+'las opciones deben tener texto y ser diferentes.');
+   if(question.choices.some(c=>!c.value||!c.label||c.value.length>100||c.label.length>160)||new Set(question.choices.map(c=>normalizedText(c.value))).size!==question.choices.length||new Set(question.choices.map(c=>normalizedText(c.label))).size!==question.choices.length)throw new Error(prefix+'las opciones deben tener texto y ser diferentes.');
    const correct=question.choices.find(c=>normalizedText(c.value)===normalizedText(answer));
    if(!correct)throw new Error(prefix+'la respuesta correcta debe coincidir con una opción.');question.answer=correct.value;
   }

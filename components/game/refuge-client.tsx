@@ -13,6 +13,7 @@ import type {
   ShelterState,
   Streak,
 } from "@/lib/engine/types";
+import {RescueProgress} from "./rescue-progress";
 import {AdoptionMoment} from "./adoption-moment";
 import {MissionWelcome} from "./mission-welcome";
 import {PropTransparency} from "@/components/scene/refuge-prop";
@@ -289,6 +290,7 @@ export function RefugeClient({
                   <p>Activa una habilidad desde Admin para empezar.</p>
                 )}
               </section>
+              <RescueProgress cats={liveCats} streak={liveStreak.current}/>
               <details className="care-journey"><summary><Icon name="heart" size={18}/>{recipient?`Hoy cuidamos a ${recipient.name}`:'Tu primer rescate te espera'}</summary><div><p><b>Cada reto logrado:</b> comida, churu, juguetes, caja, camita, estambre o visita veterinaria.</p><p><b>Rescates:</b> {nextRescue?`próximo hito a los ${nextRescue} días de racha.`:'Ya alcanzaste todos los hitos de rescate.'} Hitos: 1, 3, 4… 10 días.</p><p><b>Un nuevo hogar:</b> un gato con tres cuidados puede ser adoptado al lograr 8/10 y acertar tres preguntas difíciles (nivel 2 o 3) sin pistas. Siempre queda compañía en el refugio.</p></div></details>
               <FreePractice skills={skills} busy={busy} onStart={(id,level)=>void begin("free",id,level)}/>
             </>

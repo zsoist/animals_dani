@@ -5,6 +5,7 @@ import {familyLabels,generatedFamilies,subjectFamily} from "@/lib/engine/familie
 import {ExerciseDiagram} from "@/components/game/exercise-visual";
 import { generate } from "@/lib/engine/exercises";
 import { saveSkill, removeSkill, saveNote } from "@/lib/data/tutor-actions";
+import {QuestionImageInput} from "./question-image-input";
 import { QuestionStudio } from "./question-studio";
 import { ImageViewer } from "@/components/game/image-viewer";
 import { QuestionPreview } from "./question-preview";
@@ -20,6 +21,7 @@ const blank = (): DraftQuestion => ({
   answerFormat: "number",
 });
 export function SkillEditor({ skill, draft, onSaved, importOpen=false }: { importOpen?:boolean; onSaved?: () => void; skill?: Skill; draft?: { name:string; description:string; classTopic?:string; subject:string; questions:CustomQuestion[] } }) {
+  const [uploads,setUploads]=useState<Record<string,boolean>>({});
   const notified=useRef("");
   const [validationNotice,setValidationNotice]=useState("");
   const [clientId]=useState(()=>crypto.randomUUID());
@@ -75,6 +77,8 @@ export function SkillEditor({ skill, draft, onSaved, importOpen=false }: { impor
               <option value="quimica">Química</option>
             </select>
           </label>
+        </div>
+        <details className="editor-settings"><summary>Objetivo y planificación (opcional)</summary><div className="form-grid">
           <label className="full-width">
             Qué quieres que practique Laura
             <textarea
@@ -119,6 +123,7 @@ export function SkillEditor({ skill, draft, onSaved, importOpen=false }: { impor
           </div>
           <p>Diez preguntas: nivel 0 → 3. Los repasos conservan el nivel que necesita reforzar.</p>
         </fieldset>
+        </details>
         <label className="check-label">
           <input
             type="checkbox"
@@ -173,11 +178,32 @@ export function SkillEditor({ skill, draft, onSaved, importOpen=false }: { impor
               </button>
             </div>
             <p>
-              Escribe el enunciado y su respuesta. También puedes usar palabras u opciones.
+              Elige el tipo y completa la pregunta.
             </p>
             {questions.map((q, i) => (
               <details key={q.localId} className="question-accordion" open={i === 0 || i===questions.length-1 ? true : undefined}><summary><span className="question-number">{i+1}</span><span>{q.prompt || "Nueva pregunta"}<small>Nivel {q.level-1} · {q.answerFormat === "coefficients" ? "Coeficientes" : q.answerFormat === "fraction" ? "Fracción" : q.answerFormat === "expression" ? "Expresión" : q.answerFormat === "boolean" ? "Verdadero/falso" : q.answerFormat === "match" ? "Parejas" : q.answerFormat === "text" ? "Texto" : q.answerFormat === "choice" ? "Opciones" : "Número"}</small></span><Icon name="gear" size={18}/></summary><fieldset className="editable-question">
                 <legend>Pregunta {i + 1}</legend>
+                  <label>
+                    Tipo de pregunta
+                    <select
+                      name="format"
+                      value={q.answerFormat}
+                      onChange={(e) =>
+                        update(q.localId, {
+                          answer: "",
+                          choices: e.target.value === "choice" ? Array.from({length:4},(_,i)=>({value:String.fromCharCode(65+i),label:""})) : undefined,
+                          answerFormat: e.target
+                            .value as CustomQuestion["answerFormat"],
+                        })
+                      }
+                    >
+                      <option value="boolean">Verdadero o falso</option><option value="match">Relacionar parejas</option><option value="text">Abierta · texto corto</option><option value="choice">Opción múltiple · A, B, C, D</option><option value="number">Número</option>
+                      <option value="fraction">Fracción</option><option value="expression">Expresión con letras</option>
+                      <option value="coefficients">Coeficientes: 2,1,2</option>
+                    </select>
+                  </label>
+
+                <QuestionImageInput onBusy={busy=>setUploads(old=>({...old,[q.localId]:busy}))} onImage={(image,imageAlt)=>update(q.localId,{image,imageAlt})}/>
                 <input type="hidden" name="matches" value={JSON.stringify(q.matches??[])}/><input type="hidden" name="choices" value={JSON.stringify(q.choices??[])}/><input type="hidden" name="image" value={q.image ?? ""} />
                 <input type="hidden" name="imageAlt" value={q.imageAlt ?? ""} />
                 {q.image && (
@@ -211,11 +237,11 @@ export function SkillEditor({ skill, draft, onSaved, importOpen=false }: { impor
                   />
                 </label>
                 {q.answerFormat==='match'&&<label>Parejas correctas (una por línea, separadas por =)<textarea rows={5} value={q.matches?.map(p=>`${p.left} = ${p.right}`).join('\n')??''} onChange={e=>{const matches=e.target.value.split('\n').slice(0,5).map(line=>{const [left,...right]=line.split('=');return {left,right:right.join('=')};});update(q.localId,{matches,answer:matches.map((_,i)=>i).join(',')});}} placeholder={'Presión = Pa\nMasa = kg\nVolumen = m³'}/></label>}
-                {q.answerFormat==='choice'&&<label>Opciones (una por línea)<textarea rows={3} value={q.choices?.map(c=>c.label).join('\n')??''} onChange={e=>update(q.localId,{choices:e.target.value.split('\n').slice(0,6).map(label=>({value:label,label}))})} placeholder="Calor sensible&#10;Calor latente&#10;Trabajo"/></label>}
+                {q.answerFormat==='choice'&&<fieldset className="manual-options"><legend>Opciones de respuesta</legend>{(q.choices??[]).map((choice,index)=><label key={index}><b>{String.fromCharCode(65+index)}</b><input aria-label={`Opción ${String.fromCharCode(65+index)}`} required maxLength={160} value={choice.label} onChange={e=>{const choices=[...(q.choices??[])];choices[index]={...choice,label:e.target.value};update(q.localId,{choices});}} placeholder={`Escribe la opción ${String.fromCharCode(65+index)}`}/></label>)}</fieldset>}
                 <div className="form-grid">
                   <label>
                     Respuesta correcta
-                    {q.answerFormat==='match'?<><input type="hidden" name="answer" value={q.answer}/><span>Las parejas de arriba son la solución.</span></>:q.answerFormat==='boolean'?<select name="answer" value={q.answer} onChange={e=>update(q.localId,{answer:e.target.value})}><option value="">Elige la respuesta</option><option value="verdadero">Verdadero</option><option value="falso">Falso</option></select>:q.answerFormat==='choice'?<select name="answer" required value={q.answer} onChange={e=>update(q.localId,{answer:e.target.value})}><option value="">Elige la opción correcta</option>{q.choices?.filter(c=>c.value.trim()).map((c,i)=><option key={i} value={c.value}>{c.label}</option>)}</select>:<input
+                    {q.answerFormat==='match'?<><input type="hidden" name="answer" value={q.answer}/><span>Las parejas de arriba son la solución.</span></>:q.answerFormat==='boolean'?<select name="answer" required value={q.answer} onChange={e=>update(q.localId,{answer:e.target.value})}><option value="">Elige la respuesta</option><option value="verdadero">Verdadero</option><option value="falso">Falso</option></select>:q.answerFormat==='choice'?<select name="answer" required value={q.answer} onChange={e=>update(q.localId,{answer:e.target.value})}><option value="">Elige la opción correcta</option>{q.choices?.filter(c=>c.value.trim()).map((c,i)=><option key={i} value={c.value}>{String.fromCharCode(65+i)} · {c.label}</option>)}</select>:<input
                       name="answer"
                       required
                       value={q.answer}
@@ -224,23 +250,6 @@ export function SkillEditor({ skill, draft, onSaved, importOpen=false }: { impor
                       }
                       placeholder={q.answerFormat==="text"?"Ej. Calor sensible":"Ej. 0,5 o 1/2"}
                     />}
-                  </label>
-                  <label>
-                    Formato
-                    <select
-                      name="format"
-                      value={q.answerFormat}
-                      onChange={(e) =>
-                        update(q.localId, {
-                          answerFormat: e.target
-                            .value as CustomQuestion["answerFormat"],
-                        })
-                      }
-                    >
-                      <option value="boolean">Verdadero o falso</option><option value="match">Relacionar parejas</option><option value="text">Texto corto</option><option value="choice">Opciones de respuesta</option><option value="number">Número</option>
-                      <option value="fraction">Fracción</option><option value="expression">Expresión con letras</option>
-                      <option value="coefficients">Coeficientes: 2,1,2</option>
-                    </select>
                   </label>
                   <label>
                     Nivel
@@ -351,7 +360,7 @@ export function SkillEditor({ skill, draft, onSaved, importOpen=false }: { impor
             {state.success}
           </p>
         )}
-        <button className="primary save-skill" disabled={pending}>
+        <button className="primary save-skill" disabled={pending||Object.values(uploads).some(Boolean)}>
           {pending
             ? "Guardando…"
             : skill || state.id

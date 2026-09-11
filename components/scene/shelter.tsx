@@ -4,7 +4,7 @@ import {useCatLife} from "./use-cat-life";
 import {rewardCopy, type CareReward} from "@/lib/engine/challenge";
 import {careEnergy} from "@/lib/engine/care";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, type KeyboardEvent } from "react";
 import type { ShelterCat } from "@/lib/data/shelter";
 import type { ShelterState } from "@/lib/engine/types";
 import { CatArt } from "./cat-art";
@@ -30,7 +30,9 @@ export function Shelter({
   paused?:boolean;
 }) {
   const [selected, setSelected] = useState<ShelterCat | null>(null);
-  const life=useCatLife(cats,(state?.beds??0)>0,selected?.id,paused,celebration);
+  const [interaction,setInteraction]=useState<{object:string;id:string}|null>(null);
+  const activate=(object:string)=>({role:'button' as const,tabIndex:0,onClick:()=>setInteraction({object,id:crypto.randomUUID()}),onKeyDown:(event:KeyboardEvent<HTMLDivElement>)=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setInteraction({object,id:crypto.randomUUID()});}}});
+  const life=useCatLife(cats,(state?.beds??0)>0,selected?.id,paused,celebration,interaction);
   const energy=feedingUnlocked?100:careEnergy(state?.last_care_date??lastCare,today??new Date().toISOString().slice(0,10));
   return (
     <div ref={life}
@@ -40,16 +42,16 @@ export function Shelter({
       {!compact && <div className="refuge-greeting"><h1>Hola, Laura</h1><p>{feedingUnlocked ? "Un ratito más, un paso más." : "Lo que hoy practicas, mañana será más fácil."}</p></div>}
       <div className="world-atmosphere" aria-hidden="true"><span/><span/><span/></div>
       <div className="shelter-objects" aria-label="Objetos de los gatos">
-       <div data-object="ball" className={`cat-ball ${celebration?.reward==='toy'||celebration?.reward==='yarn'?'gift-arrival':''}`}><RefugeProp kind="ball" label="Pelota de tela para los gatos"/></div>
-       <div data-object="scratcher" className="courtyard-scratcher"><RefugeProp kind="scratcher" label="Rascador del patio"/></div>
-       <div data-object="basket" className="courtyard-basket"><RefugeProp kind="basket" label="Cesta de mantas del refugio"/></div>
-       {(state?.beds??0)>0 && <div data-object="bed" className={`cat-bed ${celebration?.reward==='bed'?'gift-arrival':''}`}><RefugeProp kind="bed" label="Camita ganada"/></div>}
-       {(state?.boxes??0)>0 && <div data-object="box" className={`cat-box ${celebration?.reward==='box'?'gift-arrival':''}`}><RefugeProp kind="box" label="Caja de Milo"/></div>}
-       {(state?.food??0)>0 && <div data-object="food" className={`cat-bowl ${celebration?.reward==='food'?'gift-arrival':''}`}><RefugeProp kind="food" label="Comida ganada"/></div>}
-       {(state?.treats??0)>0 && <div data-object="treat" className={`cat-treat ${celebration?.reward==='treat'?'gift-arrival':''}`} role="img" aria-label="Churu ganado"/>}
-       {(state?.yarn??0)>0&&<div data-object="yarn" className={`cat-yarn ${celebration?.reward==='yarn'?'gift-arrival':''}`}><RefugeProp kind="ball" label="Ovillo ganado"/></div>}
-       {(state?.toys??0)>0&&<div data-object="toy" className={`cat-toy ${celebration?.reward==='toy'?'gift-arrival':''}`}><RefugeProp kind="scratcher" label="Juguete rascador ganado"/></div>}
-       {(state?.vet_visits??0)>0&&<div data-object="vet" className={`cat-vet ${celebration?.reward==='vet'?'gift-arrival':''}`} role="img" aria-label="Visita veterinaria ganada"><Icon name="heart" size={22}/><span>Cuidado veterinario</span></div>}
+       <div {...activate("ball")} data-object="ball" className={`cat-ball ${celebration?.reward==='toy'||celebration?.reward==='yarn'?'gift-arrival':''}`}><RefugeProp kind="ball" label="Pelota de tela para los gatos"/></div>
+       <div {...activate("scratcher")} data-object="scratcher" className="courtyard-scratcher"><RefugeProp kind="scratcher" label="Rascador del patio"/></div>
+       <div {...activate("basket")} data-object="basket" className="courtyard-basket"><RefugeProp kind="basket" label="Cesta de mantas del refugio"/></div>
+       {(state?.beds??0)>0 && <div {...activate("bed")} data-object="bed" className={`cat-bed ${celebration?.reward==='bed'?'gift-arrival':''}`}><RefugeProp kind="bed" label="Camita ganada"/></div>}
+       {(state?.boxes??0)>0 && <div {...activate("box")} data-object="box" className={`cat-box ${celebration?.reward==='box'?'gift-arrival':''}`}><RefugeProp kind="box" label="Caja de Milo"/></div>}
+       {(state?.food??0)>0 && <div {...activate("food")} data-object="food" className={`cat-bowl ${celebration?.reward==='food'?'gift-arrival':''}`}><RefugeProp kind="food" label="Comida ganada"/></div>}
+       {(state?.treats??0)>0 && <div {...activate("treat")} data-object="treat" className={`cat-treat ${celebration?.reward==='treat'?'gift-arrival':''}`} aria-label="Churu ganado"/>}
+       {(state?.yarn??0)>0&&<div {...activate("yarn")} data-object="yarn" className={`cat-yarn ${celebration?.reward==='yarn'?'gift-arrival':''}`}><RefugeProp kind="ball" label="Ovillo ganado"/></div>}
+       {(state?.toys??0)>0&&<div {...activate("toy")} data-object="toy" className={`cat-toy ${celebration?.reward==='toy'?'gift-arrival':''}`}><RefugeProp kind="scratcher" label="Juguete rascador ganado"/></div>}
+       {(state?.vet_visits??0)>0&&<div {...activate("vet")} data-object="vet" className={`cat-vet ${celebration?.reward==='vet'?'gift-arrival':''}`} aria-label="Visita veterinaria ganada"><Icon name="heart" size={22}/><span>Cuidado veterinario</span></div>}
       </div>
       <div className="room-cats">
         {cats.map((cat, index) => (

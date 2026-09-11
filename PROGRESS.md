@@ -166,3 +166,8 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - PUBLICADO 2026-09-10: acceso restaurado por Chrome con la sesión DAN GPT. Migración 20260910191031 aplicada y registrada; care-and-adoption.sql pasó en Supabase con RLS de estudiante y rollback. Lectura independiente confirmó Milo admitido y sin alterar sus cuidados.
 - Código b3437a9 integrado en main. Vercel publicó por GitHub: dpl_6kTDSxMwEK19fSAaqcx28EqsDNJV READY con alias animals-dani.vercel.app (CLI rechazó el intento directo; integración GitHub completó el despliegue). HTTP 200.
 - Chrome producción: bienvenida con destinatario, reglas de cuidado/rescate/adopción, Mis gatos con Milo y cuidados. Vista móvil 390px sin desbordamiento; escritorio comprobado. Viewport restablecido. No se provocó una adopción real de Laura para mostrar el diálogo; condiciones y persistencia sí verificadas en SQL.
+
+## Editor manual claro y progreso de rescates — 2026-09-10
+- Tipo de pregunta al inicio de cada pregunta manual, cuatro campos A–D con selector de respuesta, verdadero/falso manual y archivo de imagen directo con compresión y visor. Guardado bloqueado durante carga. Opciones duplicadas rechazadas por texto visible.
+- Planificación y análisis secundarios plegados; navegación «Crear preguntas». Barra de racha para rescate y cuidados por gato para adopción, con las condiciones existentes explícitas. Objetos del patio aceptan toque/teclado para atraer al gato más cercano sin dar recompensas gratuitas.
+- 118 pruebas, tipos, lint y build pasan. Pendiente QA en navegador y confirmación de publicación. Drive privado sigue implementado pero sin credenciales/carpeta Google; requiere importación y revisión previa, no OCR/sincronización automática.
