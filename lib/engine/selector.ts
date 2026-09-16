@@ -1,3 +1,4 @@
+import {DAILY_LEVELS} from "./drive-bank";
 import type { Mastery, Question, Skill } from "./types";
 import { random } from "./random";
 export function dailySkill(
@@ -14,7 +15,8 @@ export function dailySkill(
   const scheduled = active.filter(
     (s) => !s.practiceDays?.length || s.practiceDays.includes(weekday),
   );
-  const eligible = scheduled;
+  const drive = scheduled.filter(s => s.driveFileId);
+  const eligible = drive.length ? drive : scheduled;
   if (!eligible.length) return undefined;
   const total = eligible.reduce((n, s) => n + Math.max(1, s.priority), 0);
   let ticket = random(`topic:${date.slice(0, 10)}`)() * total;
@@ -35,7 +37,7 @@ export function selectDaily(
   return Array.from({ length: 10 }, (_, i) => ({
     skillId: skill.id,
     family: skill.family,
-    level: (available.length ? available.filter(l=>l<=([1,1,1,2,2,2,3,3,4,4] as const)[i]).at(-1) ?? available[0] : ([1,1,1,2,2,2,3,3,4,4] as const)[i]),
+    level: (available.length ? available.filter(l=>l<=DAILY_LEVELS[i]).at(-1) ?? available[0] : DAILY_LEVELS[i]),
     seed: `v2:${sessionSeed}:${i}`,
   }));
 }

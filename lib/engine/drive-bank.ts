@@ -1,0 +1,21 @@
+import {validateQuestions} from './import-questions';
+export const DAILY_LEVELS = [1,1,1,2,2,2,3,3,4,4] as const;
+export function driveFolderId(value:string){
+ const raw=value.trim();
+ if(/^[\w-]{5,200}$/.test(raw))return raw;
+ try{const url=new URL(raw);if(url.protocol==='https:'&&url.hostname==='drive.google.com'){const id=url.pathname.match(/\/folders\/([\w-]+)/)?.[1];if(id&&/^[\w-]{5,200}$/.test(id))return id;}}catch{/* A folder link or identifier is required. */}
+ throw new Error('Pega el enlace de una carpeta de Google Drive.');
+}
+export function validateDriveBank(value:unknown){
+ const questions=validateQuestions(value,true);
+ if(new Set(questions.map(q=>q.prompt.trim().toLowerCase())).size!==questions.length)throw new Error('Hay preguntas repetidas en el PDF. Revisa el banco.');
+ for(const level of [1,2,3,4]){
+  const required=DAILY_LEVELS.filter(l=>l===level).length;
+  if(questions.filter(q=>q.level===level).length<required)throw new Error(`Faltan preguntas del nivel ${level-1}: necesitas al menos ${required}.`);
+ }
+ return questions;
+}
+export function sourceContainsPrompt(source:string,prompt:string){
+ const compact=(s:string)=>s.normalize('NFKC').replace(/\s+/g,'').toLowerCase();
+ return compact(source).includes(compact(prompt));
+}

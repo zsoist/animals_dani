@@ -106,3 +106,10 @@
 - Imagen es un apoyo compatible con cualquier formato; el archivo se adjunta dentro de cada pregunta y no exige importación IA. Opciones nuevas usan identificadores A–D estables, separados del texto editable.
 - El avance de rescates muestra racha; la adopción mantiene cuidados más reto difícil y explica ambas condiciones. No se sustituye silenciosamente el criterio de adopción por una racha.
 - Drive puede alimentar bancos revisados y seleccionados por el motor diario; todavía no hay credenciales Google/carpeta configuradas. No se promete extracción de PDF sin revisión ni errores cero.
+
+## 2026-09-16 — Carpeta de Daniela
+- Conexión OAuth personal desde Refugio, sin contraseña compartida. Lectura de Drive; la aplicación restringe operaciones a la carpeta elegida. Se conserva la opción anterior de cuenta de servicio.
+- Cada PDF es una microhabilidad; se exige suficiente contenido en cuatro niveles para diez preguntas distintas y progresivas. Los bancos activos de Drive tienen prioridad sobre generadores; no se cambia el tema de una práctica ya empezada.
+- Los PDF no se consultan ni se generan con IA durante el reto. Se importan, contrastan y revisan una vez; actualizar un archivo requiere reimportación y aprobación del profesor. No se inventan respuestas ausentes del solucionario.
+- Una importación fallida no sustituye un banco activo. No se elimina progreso al cambiar de carpeta o borrar PDF. Se bloquea actualizar un banco con una sesión de hoy abierta.
+- El consentimiento final de Google y sus credenciales de aplicación son un requisito externo; la sesión de Supabase no lo reemplaza.

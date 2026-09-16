@@ -174,3 +174,10 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 
 - Publicado código 37590f0, Vercel dpl_Eh8QsV5f5f2UM4VipF4ZXCSHGQb8 READY, HTTP 200. Navegador integrado: creado banco «Unidades de presión · banco manual» desactivado, con imagen subida, cuatro opciones A–D y verdadero/falso. Lectura independiente de Supabase confirma imagen y formatos/respuestas B y falso persistidos.
 - QA visual: selector al inicio, planificación plegada, formulario móvil 390px sin overflow. Refugio muestra barras reales 1/3 racha y 0/3 cuidados; objetos accesibles por botón y movimiento de Milo observado con pestaña visible (pasa por caminar/comer). Sin medición de FPS ni verificación de cada objeto individual. Se restablecieron viewport y visibilidad.
+
+## 2026-09-16 — Banco personal de Google Drive
+- Implementado: pestaña Banco de Drive, OAuth con state/PKCE, tokens cifrados y aislados del cliente; selección de carpeta privada desde el panel.
+- Importación: nombre del PDF → microhabilidad, transcripción por niveles con respuestas del solucionario, enunciados contrastados con texto fuente, revisión explícita, publicación atómica y actualización sin duplicados. Escaneos/diagramas requieren importación manual.
+- Selección: bancos activos de Drive preferidos para días nuevos, diez preguntas, niveles 0/0/0/1/1/1/2/2/3/3. Tema ya empezado se conserva. Mínimos por nivel evitan repetición dentro de la sesión.
+- Supabase DAN GPT: migración 20260916173400 aplicada y registrada; prueba transaccional real de publicación/reimportación y rechazo al estudiante pasó, con rollback. RLS habilitado y lectura de tokens denegada a anon/authenticated.
+- Pendiente externo: no existen GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET/GOOGLE_REDIRECT_URI en Vercel; Google Cloud pide iniciar sesión. Daniela (danielaguti25@gmail.com) autorizará desde Refugio después de activar el cliente OAuth. No afirmar que Drive está conectado ni que se probó un PDF real de su carpeta.

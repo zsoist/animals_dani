@@ -34,6 +34,7 @@ export type CustomQuestion = {
   level: Level;
 };
 export type Skill = {
+  driveFileId?: string;
   id: string;
   name: string;
   subject: string;

@@ -35,6 +35,7 @@ export function prepareSkill(row: Record<string, unknown>): Skill {
   }
   return {
     id: String(row.id),
+    driveFileId: typeof row.drive_file_id === "string" ? row.drive_file_id : undefined,
     name: String(row.name),
     subject: String(row.subject),
     description: String(row.description),

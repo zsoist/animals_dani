@@ -1,3 +1,4 @@
+import {DriveLibrary} from "@/components/tutor/drive-library";
 import {LearningProgress} from "@/components/tutor/learning-progress";
 import {usageData} from "@/lib/data/telemetry";
 import { CatalogBrowser } from "@/components/tutor/catalog-browser";
@@ -53,6 +54,7 @@ export default async function Tutor() {
         </a>
       </div>
       <TutorWorkspace>
+      <DriveLibrary/>
 
       <section
         id="progress"
