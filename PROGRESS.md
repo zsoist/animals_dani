@@ -192,5 +192,6 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - [x] Refugio identifica el material preparado por su profe. Preguntas importadas separan instrucciones y fórmulas, con subíndices y potencias legibles.
 - [x] Nuevas sesiones v4 mezclan opciones conservando respuestas; 200 sesiones de prueba comprueban diez preguntas distintas de una sola habilidad y progresión 3/3/2/2.
 - [x] QA navegador: login del tutor, búsqueda de Charles, prueba correcta, diseño de admin a 390 px y escritorio. Sin registrar intentos de Laura.
-- [x] 131 tests, typecheck, lint y build pasan. Pendiente comprobar el despliegue final de esta iteración.
+- [x] 131 tests, typecheck, lint y build pasan. Commit `0d8a5a8` desplegado: `dpl_vj1AJsCvorkTzBpqevuyEVyJjSME` READY; producción `/` y `/tutor` con login real responden 200. Lectura autenticada cotejó las 100 preguntas guardadas con los JSON revisados.
+- [x] Acción de pausar/reactivar probada en navegador con tutor; ambos bancos quedaron activos. Refugio muestra el temario del día y «Preparado por tu profe».
 - [ ] OAuth de Google pendiente de client ID/secret/redirect en Vercel y autorización de Daniela. Los 100 ejercicios ya están integrados; los cambios futuros del Drive no se sincronizan automáticamente.
