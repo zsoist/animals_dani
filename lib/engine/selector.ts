@@ -15,7 +15,7 @@ export function dailySkill(
   const scheduled = active.filter(
     (s) => !s.practiceDays?.length || s.practiceDays.includes(weekday),
   );
-  const drive = scheduled.filter(s => s.driveFileId);
+  const drive = scheduled.filter(s => s.driveFileId && s.family === "custom");
   const eligible = drive.length ? drive : scheduled;
   if (!eligible.length) return undefined;
   const total = eligible.reduce((n, s) => n + Math.max(1, s.priority), 0);

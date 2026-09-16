@@ -2,7 +2,7 @@
 
 ## Flujo del profesor
 
-Admin → **Banco de Drive** → Conectar mi cuenta de Google → elegir `danielaguti25@gmail.com` → pegar el enlace de la carpeta → Importar y revisar → Activar.
+Admin → **Banco de Drive** → Conectar mi cuenta de Google → elegir la cuenta de Daniela → pegar el enlace de la carpeta → Importar y revisar → Activar.
 
 Cada PDF se convierte en una microhabilidad con el nombre del archivo. Las prácticas nuevas priorizan los bancos activos de Drive: **una microhabilidad por día, exactamente diez preguntas**, con niveles internos 1,1,1,2,2,2,3,3,4,4 (en pantalla 0–3). La selección se mezcla por sesión sin repetir preguntas cuando se cumplen los mínimos. Un tema ya empezado ese día se conserva. Se mantienen las tres oportunidades diarias existentes.
 

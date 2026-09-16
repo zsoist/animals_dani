@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { tutorDatabase } from "./tutor-auth";
 import type { CustomQuestion } from "@/lib/engine/types";
 import {isGeneratedFamily,subjectFamily} from "@/lib/engine/families";
+import {validateDriveBank} from "@/lib/engine/drive-bank";
 import {validateQuestions} from "@/lib/engine/import-questions";
 type ActionState = { error: string; success: string; id?: string };
 export async function saveSkill(
@@ -69,6 +70,14 @@ export async function saveSkill(
           "Las imágenes juntas superan 3 MB. Recorta más o divide el material en dos habilidades.",
         success: "",
       };
+    if(id){
+      const source=await db.from("skills").select("drive_file_id").eq("id",id).maybeSingle();
+      if(source.error)throw new Error("No pudimos comprobar el banco. Reintenta.");
+      if(source.data?.drive_file_id && form.get("active")==="on"){
+        if(mode!=="custom")throw new Error("Un banco de Drive debe conservar sus preguntas propias.");
+        validateDriveBank(questions);
+      }
+    }
     const practiceDays = form
       .getAll("practiceDay")
       .map(Number)
