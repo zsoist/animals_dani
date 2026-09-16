@@ -56,7 +56,7 @@ export async function saveSkill(
         let choices:unknown=[],matches:unknown=[];
         try{choices=JSON.parse(String(form.getAll("choices")[i]??"[]"));matches=JSON.parse(String(form.getAll("matches")[i]??"[]"));}catch{return {error:`Pregunta ${i+1}: revisa las opciones.`,success:""};}
         try{
-          questions.push(...validateQuestions([{prompt,answer,hints,level,answerFormat:format,choices,matches,image:String(form.getAll("image")[i]??""),imageAlt:String(form.getAll("imageAlt")[i]??"")}],true));
+          questions.push(...validateQuestions([{sourceNumber:Number(form.getAll("sourceNumber")[i]),prompt,answer,hints,level,answerFormat:format,choices,matches,image:String(form.getAll("image")[i]??""),imageAlt:String(form.getAll("imageAlt")[i]??"")}],true));
         }catch(error){return {error:`Pregunta ${i+1}: ${error instanceof Error?error.message.replace(/^Pregunta 1: /,""):"revisa su contenido."}`,success:""};}
       }
       if (!questions.length)
@@ -165,4 +165,21 @@ export async function saveClassTopic(skillId:string,topic:string){
  const levels=(skill.skill_levels as {level:number;description:string}[]).map(l=>{let config:Record<string,unknown>={kind:'generated'};try{config=JSON.parse(l.description) as Record<string,unknown>;}catch{/* Plain legacy generator description. */}return {level:l.level,description:JSON.stringify({...config,classTopic:topic.trim(),fixedLevel:false})};});
  const saved=await db.rpc('save_skill_atomic',{p_id:skillId,p_values:{name:skill.name,description:skill.description,subject:skill.subject,priority:skill.priority,active:skill.active,base_difficulty:1,is_test:process.env.NODE_ENV!=='production'},p_levels:levels});
  if(saved.error)throw new Error('No se guardó el tema. Reintenta.');revalidatePath('/');revalidatePath('/tutor');return {success:true};
+}
+
+export async function setBankActive(id:string,active:boolean):Promise<{error?:string}> {
+ try {
+  if(typeof id!=="string"||typeof active!=="boolean")throw new Error("Revisa el temario seleccionado.");
+  const db=await tutorDatabase();
+  const result=await db.from('skills').select('*,skill_levels(*)').eq('id',id).single();
+  if(result.error||!result.data)throw new Error('No encontramos este temario. Actualiza la página.');
+  if(active&&result.data.drive_file_id){
+   const {prepareSkill}=await import('./catalog');
+   validateDriveBank(prepareSkill(result.data).questions);
+  }
+  const updated=await db.from('skills').update({active}).eq('id',id);
+  if(updated.error)throw new Error('No se pudo guardar el cambio. Inténtalo de nuevo.');
+  revalidatePath('/tutor');revalidatePath('/');
+  return {};
+ }catch(error){return {error:error instanceof Error?error.message:'No se pudo actualizar el temario.'};}
 }

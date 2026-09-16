@@ -1,4 +1,5 @@
 "use client";
+import {MathText,QuestionContent} from "./question-content";
 import {MatchAnswer} from "./match-answer";
 import {Calculator} from "./calculator";
 import {ExerciseDiagram} from "./exercise-visual";
@@ -271,7 +272,7 @@ export function Practice({
         </span>
       </div>
       <p className="practice-level">{resumed.mode === "free" ? "Práctica libre · " : `Oportunidad ${resumed.dailyTry}/3 · `}Nivel {exercise.level - 1}{question.reinforced ? " · Reforzamos este paso" : ""}</p>
-      <h2 className="question-instruction">
+      {skill.family === "custom" ? <QuestionContent prompt={exercise.prompt}/> : <><h2 className="question-instruction">
         {skill.family === "equations"
           ? `Deja ${exercise.target ?? "la incógnita"} sola`
           : skill.family === "units"
@@ -292,11 +293,12 @@ export function Practice({
               )
           : exercise.formula ? exercise.formula.replaceAll("*", " · ") : prompt}
       </p>
+      </>}
       <ExerciseDiagram key={`visual:${exercise.seed}`} exercise={exercise}/>
       {exercise.image && (
         <ImageViewer src={exercise.image} alt={exercise.imageAlt} />
       )}
-      {exercise.answerFormat==="match"?<MatchAnswer exercise={exercise} value={answer} onChange={setAnswer} disabled={busy||solved||review}/>:presentationChoices ? <fieldset className="answer-choices" disabled={busy||solved||review}><legend>Elige la respuesta correcta</legend>{presentationChoices.map((choice,i)=><label key={choice.value} className={answer===choice.value?'choice-selected':''}><input type="radio" name={`choice-${exercise.seed}`} value={choice.value} checked={answer===choice.value} onChange={()=>{setAnswer(choice.value);track('control_used',{control:'answer_choice',format:'choice',step:index},{sessionId,skillId:skill.id});}}/><span className="choice-letter">{String.fromCharCode(65+i)}</span><span className="choice-value">{choice.label}</span><Icon name="check" size={18}/></label>)}</fieldset> : <>
+      {exercise.answerFormat==="match"?<MatchAnswer exercise={exercise} value={answer} onChange={setAnswer} disabled={busy||solved||review}/>:presentationChoices ? <fieldset className="answer-choices" disabled={busy||solved||review}><legend>Elige la respuesta correcta</legend>{presentationChoices.map((choice,i)=><label key={choice.value} className={answer===choice.value?'choice-selected':''}><input type="radio" name={`choice-${exercise.seed}`} value={choice.value} checked={answer===choice.value} onChange={()=>{setAnswer(choice.value);track('control_used',{control:'answer_choice',format:'choice',step:index},{sessionId,skillId:skill.id});}}/><span className="choice-letter">{String.fromCharCode(65+i)}</span><span className="choice-value"><MathText text={choice.label}/></span><Icon name="check" size={18}/></label>)}</fieldset> : <>
       <label className="answer-label" htmlFor="answer">
         {exercise.answerFormat === "coefficients"
           ? "Coeficientes, separados por comas"
@@ -380,13 +382,13 @@ export function Practice({
       {message && (
         <div className={`feedback ${solved ? "good" : ""}`} role="status">
           <Icon name={solved ? "check" : "bulb"} size={23} />
-          <p>{message}</p>
+          <p><MathText text={message}/></p>
         </div>
       )}
       {review && (
         <div className="worked-answer">
-          <strong>Lo vemos juntos: {exercise.answer}</strong>
-          <p>{exercise.hints[2]}</p>
+          <strong>Lo vemos juntos: <MathText text={exercise.choices?.find(c=>c.value===exercise.answer)?.label??exercise.answer}/></strong>
+          <p><MathText text={exercise.hints[2]}/></p>
         </div>
       )}
       {solved || review ? (

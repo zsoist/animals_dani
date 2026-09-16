@@ -32,10 +32,11 @@ function baseExerciseFor(skill: Skill, question: Question): Exercise {
   const base = match?.[1] ?? question.seed;
   const offset = Math.floor(random(base)() * choices.length);
   const index = Number(match?.[2] ?? 0) + (match?.[3] ? 3 : 0);
-  const ordered=question.seed.startsWith("v3:")?choices.map(q=>({q,order:random(base+JSON.stringify(q))()})).sort((a,b)=>a.order-b.order).map(item=>item.q):choices;
-  const picked = ordered[((question.seed.startsWith("v3:")?0:offset) + index) % ordered.length];
+  const ordered=/^v[34]:/.test(question.seed)?choices.map(q=>({q,order:random(base+JSON.stringify(q))()})).sort((a,b)=>a.order-b.order).map(item=>item.q):choices;
+  const picked = ordered[((/^v[34]:/.test(question.seed)?0:offset) + index) % ordered.length];
   return {
     ...picked,
+    choices: question.seed.startsWith("v4:") && picked.answerFormat === "choice" ? picked.choices?.map(c=>({c,order:random(question.seed+":"+c.value)()})).sort((a,b)=>a.order-b.order).map(item=>item.c) : picked.choices,
     skillId: skill.id,
     level: question.level,
     seed: question.seed,

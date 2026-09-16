@@ -1,0 +1,1158 @@
+[
+  {
+    "prompt": "Despeja a.\n\na + 8 = 19",
+    "answer": "11",
+    "answerFormat": "number",
+    "level": 1,
+    "sourceNumber": 1,
+    "hints": [
+      "Busca la letra que debe quedar sola. ¿Qué se le suma o resta?",
+      "Resta en ambos lados lo que se suma; suma en ambos lados lo que se resta.",
+      "El solucionario indica: 11. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Para despejar b, se debe sumar 7 a ambos lados.\n\nb-7=5",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 1,
+    "sourceNumber": 2,
+    "hints": [
+      "Busca la letra que debe quedar sola. ¿Qué se le suma o resta?",
+      "Resta en ambos lados lo que se suma; suma en ambos lados lo que se resta.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Despeja c.\n\nc + 12 = 20",
+    "answer": "B",
+    "answerFormat": "choice",
+    "level": 1,
+    "sourceNumber": 3,
+    "hints": [
+      "Busca la letra que debe quedar sola. ¿Qué se le suma o resta?",
+      "Resta en ambos lados lo que se suma; suma en ambos lados lo que se resta.",
+      "El solucionario indica: c = 8. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "c = 32"
+      },
+      {
+        "value": "B",
+        "label": "c = 8"
+      },
+      {
+        "value": "C",
+        "label": "c = -8"
+      },
+      {
+        "value": "D",
+        "label": "c = 12"
+      }
+    ]
+  },
+  {
+    "prompt": "Despeja d.\n\nd - 9 = 14",
+    "answer": "23",
+    "answerFormat": "number",
+    "level": 1,
+    "sourceNumber": 4,
+    "hints": [
+      "Busca la letra que debe quedar sola. ¿Qué se le suma o resta?",
+      "Resta en ambos lados lo que se suma; suma en ambos lados lo que se resta.",
+      "El solucionario indica: 23. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Al despejar e, el resultado es e = 21.\n\ne + 6 = 15",
+    "answer": "falso",
+    "answerFormat": "boolean",
+    "level": 1,
+    "sourceNumber": 5,
+    "hints": [
+      "Busca la letra que debe quedar sola. ¿Qué se le suma o resta?",
+      "Resta en ambos lados lo que se suma; suma en ambos lados lo que se resta.",
+      "El solucionario indica: falso. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Despeja f.\n\nf - 11 = 4",
+    "answer": "C",
+    "answerFormat": "choice",
+    "level": 1,
+    "sourceNumber": 6,
+    "hints": [
+      "Busca la letra que debe quedar sola. ¿Qué se le suma o resta?",
+      "Resta en ambos lados lo que se suma; suma en ambos lados lo que se resta.",
+      "El solucionario indica: f = 15. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "f = -7"
+      },
+      {
+        "value": "B",
+        "label": "f = 7"
+      },
+      {
+        "value": "C",
+        "label": "f = 15"
+      },
+      {
+        "value": "D",
+        "label": "f = 44"
+      }
+    ]
+  },
+  {
+    "prompt": "Despeja g.\n\ng + 17 = 30",
+    "answer": "13",
+    "answerFormat": "number",
+    "level": 1,
+    "sourceNumber": 7,
+    "hints": [
+      "Busca la letra que debe quedar sola. ¿Qué se le suma o resta?",
+      "Resta en ambos lados lo que se suma; suma en ambos lados lo que se resta.",
+      "El solucionario indica: 13. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Al despejar h, se obtiene h = 22.\n\nh - 13 = 9",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 1,
+    "sourceNumber": 8,
+    "hints": [
+      "Busca la letra que debe quedar sola. ¿Qué se le suma o resta?",
+      "Resta en ambos lados lo que se suma; suma en ambos lados lo que se resta.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Despeja j.\n\nj + 5 = 18",
+    "answer": "B",
+    "answerFormat": "choice",
+    "level": 1,
+    "sourceNumber": 9,
+    "hints": [
+      "Busca la letra que debe quedar sola. ¿Qué se le suma o resta?",
+      "Resta en ambos lados lo que se suma; suma en ambos lados lo que se resta.",
+      "El solucionario indica: j = 13. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "j = 23"
+      },
+      {
+        "value": "B",
+        "label": "j = 13"
+      },
+      {
+        "value": "C",
+        "label": "j = -13"
+      },
+      {
+        "value": "D",
+        "label": "j = 3"
+      }
+    ]
+  },
+  {
+    "prompt": "Despeja k.\n\nk - 16 = 10",
+    "answer": "26",
+    "answerFormat": "number",
+    "level": 1,
+    "sourceNumber": 10,
+    "hints": [
+      "Busca la letra que debe quedar sola. ¿Qué se le suma o resta?",
+      "Resta en ambos lados lo que se suma; suma en ambos lados lo que se resta.",
+      "El solucionario indica: 26. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Para despejar m, se debe restar 14 a ambos lados.\n\nm + 14 = 25",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 1,
+    "sourceNumber": 11,
+    "hints": [
+      "Busca la letra que debe quedar sola. ¿Qué se le suma o resta?",
+      "Resta en ambos lados lo que se suma; suma en ambos lados lo que se resta.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Despeja n.\n\nn - 8 = 17",
+    "answer": "B",
+    "answerFormat": "choice",
+    "level": 1,
+    "sourceNumber": 12,
+    "hints": [
+      "Busca la letra que debe quedar sola. ¿Qué se le suma o resta?",
+      "Resta en ambos lados lo que se suma; suma en ambos lados lo que se resta.",
+      "El solucionario indica: n = 25. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "n = 9"
+      },
+      {
+        "value": "B",
+        "label": "n = 25"
+      },
+      {
+        "value": "C",
+        "label": "n = -25"
+      },
+      {
+        "value": "D",
+        "label": "n = 136"
+      }
+    ]
+  },
+  {
+    "prompt": "Despeja p.\n\np + 9 = 28",
+    "answer": "19",
+    "answerFormat": "number",
+    "level": 1,
+    "sourceNumber": 13,
+    "hints": [
+      "Busca la letra que debe quedar sola. ¿Qué se le suma o resta?",
+      "Resta en ambos lados lo que se suma; suma en ambos lados lo que se resta.",
+      "El solucionario indica: 19. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Despeja q.\n\n6q = 42",
+    "answer": "7",
+    "answerFormat": "number",
+    "level": 2,
+    "sourceNumber": 14,
+    "hints": [
+      "Identifica si la letra está multiplicada o dividida por un número.",
+      "Divide ambos lados por el factor que multiplica, o multiplica por el divisor.",
+      "El solucionario indica: 7. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Despeja r.\n\nr/5=9",
+    "answer": "B",
+    "answerFormat": "choice",
+    "level": 2,
+    "sourceNumber": 15,
+    "hints": [
+      "Identifica si la letra está multiplicada o dividida por un número.",
+      "Divide ambos lados por el factor que multiplica, o multiplica por el divisor.",
+      "El solucionario indica: r = 45. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "r = 14"
+      },
+      {
+        "value": "B",
+        "label": "r = 45"
+      },
+      {
+        "value": "C",
+        "label": "r = 9/5"
+      },
+      {
+        "value": "D",
+        "label": "r = 4"
+      }
+    ]
+  },
+  {
+    "prompt": "Para despejar s, se deben dividir ambos lados entre 8.\n\n8s = 64",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 2,
+    "sourceNumber": 16,
+    "hints": [
+      "Identifica si la letra está multiplicada o dividida por un número.",
+      "Divide ambos lados por el factor que multiplica, o multiplica por el divisor.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Despeja t.\n\nt/7=6",
+    "answer": "42",
+    "answerFormat": "number",
+    "level": 2,
+    "sourceNumber": 17,
+    "hints": [
+      "Identifica si la letra está multiplicada o dividida por un número.",
+      "Divide ambos lados por el factor que multiplica, o multiplica por el divisor.",
+      "El solucionario indica: 42. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Despeja u.\n\n9u = 81",
+    "answer": "B",
+    "answerFormat": "choice",
+    "level": 2,
+    "sourceNumber": 18,
+    "hints": [
+      "Identifica si la letra está multiplicada o dividida por un número.",
+      "Divide ambos lados por el factor que multiplica, o multiplica por el divisor.",
+      "El solucionario indica: u = 9. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "u = 72"
+      },
+      {
+        "value": "B",
+        "label": "u = 9"
+      },
+      {
+        "value": "C",
+        "label": "u = 90"
+      },
+      {
+        "value": "D",
+        "label": "u = 8"
+      }
+    ]
+  },
+  {
+    "prompt": "Al despejar v, se obtiene v = 3.\n\nv / 4 = 12",
+    "answer": "falso",
+    "answerFormat": "boolean",
+    "level": 2,
+    "sourceNumber": 19,
+    "hints": [
+      "Identifica si la letra está multiplicada o dividida por un número.",
+      "Divide ambos lados por el factor que multiplica, o multiplica por el divisor.",
+      "El solucionario indica: falso. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Despeja w.\n\n5w = 60",
+    "answer": "12",
+    "answerFormat": "number",
+    "level": 2,
+    "sourceNumber": 20,
+    "hints": [
+      "Identifica si la letra está multiplicada o dividida por un número.",
+      "Divide ambos lados por el factor que multiplica, o multiplica por el divisor.",
+      "El solucionario indica: 12. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Despeja y.\n\ny/8=7",
+    "answer": "B",
+    "answerFormat": "choice",
+    "level": 2,
+    "sourceNumber": 21,
+    "hints": [
+      "Identifica si la letra está multiplicada o dividida por un número.",
+      "Divide ambos lados por el factor que multiplica, o multiplica por el divisor.",
+      "El solucionario indica: y = 56. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "y = 15"
+      },
+      {
+        "value": "B",
+        "label": "y = 56"
+      },
+      {
+        "value": "C",
+        "label": "y = 7/8"
+      },
+      {
+        "value": "D",
+        "label": "y = 1"
+      }
+    ]
+  },
+  {
+    "prompt": "Al despejar z, se obtiene z = 9.\n\n11z = 99",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 2,
+    "sourceNumber": 22,
+    "hints": [
+      "Identifica si la letra está multiplicada o dividida por un número.",
+      "Divide ambos lados por el factor que multiplica, o multiplica por el divisor.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Despeja a.\n\na/6=8",
+    "answer": "48",
+    "answerFormat": "number",
+    "level": 2,
+    "sourceNumber": 23,
+    "hints": [
+      "Identifica si la letra está multiplicada o dividida por un número.",
+      "Divide ambos lados por el factor que multiplica, o multiplica por el divisor.",
+      "El solucionario indica: 48. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Despeja b.\n\n12b = 84",
+    "answer": "C",
+    "answerFormat": "choice",
+    "level": 2,
+    "sourceNumber": 24,
+    "hints": [
+      "Identifica si la letra está multiplicada o dividida por un número.",
+      "Divide ambos lados por el factor que multiplica, o multiplica por el divisor.",
+      "El solucionario indica: b = 7. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "b = 96"
+      },
+      {
+        "value": "B",
+        "label": "b = 72"
+      },
+      {
+        "value": "C",
+        "label": "b = 7"
+      },
+      {
+        "value": "D",
+        "label": "b = 12"
+      }
+    ]
+  },
+  {
+    "prompt": "Al despejar c, se obtiene c = 45.\n\nc/9=5",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 2,
+    "sourceNumber": 25,
+    "hints": [
+      "Identifica si la letra está multiplicada o dividida por un número.",
+      "Divide ambos lados por el factor que multiplica, o multiplica por el divisor.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Despeja d.\n\n7d = 91",
+    "answer": "13",
+    "answerFormat": "number",
+    "level": 2,
+    "sourceNumber": 26,
+    "hints": [
+      "Identifica si la letra está multiplicada o dividida por un número.",
+      "Divide ambos lados por el factor que multiplica, o multiplica por el divisor.",
+      "El solucionario indica: 13. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "La presión normal se calcula con la fórmula mostrada. Despeja la fuerza F.\n\nP=F/A",
+    "answer": "B",
+    "answerFormat": "choice",
+    "level": 3,
+    "sourceNumber": 27,
+    "hints": [
+      "Localiza la variable pedida y los factores que la acompañan.",
+      "Haz la misma operación a ambos lados. Si divides un producto, agrupa todos sus factores entre paréntesis.",
+      "El solucionario indica: F = PA. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "F = P / A"
+      },
+      {
+        "value": "B",
+        "label": "F = PA"
+      },
+      {
+        "value": "C",
+        "label": "F = P + A"
+      },
+      {
+        "value": "D",
+        "label": "F = A / P"
+      }
+    ]
+  },
+  {
+    "prompt": "En la fórmula de densidad, al despejar la masa m se obtiene m = ρV.\n\nρ=m/V",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 3,
+    "sourceNumber": 28,
+    "hints": [
+      "Localiza la variable pedida y los factores que la acompañan.",
+      "Haz la misma operación a ambos lados. Si divides un producto, agrupa todos sus factores entre paréntesis.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "En la presión hidrostática, despeja la profundidad h.\n\nP_h = ρgh",
+    "answer": "C",
+    "answerFormat": "choice",
+    "level": 3,
+    "sourceNumber": 29,
+    "hints": [
+      "Localiza la variable pedida y los factores que la acompañan.",
+      "Haz la misma operación a ambos lados. Si divides un producto, agrupa todos sus factores entre paréntesis.",
+      "El solucionario indica: h = P_h/(ρg). Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "h = P_hρg"
+      },
+      {
+        "value": "B",
+        "label": "h = ρg/P_h"
+      },
+      {
+        "value": "C",
+        "label": "h = P_h/(ρg)"
+      },
+      {
+        "value": "D",
+        "label": "h = P_h − ρg"
+      }
+    ]
+  },
+  {
+    "prompt": "En la ecuación de calor sensible, despeja el cambio de temperatura ΔT.\n\nQ = mcΔT",
+    "answer": "B",
+    "answerFormat": "choice",
+    "level": 3,
+    "sourceNumber": 30,
+    "hints": [
+      "Localiza la variable pedida y los factores que la acompañan.",
+      "Haz la misma operación a ambos lados. Si divides un producto, agrupa todos sus factores entre paréntesis.",
+      "El solucionario indica: ΔT = Q / (mc). Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "ΔT = Qmc"
+      },
+      {
+        "value": "B",
+        "label": "ΔT = Q / (mc)"
+      },
+      {
+        "value": "C",
+        "label": "ΔT = mc / Q"
+      },
+      {
+        "value": "D",
+        "label": "ΔT = Q - mc"
+      }
+    ]
+  },
+  {
+    "prompt": "En la ecuación de calor latente, al despejar L se obtiene L = Q/m.\n\nQ = mL",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 3,
+    "sourceNumber": 31,
+    "hints": [
+      "Localiza la variable pedida y los factores que la acompañan.",
+      "Haz la misma operación a ambos lados. Si divides un producto, agrupa todos sus factores entre paréntesis.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "En dilatación lineal, despeja el coeficiente α.\n\nΔL = L_i α ΔT",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 3,
+    "sourceNumber": 32,
+    "hints": [
+      "Localiza la variable pedida y los factores que la acompañan.",
+      "Haz la misma operación a ambos lados. Si divides un producto, agrupa todos sus factores entre paréntesis.",
+      "El solucionario indica: α = ΔL/(L_iΔT). Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "α = ΔL/(L_iΔT)"
+      },
+      {
+        "value": "B",
+        "label": "α = ΔL L_i ΔT"
+      },
+      {
+        "value": "C",
+        "label": "α = L_iΔT/ΔL"
+      },
+      {
+        "value": "D",
+        "label": "α = ΔL − L_iΔT"
+      }
+    ]
+  },
+  {
+    "prompt": "En el principio de Arquímedes, despeja el volumen sumergido V_s.\n\nE = ρ_f g V_s",
+    "answer": "C",
+    "answerFormat": "choice",
+    "level": 3,
+    "sourceNumber": 33,
+    "hints": [
+      "Localiza la variable pedida y los factores que la acompañan.",
+      "Haz la misma operación a ambos lados. Si divides un producto, agrupa todos sus factores entre paréntesis.",
+      "El solucionario indica: V_s = E/(ρ_f g). Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "V_s = Eρ_f g"
+      },
+      {
+        "value": "B",
+        "label": "V_s = ρ_f g/E"
+      },
+      {
+        "value": "C",
+        "label": "V_s = E/(ρ_f g)"
+      },
+      {
+        "value": "D",
+        "label": "V_s = E − ρ_f g"
+      }
+    ]
+  },
+  {
+    "prompt": "En la ecuación de gases ideales, al despejar la temperatura T se obtiene T = PV/(nR).\n\nPV = nRT",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 3,
+    "sourceNumber": 34,
+    "hints": [
+      "Localiza la variable pedida y los factores que la acompañan.",
+      "Haz la misma operación a ambos lados. Si divides un producto, agrupa todos sus factores entre paréntesis.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "En la ley de Boyle, despeja V_2.\n\nP_1V_1 = P_2V_2",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 3,
+    "sourceNumber": 35,
+    "hints": [
+      "Localiza la variable pedida y los factores que la acompañan.",
+      "Haz la misma operación a ambos lados. Si divides un producto, agrupa todos sus factores entre paréntesis.",
+      "El solucionario indica: V_2 = P_1V_1/P_2. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "V_2 = P_1V_1/P_2"
+      },
+      {
+        "value": "B",
+        "label": "V_2 = P_2/(P_1V_1)"
+      },
+      {
+        "value": "C",
+        "label": "V_2 = P_1V_1P_2"
+      },
+      {
+        "value": "D",
+        "label": "V_2 = P_1 + V_1 − P_2"
+      }
+    ]
+  },
+  {
+    "prompt": "En la fórmula de presión normal, al despejar el área A se obtiene A = F/P.\n\nP=F/A",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 3,
+    "sourceNumber": 36,
+    "hints": [
+      "Localiza la variable pedida y los factores que la acompañan.",
+      "Haz la misma operación a ambos lados. Si divides un producto, agrupa todos sus factores entre paréntesis.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Esta expresión no representa una fórmula conocida. Despeja Y.\n\nX=Y/Z",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 3,
+    "sourceNumber": 37,
+    "hints": [
+      "Localiza la variable pedida y los factores que la acompañan.",
+      "Haz la misma operación a ambos lados. Si divides un producto, agrupa todos sus factores entre paréntesis.",
+      "El solucionario indica: Y = XZ. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "Y = XZ"
+      },
+      {
+        "value": "B",
+        "label": "Y = X / Z"
+      },
+      {
+        "value": "C",
+        "label": "Y = Z / X"
+      },
+      {
+        "value": "D",
+        "label": "Y = X - Z"
+      }
+    ]
+  },
+  {
+    "prompt": "En presión absoluta, al despejar la presión atmosférica se obtiene P_atm = P_abs − P_h.\n\nP_abs = P_atm + P_h",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 3,
+    "sourceNumber": 38,
+    "hints": [
+      "Localiza la variable pedida y los factores que la acompañan.",
+      "Haz la misma operación a ambos lados. Si divides un producto, agrupa todos sus factores entre paréntesis.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "En el principio de Pascal, despeja la fuerza F_2.\n\nF_1/A_1 = F_2/A_2",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 4,
+    "sourceNumber": 39,
+    "hints": [
+      "Deshaz las operaciones desde la parte exterior hacia la variable.",
+      "Primero elimina sumas o denominadores exteriores. Después aísla la variable, manteniendo agrupados los productos.",
+      "El solucionario indica: F_2 = F_1A_2/A_1. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "F_2 = F_1A_2/A_1"
+      },
+      {
+        "value": "B",
+        "label": "F_2 = F_1A_1/A_2"
+      },
+      {
+        "value": "C",
+        "label": "F_2 = A_1A_2/F_1"
+      },
+      {
+        "value": "D",
+        "label": "F_2 = F_1/(A_1A_2)"
+      }
+    ]
+  },
+  {
+    "prompt": "En esta forma de la ecuación de calor, despeja Q.\n\nT_f = T_i + Q/(mc)",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 4,
+    "sourceNumber": 40,
+    "hints": [
+      "Deshaz las operaciones desde la parte exterior hacia la variable.",
+      "Primero elimina sumas o denominadores exteriores. Después aísla la variable, manteniendo agrupados los productos.",
+      "El solucionario indica: Q = mc(T_f − T_i). Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "Q = mc(T_f − T_i)"
+      },
+      {
+        "value": "B",
+        "label": "Q = (T_f − T_i)/(mc)"
+      },
+      {
+        "value": "C",
+        "label": "Q = mc(T_f + T_i)"
+      },
+      {
+        "value": "D",
+        "label": "Q = mcT_f − T_i"
+      }
+    ]
+  },
+  {
+    "prompt": "La presión absoluta incluye la presión atmosférica y la hidrostática. Despeja h.\n\nP_abs = P_atm + ρgh",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 4,
+    "sourceNumber": 41,
+    "hints": [
+      "Deshaz las operaciones desde la parte exterior hacia la variable.",
+      "Primero elimina sumas o denominadores exteriores. Después aísla la variable, manteniendo agrupados los productos.",
+      "El solucionario indica: h = (P_abs − P_atm)/(ρg). Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "h = (P_abs − P_atm)/(ρg)"
+      },
+      {
+        "value": "B",
+        "label": "h = (P_abs + P_atm)/(ρg)"
+      },
+      {
+        "value": "C",
+        "label": "h = ρg(P_abs − P_atm)"
+      },
+      {
+        "value": "D",
+        "label": "h = P_abs − P_atm − ρg"
+      }
+    ]
+  },
+  {
+    "prompt": "En esta forma de la dilatación lineal, despeja α.\n\nL_f = L_i(1 + αΔT)",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 4,
+    "sourceNumber": 42,
+    "hints": [
+      "Deshaz las operaciones desde la parte exterior hacia la variable.",
+      "Primero elimina sumas o denominadores exteriores. Después aísla la variable, manteniendo agrupados los productos.",
+      "El solucionario indica: α = (L_f/L_i − 1)/ΔT. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "α = (L_f/L_i − 1)/ΔT"
+      },
+      {
+        "value": "B",
+        "label": "α = (L_f − L_i)ΔT"
+      },
+      {
+        "value": "C",
+        "label": "α = L_f/(L_i − ΔT)"
+      },
+      {
+        "value": "D",
+        "label": "α = L_f/L_i − ΔT"
+      }
+    ]
+  },
+  {
+    "prompt": "Si la fuerza es el peso del objeto, al despejar la masa m se obtiene m = PA/g.\n\nP = mg / A",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 4,
+    "sourceNumber": 43,
+    "hints": [
+      "Deshaz las operaciones desde la parte exterior hacia la variable.",
+      "Primero elimina sumas o denominadores exteriores. Después aísla la variable, manteniendo agrupados los productos.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "En la ley de Charles, despeja T_2.\n\nV_1/T_1 = V_2/T_2",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 4,
+    "sourceNumber": 44,
+    "hints": [
+      "Deshaz las operaciones desde la parte exterior hacia la variable.",
+      "Primero elimina sumas o denominadores exteriores. Después aísla la variable, manteniendo agrupados los productos.",
+      "El solucionario indica: T_2 = V_2T_1/V_1. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "T_2 = V_2T_1/V_1"
+      },
+      {
+        "value": "B",
+        "label": "T_2 = V_1T_1/V_2"
+      },
+      {
+        "value": "C",
+        "label": "T_2 = V_1V_2/T_1"
+      },
+      {
+        "value": "D",
+        "label": "T_2 = V_1/(T_1V_2)"
+      }
+    ]
+  },
+  {
+    "prompt": "Sin importar qué significan las letras, al despejar C se obtiene C = D(A - B).\n\nA=B+C/D",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 4,
+    "sourceNumber": 45,
+    "hints": [
+      "Deshaz las operaciones desde la parte exterior hacia la variable.",
+      "Primero elimina sumas o denominadores exteriores. Después aísla la variable, manteniendo agrupados los productos.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Esta expresión es desconocida. Despeja L.\n\nJ = (K - L) / M",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 4,
+    "sourceNumber": 46,
+    "hints": [
+      "Deshaz las operaciones desde la parte exterior hacia la variable.",
+      "Primero elimina sumas o denominadores exteriores. Después aísla la variable, manteniendo agrupados los productos.",
+      "El solucionario indica: L = K - JM. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "L = K - JM"
+      },
+      {
+        "value": "B",
+        "label": "L = JM - K"
+      },
+      {
+        "value": "C",
+        "label": "L = (K - J) / M"
+      },
+      {
+        "value": "D",
+        "label": "L = K + JM"
+      }
+    ]
+  },
+  {
+    "prompt": "Esta expresión es desconocida. Despeja R.\n\nH = (R + S) / (tu)",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 4,
+    "sourceNumber": 47,
+    "hints": [
+      "Deshaz las operaciones desde la parte exterior hacia la variable.",
+      "Primero elimina sumas o denominadores exteriores. Después aísla la variable, manteniendo agrupados los productos.",
+      "El solucionario indica: R = Htu - S. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "R = Htu - S"
+      },
+      {
+        "value": "B",
+        "label": "R = H / (tu) - S"
+      },
+      {
+        "value": "C",
+        "label": "R = Htu + S"
+      },
+      {
+        "value": "D",
+        "label": "R = tu / H - S"
+      }
+    ]
+  },
+  {
+    "prompt": "Sin importar qué significan las letras, al despejar x se obtiene x = (Qw - z)/y.\n\nQ = (xy + z) / w",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 4,
+    "sourceNumber": 48,
+    "hints": [
+      "Deshaz las operaciones desde la parte exterior hacia la variable.",
+      "Primero elimina sumas o denominadores exteriores. Después aísla la variable, manteniendo agrupados los productos.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Despeja r. Escribe solo el número.\n\n4r + 7 = 39",
+    "answer": "8",
+    "answerFormat": "number",
+    "level": 4,
+    "sourceNumber": 49,
+    "hints": [
+      "Deshaz las operaciones desde la parte exterior hacia la variable.",
+      "Primero elimina sumas o denominadores exteriores. Después aísla la variable, manteniendo agrupados los productos.",
+      "El solucionario indica: 8. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Despeja s. Escribe solo el número.\n\n3s - 5 = 22",
+    "answer": "9",
+    "answerFormat": "number",
+    "level": 4,
+    "sourceNumber": 50,
+    "hints": [
+      "Deshaz las operaciones desde la parte exterior hacia la variable.",
+      "Primero elimina sumas o denominadores exteriores. Después aísla la variable, manteniendo agrupados los productos.",
+      "El solucionario indica: 9. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  }
+]

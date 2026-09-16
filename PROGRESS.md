@@ -183,3 +183,14 @@ Publicada en https://animals-dani.vercel.app. Despliegue `dpl_HTUJWV4Gzjtne7LxLv
 - Pendiente externo: no existen GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET/GOOGLE_REDIRECT_URI en Vercel; Google Cloud pide iniciar sesión. Daniela autorizará desde Refugio después de activar el cliente OAuth. No afirmar que Drive está conectado ni que se probó un PDF real de su carpeta.
 - Verificación local: typecheck, lint, 125 tests y build correctos. Acceso HTTP autenticado del tutor a /tutor y /api/tutor/drive devuelve 200; sin sesión la API rechaza. Estado sin credenciales de Google mostrado como no conectado.
 - Producción verificada: código bfa6720, despliegue dpl_4h4q1Y8x5MYfCHZLNuzFViv2Ypxm READY. Alias animals-dani.vercel.app responde 200, panel autenticado y API de Drive 200; sin sesión la API rechaza. Google figura correctamente como no configurado. No se pudo probar consentimiento ni importar PDF privado real sin credenciales OAuth.
+
+## 2026-09-16 — Dos PDF reales y biblioteca de temarios
+
+- [x] Descargados los dos PDF de la carpeta compartida; revisadas las 100 preguntas, solucionarios, subíndices y potencias. Bancos versionados en `supabase/banks`.
+- [x] Publicados en Supabase DANGPT con sesión real de tutor y RPC atómica; lectura posterior confirmó 50 preguntas activas por banco. Incluye controles V/F explícitos.
+- [x] Admin abre en Temarios: selector, niveles, buscador, filtro de formato, prueba de respuestas/pistas, fuente PDF, activar/pausar y editor/calendario desplegables.
+- [x] Refugio identifica el material preparado por su profe. Preguntas importadas separan instrucciones y fórmulas, con subíndices y potencias legibles.
+- [x] Nuevas sesiones v4 mezclan opciones conservando respuestas; 200 sesiones de prueba comprueban diez preguntas distintas de una sola habilidad y progresión 3/3/2/2.
+- [x] QA navegador: login del tutor, búsqueda de Charles, prueba correcta, diseño de admin a 390 px y escritorio. Sin registrar intentos de Laura.
+- [x] 131 tests, typecheck, lint y build pasan. Pendiente comprobar el despliegue final de esta iteración.
+- [ ] OAuth de Google pendiente de client ID/secret/redirect en Vercel y autorización de Daniela. Los 100 ejercicios ya están integrados; los cambios futuros del Drive no se sincronizan automáticamente.

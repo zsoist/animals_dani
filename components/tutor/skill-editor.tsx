@@ -181,7 +181,7 @@ export function SkillEditor({ skill, draft, onSaved, importOpen=false }: { impor
               Elige el tipo y completa la pregunta.
             </p>
             {questions.map((q, i) => (
-              <details key={q.localId} className="question-accordion" open={i === 0 || i===questions.length-1 ? true : undefined}><summary><span className="question-number">{i+1}</span><span>{q.prompt || "Nueva pregunta"}<small>Nivel {q.level-1} · {q.answerFormat === "coefficients" ? "Coeficientes" : q.answerFormat === "fraction" ? "Fracción" : q.answerFormat === "expression" ? "Expresión" : q.answerFormat === "boolean" ? "Verdadero/falso" : q.answerFormat === "match" ? "Parejas" : q.answerFormat === "text" ? "Texto" : q.answerFormat === "choice" ? "Opciones" : "Número"}</small></span><Icon name="gear" size={18}/></summary><fieldset className="editable-question">
+              <details key={q.localId} className="question-accordion" open={i === 0 || i===questions.length-1 ? true : undefined}><summary><span className="question-number">{i+1}</span><span>{q.prompt || "Nueva pregunta"}<small>Nivel {q.level-1} · {q.answerFormat === "coefficients" ? "Coeficientes" : q.answerFormat === "fraction" ? "Fracción" : q.answerFormat === "expression" ? "Expresión" : q.answerFormat === "boolean" ? "Verdadero/falso" : q.answerFormat === "match" ? "Parejas" : q.answerFormat === "text" ? "Texto" : q.answerFormat === "choice" ? "Opciones" : "Número"}</small></span><Icon name="gear" size={18}/></summary><fieldset className="editable-question"><input type="hidden" name="sourceNumber" value={q.sourceNumber ?? ""}/>
                 <legend>Pregunta {i + 1}</legend>
                   <label>
                     Tipo de pregunta

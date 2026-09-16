@@ -1,0 +1,1126 @@
+[
+  {
+    "prompt": "¿Cuál es la unidad de longitud más grande?",
+    "answer": "D",
+    "answerFormat": "choice",
+    "level": 1,
+    "sourceNumber": 1,
+    "hints": [
+      "Compara el tamaño de las unidades, no el tamaño del número.",
+      "Al usar una unidad más pequeña, necesitas más unidades para representar la misma cantidad.",
+      "El solucionario indica: Kilómetro. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "Milímetro"
+      },
+      {
+        "value": "B",
+        "label": "Centímetro"
+      },
+      {
+        "value": "C",
+        "label": "Metro"
+      },
+      {
+        "value": "D",
+        "label": "Kilómetro"
+      }
+    ]
+  },
+  {
+    "prompt": "¿Cuál es la unidad de longitud más pequeña?",
+    "answer": "D",
+    "answerFormat": "choice",
+    "level": 1,
+    "sourceNumber": 2,
+    "hints": [
+      "Compara el tamaño de las unidades, no el tamaño del número.",
+      "Al usar una unidad más pequeña, necesitas más unidades para representar la misma cantidad.",
+      "El solucionario indica: Milímetro. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "Kilómetro"
+      },
+      {
+        "value": "B",
+        "label": "Metro"
+      },
+      {
+        "value": "C",
+        "label": "Centímetro"
+      },
+      {
+        "value": "D",
+        "label": "Milímetro"
+      }
+    ]
+  },
+  {
+    "prompt": "Al convertir una medida de metros a centímetros, el resultado numérico será mayor.",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 1,
+    "sourceNumber": 3,
+    "hints": [
+      "Compara el tamaño de las unidades, no el tamaño del número.",
+      "Al usar una unidad más pequeña, necesitas más unidades para representar la misma cantidad.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Al convertir una medida de centímetros a metros, el resultado numérico será mayor.",
+    "answer": "falso",
+    "answerFormat": "boolean",
+    "level": 1,
+    "sourceNumber": 4,
+    "hints": [
+      "Compara el tamaño de las unidades, no el tamaño del número.",
+      "Al usar una unidad más pequeña, necesitas más unidades para representar la misma cantidad.",
+      "El solucionario indica: falso. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Al convertir kilómetros a milímetros, ¿qué ocurre con el número?",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 1,
+    "sourceNumber": 5,
+    "hints": [
+      "Compara el tamaño de las unidades, no el tamaño del número.",
+      "Al usar una unidad más pequeña, necesitas más unidades para representar la misma cantidad.",
+      "El solucionario indica: Aumenta. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "Aumenta"
+      },
+      {
+        "value": "B",
+        "label": "Disminuye"
+      },
+      {
+        "value": "C",
+        "label": "No cambia"
+      },
+      {
+        "value": "D",
+        "label": "Siempre queda en 1"
+      }
+    ]
+  },
+  {
+    "prompt": "Al convertir milímetros a kilómetros, ¿qué ocurre con el número?",
+    "answer": "B",
+    "answerFormat": "choice",
+    "level": 1,
+    "sourceNumber": 6,
+    "hints": [
+      "Compara el tamaño de las unidades, no el tamaño del número.",
+      "Al usar una unidad más pequeña, necesitas más unidades para representar la misma cantidad.",
+      "El solucionario indica: Disminuye. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "Aumenta"
+      },
+      {
+        "value": "B",
+        "label": "Disminuye"
+      },
+      {
+        "value": "C",
+        "label": "No cambia"
+      },
+      {
+        "value": "D",
+        "label": "Se duplica"
+      }
+    ]
+  },
+  {
+    "prompt": "¿Cuál representa una unidad de capacidad mayor?",
+    "answer": "B",
+    "answerFormat": "choice",
+    "level": 1,
+    "sourceNumber": 7,
+    "hints": [
+      "Compara el tamaño de las unidades, no el tamaño del número.",
+      "Al usar una unidad más pequeña, necesitas más unidades para representar la misma cantidad.",
+      "El solucionario indica: Litro. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "Mililitro"
+      },
+      {
+        "value": "B",
+        "label": "Litro"
+      },
+      {
+        "value": "C",
+        "label": "Ambas son iguales"
+      },
+      {
+        "value": "D",
+        "label": "Depende del líquido"
+      }
+    ]
+  },
+  {
+    "prompt": "Al convertir mililitros a litros, el resultado numérico será menor.",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 1,
+    "sourceNumber": 8,
+    "hints": [
+      "Compara el tamaño de las unidades, no el tamaño del número.",
+      "Al usar una unidad más pequeña, necesitas más unidades para representar la misma cantidad.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "¿Cuál de estas unidades representa una cantidad de presión mayor?",
+    "answer": "C",
+    "answerFormat": "choice",
+    "level": 1,
+    "sourceNumber": 9,
+    "hints": [
+      "Compara el tamaño de las unidades, no el tamaño del número.",
+      "Al usar una unidad más pequeña, necesitas más unidades para representar la misma cantidad.",
+      "El solucionario indica: 1 atm. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "1 Pa"
+      },
+      {
+        "value": "B",
+        "label": "1 mmHg"
+      },
+      {
+        "value": "C",
+        "label": "1 atm"
+      },
+      {
+        "value": "D",
+        "label": "Las tres son iguales"
+      }
+    ]
+  },
+  {
+    "prompt": "Al expresar una presión de atmósferas en pascales, el número será mayor.",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 1,
+    "sourceNumber": 10,
+    "hints": [
+      "Compara el tamaño de las unidades, no el tamaño del número.",
+      "Al usar una unidad más pequeña, necesitas más unidades para representar la misma cantidad.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Al expresar una presión de mmHg en atmósferas, el número será menor.",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 1,
+    "sourceNumber": 11,
+    "hints": [
+      "Compara el tamaño de las unidades, no el tamaño del número.",
+      "Al usar una unidad más pequeña, necesitas más unidades para representar la misma cantidad.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "La misma longitud se expresa en metros y en centímetros. ¿En cuál unidad aparece el número más grande?",
+    "answer": "B",
+    "answerFormat": "choice",
+    "level": 1,
+    "sourceNumber": 12,
+    "hints": [
+      "Compara el tamaño de las unidades, no el tamaño del número.",
+      "Al usar una unidad más pequeña, necesitas más unidades para representar la misma cantidad.",
+      "El solucionario indica: En centímetros. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "En metros"
+      },
+      {
+        "value": "B",
+        "label": "En centímetros"
+      },
+      {
+        "value": "C",
+        "label": "Es el mismo número"
+      },
+      {
+        "value": "D",
+        "label": "No se puede saber"
+      }
+    ]
+  },
+  {
+    "prompt": "Una longitud está expresada en centímetros. Si se expresa en milímetros, ¿cómo será el nuevo número?",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 1,
+    "sourceNumber": 13,
+    "hints": [
+      "Compara el tamaño de las unidades, no el tamaño del número.",
+      "Al usar una unidad más pequeña, necesitas más unidades para representar la misma cantidad.",
+      "El solucionario indica: Más grande. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "Más grande"
+      },
+      {
+        "value": "B",
+        "label": "Más pequeño"
+      },
+      {
+        "value": "C",
+        "label": "Igual"
+      },
+      {
+        "value": "D",
+        "label": "Siempre será cero"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte. Escribe solo el número.\n\n4 km = ? m",
+    "answer": "4000",
+    "answerFormat": "number",
+    "level": 2,
+    "sourceNumber": 14,
+    "hints": [
+      "Identifica las unidades inicial y final y busca su equivalencia.",
+      "Recuerda: 1 km = 1000 m; 1 m = 100 cm = 1000 mm; 1 L = 1000 mL. Para presión: 1 atm = 101325 Pa = 760 mmHg.",
+      "El solucionario indica: 4000. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Convierte.\n\n350 cm = ? mm",
+    "answer": "C",
+    "answerFormat": "choice",
+    "level": 2,
+    "sourceNumber": 15,
+    "hints": [
+      "Identifica las unidades inicial y final y busca su equivalencia.",
+      "Recuerda: 1 km = 1000 m; 1 m = 100 cm = 1000 mm; 1 L = 1000 mL. Para presión: 1 atm = 101325 Pa = 760 mmHg.",
+      "El solucionario indica: 3 500 mm. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "35 mm"
+      },
+      {
+        "value": "B",
+        "label": "350 mm"
+      },
+      {
+        "value": "C",
+        "label": "3 500 mm"
+      },
+      {
+        "value": "D",
+        "label": "35 000 mm"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte. Escribe solo el número.\n\n9 000 mm = ? m",
+    "answer": "9",
+    "answerFormat": "number",
+    "level": 2,
+    "sourceNumber": 16,
+    "hints": [
+      "Identifica las unidades inicial y final y busca su equivalencia.",
+      "Recuerda: 1 km = 1000 m; 1 m = 100 cm = 1000 mm; 1 L = 1000 mL. Para presión: 1 atm = 101325 Pa = 760 mmHg.",
+      "El solucionario indica: 9. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "La conversión mostrada es correcta.\n\n5 m = 500 cm",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 2,
+    "sourceNumber": 17,
+    "hints": [
+      "Identifica las unidades inicial y final y busca su equivalencia.",
+      "Recuerda: 1 km = 1000 m; 1 m = 100 cm = 1000 mm; 1 L = 1000 mL. Para presión: 1 atm = 101325 Pa = 760 mmHg.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte.\n\n600 000 cm = ? km",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 2,
+    "sourceNumber": 18,
+    "hints": [
+      "Identifica las unidades inicial y final y busca su equivalencia.",
+      "Recuerda: 1 km = 1000 m; 1 m = 100 cm = 1000 mm; 1 L = 1000 mL. Para presión: 1 atm = 101325 Pa = 760 mmHg.",
+      "El solucionario indica: 6 km. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "6 km"
+      },
+      {
+        "value": "B",
+        "label": "60 km"
+      },
+      {
+        "value": "C",
+        "label": "600 km"
+      },
+      {
+        "value": "D",
+        "label": "6 000 km"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte. Escribe solo el número.\n\n3 000 000 mm = ? km",
+    "answer": "3",
+    "answerFormat": "number",
+    "level": 2,
+    "sourceNumber": 19,
+    "hints": [
+      "Identifica las unidades inicial y final y busca su equivalencia.",
+      "Recuerda: 1 km = 1000 m; 1 m = 100 cm = 1000 mm; 1 L = 1000 mL. Para presión: 1 atm = 101325 Pa = 760 mmHg.",
+      "El solucionario indica: 3. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Convierte. Escribe solo el número.\n\n8 L = ? mL",
+    "answer": "8000",
+    "answerFormat": "number",
+    "level": 2,
+    "sourceNumber": 20,
+    "hints": [
+      "Identifica las unidades inicial y final y busca su equivalencia.",
+      "Recuerda: 1 km = 1000 m; 1 m = 100 cm = 1000 mm; 1 L = 1000 mL. Para presión: 1 atm = 101325 Pa = 760 mmHg.",
+      "El solucionario indica: 8000. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Convierte.\n\n12 000 mL = ? L",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 2,
+    "sourceNumber": 21,
+    "hints": [
+      "Identifica las unidades inicial y final y busca su equivalencia.",
+      "Recuerda: 1 km = 1000 m; 1 m = 100 cm = 1000 mm; 1 L = 1000 mL. Para presión: 1 atm = 101325 Pa = 760 mmHg.",
+      "El solucionario indica: 12 L. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "12 L"
+      },
+      {
+        "value": "B",
+        "label": "120 L"
+      },
+      {
+        "value": "C",
+        "label": "1 200 L"
+      },
+      {
+        "value": "D",
+        "label": "12 000 L"
+      }
+    ]
+  },
+  {
+    "prompt": "Usa 1 atm = 760 mmHg. Escribe solo el número.\n\n2 atm = ? mmHg",
+    "answer": "1520",
+    "answerFormat": "number",
+    "level": 2,
+    "sourceNumber": 22,
+    "hints": [
+      "Identifica las unidades inicial y final y busca su equivalencia.",
+      "Recuerda: 1 km = 1000 m; 1 m = 100 cm = 1000 mm; 1 L = 1000 mL. Para presión: 1 atm = 101325 Pa = 760 mmHg.",
+      "El solucionario indica: 1520. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Usa 1 atm = 101 325 Pa. Convierte.\n\n3 atm = ? Pa",
+    "answer": "D",
+    "answerFormat": "choice",
+    "level": 2,
+    "sourceNumber": 23,
+    "hints": [
+      "Identifica las unidades inicial y final y busca su equivalencia.",
+      "Recuerda: 1 km = 1000 m; 1 m = 100 cm = 1000 mm; 1 L = 1000 mL. Para presión: 1 atm = 101325 Pa = 760 mmHg.",
+      "El solucionario indica: 303 975 Pa. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "33 775 Pa"
+      },
+      {
+        "value": "B",
+        "label": "101 328 Pa"
+      },
+      {
+        "value": "C",
+        "label": "202 650 Pa"
+      },
+      {
+        "value": "D",
+        "label": "303 975 Pa"
+      }
+    ]
+  },
+  {
+    "prompt": "Usa 1 atm = 101 325 Pa. Escribe solo el número.\n\n202 650 Pa = ? atm",
+    "answer": "2",
+    "answerFormat": "number",
+    "level": 2,
+    "sourceNumber": 24,
+    "hints": [
+      "Identifica las unidades inicial y final y busca su equivalencia.",
+      "Recuerda: 1 km = 1000 m; 1 m = 100 cm = 1000 mm; 1 L = 1000 mL. Para presión: 1 atm = 101325 Pa = 760 mmHg.",
+      "El solucionario indica: 2. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Usa 1 atm = 760 mmHg. Convierte.\n\n2 280 mmHg = ? atm",
+    "answer": "B",
+    "answerFormat": "choice",
+    "level": 2,
+    "sourceNumber": 25,
+    "hints": [
+      "Identifica las unidades inicial y final y busca su equivalencia.",
+      "Recuerda: 1 km = 1000 m; 1 m = 100 cm = 1000 mm; 1 L = 1000 mL. Para presión: 1 atm = 101325 Pa = 760 mmHg.",
+      "El solucionario indica: 3 atm. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "2 atm"
+      },
+      {
+        "value": "B",
+        "label": "3 atm"
+      },
+      {
+        "value": "C",
+        "label": "30 atm"
+      },
+      {
+        "value": "D",
+        "label": "1 520 atm"
+      }
+    ]
+  },
+  {
+    "prompt": "La equivalencia mostrada es correcta.\n\n101 325 Pa = 760 mmHg",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 2,
+    "sourceNumber": 26,
+    "hints": [
+      "Identifica las unidades inicial y final y busca su equivalencia.",
+      "Recuerda: 1 km = 1000 m; 1 m = 100 cm = 1000 mm; 1 L = 1000 mL. Para presión: 1 atm = 101325 Pa = 760 mmHg.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte. Escribe solo el número.\n\n5 m² = ? cm²",
+    "answer": "50000",
+    "answerFormat": "number",
+    "level": 3,
+    "sourceNumber": 27,
+    "hints": [
+      "Mira el exponente: una superficie es cuadrada y un volumen es cúbico.",
+      "Eleva el factor lineal al cuadrado para áreas y al cubo para volúmenes. Además, 1 m³ = 1000 L.",
+      "El solucionario indica: 50000. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Convierte.\n\n30 000 cm² = ? m²",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 3,
+    "sourceNumber": 28,
+    "hints": [
+      "Mira el exponente: una superficie es cuadrada y un volumen es cúbico.",
+      "Eleva el factor lineal al cuadrado para áreas y al cubo para volúmenes. Además, 1 m³ = 1000 L.",
+      "El solucionario indica: 3 m². Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "3 m²"
+      },
+      {
+        "value": "B",
+        "label": "30 m²"
+      },
+      {
+        "value": "C",
+        "label": "300 m²"
+      },
+      {
+        "value": "D",
+        "label": "3 000 m²"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte. Escribe solo el número.\n\n2 m² = ? mm²",
+    "answer": "2000000",
+    "answerFormat": "number",
+    "level": 3,
+    "sourceNumber": 29,
+    "hints": [
+      "Mira el exponente: una superficie es cuadrada y un volumen es cúbico.",
+      "Eleva el factor lineal al cuadrado para áreas y al cubo para volúmenes. Además, 1 m³ = 1000 L.",
+      "El solucionario indica: 2000000. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Convierte.\n\n4 km² = ? m²",
+    "answer": "D",
+    "answerFormat": "choice",
+    "level": 3,
+    "sourceNumber": 30,
+    "hints": [
+      "Mira el exponente: una superficie es cuadrada y un volumen es cúbico.",
+      "Eleva el factor lineal al cuadrado para áreas y al cubo para volúmenes. Además, 1 m³ = 1000 L.",
+      "El solucionario indica: 4 000 000 m². Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "4 000 m²"
+      },
+      {
+        "value": "B",
+        "label": "40 000 m²"
+      },
+      {
+        "value": "C",
+        "label": "400 000 m²"
+      },
+      {
+        "value": "D",
+        "label": "4 000 000 m²"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte. Escribe solo el número.\n\n6 000 000 mm² = ? m²",
+    "answer": "6",
+    "answerFormat": "number",
+    "level": 3,
+    "sourceNumber": 31,
+    "hints": [
+      "Mira el exponente: una superficie es cuadrada y un volumen es cúbico.",
+      "Eleva el factor lineal al cuadrado para áreas y al cubo para volúmenes. Además, 1 m³ = 1000 L.",
+      "El solucionario indica: 6. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "La equivalencia mostrada es correcta.\n\n1 m² = 10 000 cm²",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 3,
+    "sourceNumber": 32,
+    "hints": [
+      "Mira el exponente: una superficie es cuadrada y un volumen es cúbico.",
+      "Eleva el factor lineal al cuadrado para áreas y al cubo para volúmenes. Además, 1 m³ = 1000 L.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte. Escribe solo el número.\n\n7 m³ = ? cm³",
+    "answer": "7000000",
+    "answerFormat": "number",
+    "level": 3,
+    "sourceNumber": 33,
+    "hints": [
+      "Mira el exponente: una superficie es cuadrada y un volumen es cúbico.",
+      "Eleva el factor lineal al cuadrado para áreas y al cubo para volúmenes. Además, 1 m³ = 1000 L.",
+      "El solucionario indica: 7000000. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Convierte.\n\n8 000 000 cm³ = ? m³",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 3,
+    "sourceNumber": 34,
+    "hints": [
+      "Mira el exponente: una superficie es cuadrada y un volumen es cúbico.",
+      "Eleva el factor lineal al cuadrado para áreas y al cubo para volúmenes. Además, 1 m³ = 1000 L.",
+      "El solucionario indica: 8 m³. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "8 m³"
+      },
+      {
+        "value": "B",
+        "label": "80 m³"
+      },
+      {
+        "value": "C",
+        "label": "800 m³"
+      },
+      {
+        "value": "D",
+        "label": "8 000 m³"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte. Escribe solo el número.\n\n5 m³ = ? L",
+    "answer": "5000",
+    "answerFormat": "number",
+    "level": 3,
+    "sourceNumber": 35,
+    "hints": [
+      "Mira el exponente: una superficie es cuadrada y un volumen es cúbico.",
+      "Eleva el factor lineal al cuadrado para áreas y al cubo para volúmenes. Además, 1 m³ = 1000 L.",
+      "El solucionario indica: 5000. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Convierte.\n\n4 000 L = ? m³",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 3,
+    "sourceNumber": 36,
+    "hints": [
+      "Mira el exponente: una superficie es cuadrada y un volumen es cúbico.",
+      "Eleva el factor lineal al cuadrado para áreas y al cubo para volúmenes. Además, 1 m³ = 1000 L.",
+      "El solucionario indica: 4 m³. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "4 m³"
+      },
+      {
+        "value": "B",
+        "label": "40 m³"
+      },
+      {
+        "value": "C",
+        "label": "400 m³"
+      },
+      {
+        "value": "D",
+        "label": "4 000 m³"
+      }
+    ]
+  },
+  {
+    "prompt": "La equivalencia mostrada es correcta.\n\n1 m³ = 1 000 000 cm³",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 3,
+    "sourceNumber": 37,
+    "hints": [
+      "Mira el exponente: una superficie es cuadrada y un volumen es cúbico.",
+      "Eleva el factor lineal al cuadrado para áreas y al cubo para volúmenes. Además, 1 m³ = 1000 L.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte. Escribe solo el número.\n\n12 000 000 cm³ = ? m³",
+    "answer": "12",
+    "answerFormat": "number",
+    "level": 3,
+    "sourceNumber": 38,
+    "hints": [
+      "Mira el exponente: una superficie es cuadrada y un volumen es cúbico.",
+      "Eleva el factor lineal al cuadrado para áreas y al cubo para volúmenes. Además, 1 m³ = 1000 L.",
+      "El solucionario indica: 12. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Convierte la densidad.\n\n2 g/cm³ = ? kg/m³",
+    "answer": "C",
+    "answerFormat": "choice",
+    "level": 4,
+    "sourceNumber": 39,
+    "hints": [
+      "Hay dos unidades: convierte el numerador y el denominador por separado.",
+      "1 g/cm³ = 1000 kg/m³; 1 kg/L = 1000 kg/m³. Para N/volumen, 1 m³ contiene 1000 L o 1000000 cm³: el factor del denominador se invierte.",
+      "El solucionario indica: 2 000 kg/m³. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "2 kg/m³"
+      },
+      {
+        "value": "B",
+        "label": "200 kg/m³"
+      },
+      {
+        "value": "C",
+        "label": "2 000 kg/m³"
+      },
+      {
+        "value": "D",
+        "label": "2 000 000 kg/m³"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte la densidad. Escribe solo el número.\n\n5 000 kg/m³ = ? g/cm³",
+    "answer": "5",
+    "answerFormat": "number",
+    "level": 4,
+    "sourceNumber": 40,
+    "hints": [
+      "Hay dos unidades: convierte el numerador y el denominador por separado.",
+      "1 g/cm³ = 1000 kg/m³; 1 kg/L = 1000 kg/m³. Para N/volumen, 1 m³ contiene 1000 L o 1000000 cm³: el factor del denominador se invierte.",
+      "El solucionario indica: 5. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "La equivalencia de densidad mostrada es correcta.\n\n1 g/cm³ = 1 000 kg/m³",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 4,
+    "sourceNumber": 41,
+    "hints": [
+      "Hay dos unidades: convierte el numerador y el denominador por separado.",
+      "1 g/cm³ = 1000 kg/m³; 1 kg/L = 1000 kg/m³. Para N/volumen, 1 m³ contiene 1000 L o 1000000 cm³: el factor del denominador se invierte.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte la densidad.\n\n7 kg/L = ? kg/m³",
+    "answer": "D",
+    "answerFormat": "choice",
+    "level": 4,
+    "sourceNumber": 42,
+    "hints": [
+      "Hay dos unidades: convierte el numerador y el denominador por separado.",
+      "1 g/cm³ = 1000 kg/m³; 1 kg/L = 1000 kg/m³. Para N/volumen, 1 m³ contiene 1000 L o 1000000 cm³: el factor del denominador se invierte.",
+      "El solucionario indica: 7 000 kg/m³. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "7 kg/m³"
+      },
+      {
+        "value": "B",
+        "label": "70 kg/m³"
+      },
+      {
+        "value": "C",
+        "label": "700 kg/m³"
+      },
+      {
+        "value": "D",
+        "label": "7 000 kg/m³"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte la densidad. Escribe solo el número.\n\n6 000 kg/m³ = ? kg/L",
+    "answer": "6",
+    "answerFormat": "number",
+    "level": 4,
+    "sourceNumber": 43,
+    "hints": [
+      "Hay dos unidades: convierte el numerador y el denominador por separado.",
+      "1 g/cm³ = 1000 kg/m³; 1 kg/L = 1000 kg/m³. Para N/volumen, 1 m³ contiene 1000 L o 1000000 cm³: el factor del denominador se invierte.",
+      "El solucionario indica: 6. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Convierte la densidad.\n\n4 g/mL = ? kg/m³",
+    "answer": "D",
+    "answerFormat": "choice",
+    "level": 4,
+    "sourceNumber": 44,
+    "hints": [
+      "Hay dos unidades: convierte el numerador y el denominador por separado.",
+      "1 g/cm³ = 1000 kg/m³; 1 kg/L = 1000 kg/m³. Para N/volumen, 1 m³ contiene 1000 L o 1000000 cm³: el factor del denominador se invierte.",
+      "El solucionario indica: 4 000 kg/m³. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "4 kg/m³"
+      },
+      {
+        "value": "B",
+        "label": "40 kg/m³"
+      },
+      {
+        "value": "C",
+        "label": "400 kg/m³"
+      },
+      {
+        "value": "D",
+        "label": "4 000 kg/m³"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte la fuerza por unidad de volumen. Escribe solo el número.\n\n3 N/cm³ = ? N/m³",
+    "answer": "3000000",
+    "answerFormat": "number",
+    "level": 4,
+    "sourceNumber": 45,
+    "hints": [
+      "Hay dos unidades: convierte el numerador y el denominador por separado.",
+      "1 g/cm³ = 1000 kg/m³; 1 kg/L = 1000 kg/m³. Para N/volumen, 1 m³ contiene 1000 L o 1000000 cm³: el factor del denominador se invierte.",
+      "El solucionario indica: 3000000. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Convierte la fuerza por unidad de volumen.\n\n5 000 000 N/m³ = ? N/cm³",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 4,
+    "sourceNumber": 46,
+    "hints": [
+      "Hay dos unidades: convierte el numerador y el denominador por separado.",
+      "1 g/cm³ = 1000 kg/m³; 1 kg/L = 1000 kg/m³. Para N/volumen, 1 m³ contiene 1000 L o 1000000 cm³: el factor del denominador se invierte.",
+      "El solucionario indica: 5 N/cm³. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "5 N/cm³"
+      },
+      {
+        "value": "B",
+        "label": "50 N/cm³"
+      },
+      {
+        "value": "C",
+        "label": "500 N/cm³"
+      },
+      {
+        "value": "D",
+        "label": "5 000 N/cm³"
+      }
+    ]
+  },
+  {
+    "prompt": "La equivalencia mostrada es correcta.\n\n1 N/cm³ = 1 000 000 N/m³",
+    "answer": "verdadero",
+    "answerFormat": "boolean",
+    "level": 4,
+    "sourceNumber": 47,
+    "hints": [
+      "Hay dos unidades: convierte el numerador y el denominador por separado.",
+      "1 g/cm³ = 1000 kg/m³; 1 kg/L = 1000 kg/m³. Para N/volumen, 1 m³ contiene 1000 L o 1000000 cm³: el factor del denominador se invierte.",
+      "El solucionario indica: verdadero. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "verdadero",
+        "label": "Verdadero"
+      },
+      {
+        "value": "falso",
+        "label": "Falso"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte la fuerza por unidad de volumen. Escribe solo el número.\n\n8 N/L = ? N/m³",
+    "answer": "8000",
+    "answerFormat": "number",
+    "level": 4,
+    "sourceNumber": 48,
+    "hints": [
+      "Hay dos unidades: convierte el numerador y el denominador por separado.",
+      "1 g/cm³ = 1000 kg/m³; 1 kg/L = 1000 kg/m³. Para N/volumen, 1 m³ contiene 1000 L o 1000000 cm³: el factor del denominador se invierte.",
+      "El solucionario indica: 8000. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ]
+  },
+  {
+    "prompt": "Convierte la fuerza por unidad de volumen.\n\n9 000 N/m³ = ? N/L",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 4,
+    "sourceNumber": 49,
+    "hints": [
+      "Hay dos unidades: convierte el numerador y el denominador por separado.",
+      "1 g/cm³ = 1000 kg/m³; 1 kg/L = 1000 kg/m³. Para N/volumen, 1 m³ contiene 1000 L o 1000000 cm³: el factor del denominador se invierte.",
+      "El solucionario indica: 9 N/L. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "9 N/L"
+      },
+      {
+        "value": "B",
+        "label": "90 N/L"
+      },
+      {
+        "value": "C",
+        "label": "900 N/L"
+      },
+      {
+        "value": "D",
+        "label": "9 000 N/L"
+      }
+    ]
+  },
+  {
+    "prompt": "Convierte la fuerza por unidad de volumen.\n\n12 000 N/L = ? N/cm³",
+    "answer": "A",
+    "answerFormat": "choice",
+    "level": 4,
+    "sourceNumber": 50,
+    "hints": [
+      "Hay dos unidades: convierte el numerador y el denominador por separado.",
+      "1 g/cm³ = 1000 kg/m³; 1 kg/L = 1000 kg/m³. Para N/volumen, 1 m³ contiene 1000 L o 1000000 cm³: el factor del denominador se invierte.",
+      "El solucionario indica: 12 N/cm³. Compara este resultado con tus pasos y comprueba la equivalencia."
+    ],
+    "choices": [
+      {
+        "value": "A",
+        "label": "12 N/cm³"
+      },
+      {
+        "value": "B",
+        "label": "120 N/cm³"
+      },
+      {
+        "value": "C",
+        "label": "1 200 N/cm³"
+      },
+      {
+        "value": "D",
+        "label": "12 000 N/cm³"
+      }
+    ]
+  }
+]

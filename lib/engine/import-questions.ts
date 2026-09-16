@@ -15,6 +15,7 @@ export function validateQuestions(value:unknown,defaultHints=false):CustomQuesti
   const prepared=[0,1,2].map(i=>typeof hints[i]==='string'&&hints[i].trim()?hints[i].trim():defaultHints?fallback[i]:'');
   if(prepared.some(h=>!h))throw new Error(prefix+'faltan las tres pistas de la propuesta IA.');
   const question:CustomQuestion={prompt:q.prompt.trim(),answer,answerFormat:q.answerFormat as CustomQuestion['answerFormat'],level:Number(q.level) as CustomQuestion['level'],hints:prepared as CustomQuestion['hints']};
+  if(Number.isInteger(q.sourceNumber)&&Number(q.sourceNumber)>0&&Number(q.sourceNumber)<=1000)question.sourceNumber=Number(q.sourceNumber);
   if(q.answerFormat==='boolean'){question.choices=[{value:'verdadero',label:'Verdadero'},{value:'falso',label:'Falso'}];question.answer=normalizedText(answer);if(!['verdadero','falso'].includes(question.answer))throw new Error(prefix+'elige verdadero o falso.');}
   if(q.answerFormat==='match'){
    if(!Array.isArray(q.matches)||q.matches.length<2||q.matches.length>5)throw new Error(prefix+'añade entre 2 y 5 parejas.');

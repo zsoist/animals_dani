@@ -263,6 +263,7 @@ export function RefugeClient({
                 <p>
                   {dates.includes(today) ? "Puedes seguir practicando a tu ritmo." : `${topic?.name ?? "Tu próxima habilidad"} · 7 de 10 al primer intento. Las pistas están disponibles.`}
                 </p>
+                {topic?.driveFileId&&<div className="daily-bank-ticket"><span>Preparado por tu profe</span><strong>{topic.name}</strong><div aria-label="Diez preguntas de dificultad progresiva">{[1,1,1,2,2,2,3,3,4,4].map((level,i)=><i key={i} style={{height:8+level*4}}/>)}</div><small>10 preguntas · empezamos suave y subimos el nivel</small></div>}
                 <MissionWelcome recipient={recipient?.name} today={today} completed={dates.includes(today)} reward={nextReward} busy={busy} available={tries<DAILY_CHANCES&&queue.length>0} onStart={()=>void begin("daily")}/>
                 <div className="mission-perks">
                   <span>

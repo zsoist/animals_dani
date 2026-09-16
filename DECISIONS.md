@@ -113,3 +113,11 @@
 - Los PDF no se consultan ni se generan con IA durante el reto. Se importan, contrastan y revisan una vez; actualizar un archivo requiere reimportación y aprobación del profesor. No se inventan respuestas ausentes del solucionario.
 - Una importación fallida no sustituye un banco activo. No se elimina progreso al cambiar de carpeta o borrar PDF. Se bloquea actualizar un banco con una sesión de hoy abierta.
 - El consentimiento final de Google y sus credenciales de aplicación son un requisito externo; la sesión de Supabase no lo reemplaza.
+
+## 2026-09-16 — Importación de los PDF proporcionados
+
+- Se integran los dos PDF públicos proporcionados ahora, sin bloquear el contenido por la configuración pendiente de OAuth. La UI distingue bancos importados de conexión futura.
+- Se preservan las 50 preguntas de cada archivo y su solucionario. Se corrige únicamente la notación dañada por extracción y se añaden pistas pedagógicas. Las referencias originales quedan accesibles desde Temarios.
+- Niveles del PDF 1–4 se presentan como 0–3 para mantener la convención de la app, explicándolo en admin. Una sesión nueva tiene diez preguntas progresivas de un banco.
+- La mezcla de opciones usa semillas v4; no altera las sesiones previas. Los valores canónicos A–D se conservan aunque cambie su posición visual.
+- No se modifica el arte del refugio. El material del día se destaca con una ficha compacta y las fórmulas ganan espacio dentro de las tarjetas existentes.

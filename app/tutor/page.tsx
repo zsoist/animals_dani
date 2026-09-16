@@ -54,7 +54,7 @@ export default async function Tutor() {
         </a>
       </div>
       <TutorWorkspace>
-      <DriveLibrary/>
+      <DriveLibrary skills={data.skills}/>
 
       <section
         id="progress"
@@ -81,11 +81,10 @@ export default async function Tutor() {
       <LearningProgress attempts={data.attempts} skills={data.skills} today={dayKey()} events={usage.events}/>
       <section id="catalog" className="admin-catalog">
         <h2>
-          Habilidades de práctica <span>{data.skills.length}</span>
+          Tus temarios <span>{data.skills.length}</span>
         </h2>
         <p>
-          Abre una habilidad para editar sus preguntas, prioridad, dificultad y
-          notas.
+          Elige qué practica Laura. Explora cada pregunta y prueba sus respuestas antes de editar.
         </p>
         <CatalogBrowser skills={data.skills}>
         {data.skills.map((skill) => {

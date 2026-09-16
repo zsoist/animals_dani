@@ -10,7 +10,7 @@ export async function GET(request:Request){
   if(!state||state.userId!==userId||state.state!==url.searchParams.get('state')||!url.searchParams.get('code'))throw new Error('Invalid state');
   const {tokens}=await driveOAuth().getToken({code:url.searchParams.get('code')!,codeVerifier:state.verifier});
   if(!tokens.refresh_token||!tokens.scope?.split(' ').includes(DRIVE_SCOPE))throw new Error('Permission required');
-  const savedToken=await store.from('drive_connections').upsert({user_id:userId,refresh_token:sealToken(tokens.refresh_token),folder_id:null,folder_name:null,updated_at:new Date().toISOString()});
+  const savedToken=await store.from('drive_connections').upsert({user_id:userId,refresh_token:sealToken(tokens.refresh_token),updated_at:new Date().toISOString()});
   if(savedToken.error)throw new Error('Connection not saved');result='connected';
  }catch{/* Do not expose OAuth codes, tokens or provider error payloads. */}
  return Response.redirect(new URL(`/tutor?drive=${result}#drive`,request.url));

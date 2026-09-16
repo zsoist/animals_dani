@@ -23,6 +23,7 @@ export type Exercise = {
   hints: [string, string, string];
 };
 export type CustomQuestion = {
+  sourceNumber?: number;
   matches?: {left:string;right:string}[];
   choices?: {value:string;label:string}[];
   image?: string;
