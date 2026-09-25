@@ -19,13 +19,11 @@ pnpm install --frozen-lockfile
 pnpm exec supabase login
 pnpm exec vercel login
 pnpm exec vercel link
-pnpm setup:remote
-pnpm setup:verify
-pnpm verify
-pnpm exec vercel --prod --yes
+pnpm setup:doctor
+pnpm setup:daniela
 ```
 
-El traspaso completo, incluida la ubicación de cada clave y las comprobaciones posteriores, está en [DANIELA_SETUP.md](DANIELA_SETUP.md). Usa un proyecto Supabase exclusivo para este refugio; no compartas una base usada por otras aplicaciones.
+Para entregar el proyecto sin experiencia técnica, abre [DANIELA_SETUP.md](DANIELA_SETUP.md). Daniela puede copiar un único prompt desde [DANIELA_AGENT_PROMPT.md](DANIELA_AGENT_PROMPT.md) en Codex o Claude y el agente ejecutará el proceso, deteniéndose solo en logins, CAPTCHA, costos o secretos. Usa un proyecto Supabase exclusivo para este refugio; no compartas una base usada por otras aplicaciones.
 
 Para desarrollar: `pnpm dev`.
 

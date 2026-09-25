@@ -1,84 +1,105 @@
-# Entrega del Refugio a Daniela
+# Refugio listo para Daniela
 
-Este procedimiento crea una instalación independiente, propiedad de Daniela: su repositorio de GitHub, su proyecto Supabase y su proyecto Vercel. No se copian claves de la instalación anterior ni el progreso histórico de Laura.
+Esta guía deja Refugio en cuentas propias de Daniela y preparado para desarrollar con Codex o Claude. No necesitas saber de bases de datos ni despliegues: el agente hace el trabajo técnico y solo te pide ayuda para iniciar sesión, crear proyectos o copiar claves privadas.
 
-## 1. Preparar las cuentas
+## La versión corta
 
-1. Comparte este repositorio con la cuenta de GitHub de Daniela o transfiérelo a una organización que ella controle.
-2. Daniela crea un proyecto **nuevo y exclusivo** en Supabase. Debe guardar la contraseña de la base de datos al crearlo.
-3. Daniela importa el repositorio desde GitHub en Vercel y crea un proyecto nuevo. Todavía no importa que el primer despliegue falle por variables ausentes.
-4. En su computador instala Node.js 22 o posterior y activa pnpm con `corepack enable`.
+1. Acepta la invitación al repositorio en GitHub.
+2. Clona el repositorio o ábrelo como proyecto local en Codex/Claude.
+3. Abre [DANIELA_AGENT_PROMPT.md](DANIELA_AGENT_PROMPT.md), copia el bloque completo y pégalo en el chat del agente.
+4. Sigue únicamente las pausas que el agente marque como “paso humano”.
 
-No reutilices el proyecto Supabase `DAN GPT`: contiene tablas de otras aplicaciones. El refugio debe tener su propia base para evitar que una migración ajena vuelva a afectar sus políticas RLS.
+Al terminar tendrás:
 
-## 2. Clonar y configurar las claves locales
+- Refugio funcionando localmente con `pnpm dev`;
+- un Supabase exclusivo bajo tu cuenta;
+- un Vercel exclusivo conectado a tu GitHub;
+- producción online;
+- acceso de Laura y acceso `admin` del tutor;
+- verificaciones automáticas para seguir vibecodeando sin romper producción.
 
-```sh
-git clone URL_DEL_REPOSITORIO
-cd CARPETA_DEL_REPOSITORIO
-corepack enable
+## Qué te pedirá el agente
+
+### 1. Iniciar sesión
+
+El agente abrirá o ejecutará los inicios de sesión de Supabase y Vercel. Tú completas email, contraseña, autorización del navegador o CAPTCHA. Nunca pegues contraseñas dentro del chat.
+
+### 2. Crear un Supabase nuevo
+
+El proyecto debe ser nuevo y usarse solo para Refugio. No uses `DAN GPT` ni el project ref `pwcvskguqyhbhlwnsmmy`: ese proyecto contiene otras aplicaciones.
+
+Guarda la contraseña de la base cuando Supabase la muestre. El agente te indicará dónde poner, de forma local, estos cinco valores:
+
+- `SUPABASE_PROJECT_REF`
+- `SUPABASE_DB_PASSWORD`
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` (publishable key)
+- `SUPABASE_SERVICE_ROLE_KEY` (secret/service-role key)
+
+La contraseña de la base permanece solo en el equipo local. La clave privada se configura como secreto del servidor en Vercel; nunca se convierte en una variable `NEXT_PUBLIC_*`, se muestra en el chat ni se guarda en Git.
+
+### 3. Crear un Vercel nuevo
+
+Importa el repositorio desde tu GitHub y crea un proyecto Vercel propio. El agente lo enlazará localmente y comprobará `.vercel/project.json` antes de tocar la base.
+
+## Lo que hará el agente
+
+El flujo técnico está automatizado y siempre sigue este orden:
+
+```text
 pnpm install --frozen-lockfile
-cp .env.example .env.local
+        ↓
+login y enlace de Vercel/Supabase
+        ↓
+pnpm setup:doctor
+        ↓
+pnpm setup:daniela
+        ↓
+prueba del navegador + logs de producción
+        ↓
+pnpm dev
 ```
 
-Completa `.env.local` con valores del proyecto Supabase de Daniela:
+`pnpm setup:daniela` aplica migraciones y datos iniciales, crea o recupera los usuarios de forma reanudable, verifica RLS, sincroniza las variables necesarias con Vercel, ejecuta pruebas/build y despliega producción. Si se corta internet, el agente puede repetir el comando sin crear usuarios duplicados.
 
-- `SUPABASE_PROJECT_REF`: identificador corto que aparece en la URL del dashboard.
-- `SUPABASE_DB_PASSWORD`: contraseña guardada al crear el proyecto. Solo se usa durante la instalación local.
-- `NEXT_PUBLIC_SUPABASE_URL`: Project URL.
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: publishable key; una anon key heredada también funciona.
-- `SUPABASE_SERVICE_ROLE_KEY`: secret key o service-role key. Es privada y nunca debe usar el prefijo `NEXT_PUBLIC_`.
+## Credenciales que recibirás
 
-Deja `LAURA_PASSWORD` vacío. El instalador creará una contraseña aleatoria. Los archivos `.env.local`, `.env.credentials.json` y `.vercel/` están excluidos de Git.
+El instalador crea dos usuarios y guarda sus contraseñas en `.env.credentials.json`:
 
-## 3. Enlazar Supabase y Vercel
+- `student`: lo usa el servidor para abrir el refugio de Laura;
+- `tutor`: permite entrar por `/auth`; en la pantalla se escribe el usuario `admin` y la contraseña del tutor.
+
+Ese archivo está fuera de Git. Al finalizar, guarda ambas credenciales en tu gestor de contraseñas. No compartas el archivo por chat, correo ni commits.
+
+## Tu rutina para vibecodear
+
+Abre el repositorio en Codex o Claude y describe el cambio que quieres. Antes de aceptar un cambio importante, pídele al agente:
+
+```text
+Implementa el cambio, ejecuta pnpm verify, prueba la pantalla afectada en navegador y no despliegues si hay errores.
+```
+
+Comandos útiles:
 
 ```sh
-pnpm exec supabase login
-pnpm exec vercel login
-pnpm exec vercel link
+pnpm setup:doctor   # explica qué falta, sin mostrar secretos
+pnpm dev            # abre el entorno local
+pnpm verify         # tipos + lint + pruebas + build
+pnpm setup:verify   # comprueba login, datos y aislamiento RLS
 ```
 
-En `vercel link`, selecciona el proyecto que Daniela importó desde GitHub. Comprueba que `.vercel/project.json` mencione ese proyecto antes de continuar.
+## Opcionales
 
-## 4. Crear la base, usuarios y variables de producción
+- IA de Numa: añade `DEEPSEEK_API_KEY` como secreto de producción. Sin esa clave, el refugio y los ejercicios normales siguen funcionando.
+- Google Drive: el agente puede seguir [DRIVE_SETUP.md](DRIVE_SETUP.md). El callback debe usar el dominio nuevo de Daniela.
+- Previews: usa otro Supabase para previews. No conectes ramas experimentales a la base de producción con la clave privada.
 
-```sh
-pnpm setup:remote
+## Si algo sale mal
+
+Pega esto al agente:
+
+```text
+Ejecuta pnpm setup:doctor. Diagnostica el primer paso rojo, corrígelo sin revelar secretos, ejecuta pnpm setup:verify y pnpm verify, y después comprueba producción y logs de Vercel.
 ```
 
-El comando hace cuatro cosas:
-
-1. enlaza el proyecto Supabase indicado por `SUPABASE_PROJECT_REF`;
-2. aplica todas las migraciones y `supabase/seed.sql`;
-3. crea el usuario compartido de Laura y el usuario tutor;
-4. configura en Vercel las cinco variables necesarias para abrir el refugio.
-
-Las dos contraseñas quedan en `.env.credentials.json`. Daniela debe guardarlas en su gestor de contraseñas. El acceso de estudiante se usa internamente; para `/tutor`, el usuario visible es `admin` y la contraseña es la del registro con rol `tutor`.
-
-Este instalador está pensado para un proyecto Supabase vacío. No lo ejecutes sobre la instalación anterior ni sobre una base con usuarios del refugio ya creados.
-
-## 5. Verificar y publicar
-
-```sh
-pnpm setup:verify
-pnpm verify
-pnpm exec vercel --prod --yes
-```
-
-Después del despliegue:
-
-1. abre la URL de producción y confirma que aparece `Hola, Laura`, Milo y el botón `Ver misión de hoy`;
-2. abre `/auth`, entra como `admin` con la contraseña del tutor y confirma que carga el panel;
-3. ejecuta `pnpm exec vercel logs --environment production --since 10m --level error` y confirma que no hay errores nuevos;
-4. en Supabase, revisa Advisors y confirma que no hay avisos RLS nuevos.
-
-## 6. Servicios opcionales
-
-- Numa/DeepSeek: añade `DEEPSEEK_API_KEY` como secreto de producción en Vercel. `DEEPSEEK_MODEL` es opcional.
-- Google Drive: configura las variables `GOOGLE_*` en Vercel, comparte la carpeta con la cuenta de servicio y usa `https://DOMINIO-DE-DANIELA/api/tutor/drive/callback` como `GOOGLE_REDIRECT_URI`. Consulta `DRIVE_SETUP.md`.
-- Previews de Vercel: las claves del Supabase de producción se configuran solo para Production. Para previews, crea un Supabase separado o añade variables de Preview conscientemente; no expongas la clave privada en código cliente.
-
-## Recuperación rápida
-
-Si la portada queda detenida en `Abriendo el refugio…`, revisa primero los logs de Vercel y luego que el usuario compartido pueda leer su fila en `public.profiles`. Las políticas del catálogo dependen de esa lectura. La migración `20260925151338_restore_profile_read_policies.sql` restaura esa garantía de forma idempotente.
+Si la portada queda en `Abriendo el refugio…`, el agente debe revisar primero Vercel Runtime Logs y luego comprobar que el usuario estudiante puede leer su fila de `public.profiles`. La migración `20260925151338_restore_profile_read_policies.sql` protege esa relación.

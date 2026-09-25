@@ -11,8 +11,10 @@
     "lint": "eslint . --max-warnings=0",
     "test": "vitest run",
     "verify": "pnpm typecheck && pnpm lint && pnpm test && pnpm build",
+    "setup:doctor": "node scripts/setup-doctor.mjs",
     "setup:remote": "node --env-file=.env.local scripts/setup-remote.mjs",
-    "setup:verify": "node --env-file=.env.local lib/data/verify-connection.mjs"
+    "setup:verify": "node --env-file=.env.local lib/data/verify-connection.mjs",
+    "setup:daniela": "pnpm setup:doctor && pnpm setup:remote && pnpm verify && pnpm exec vercel --prod --yes"
   },
   "dependencies": {
     "@react-three/drei": "10.7.8",
