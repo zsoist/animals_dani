@@ -10,15 +10,22 @@ En `/tutor`, el usuario `admin` usa la contraseña existente. Desde «Nueva habi
 
 Producción: https://animals-dani.vercel.app
 
-## Instalación y despliegue en tres comandos
+## Instalación y despliegue
 
-Requisitos: pnpm, acceso a Vercel y un proyecto Supabase nuevo. Copiar `.env.example` a `.env.local` y completar las claves del proyecto. La clave de servicio es exclusiva del servidor. Definir `SUPABASE_PROJECT_REF` y `SUPABASE_DB_PASSWORD` en el entorno de la terminal. Autenticar la CLI Supabase según sus instrucciones. El script de instalación escribe las credenciales aleatorias en un archivo local excluido de Git y configura las variables de Vercel.
+Requisitos: Node.js 22+, Corepack/pnpm, una cuenta de GitHub, un proyecto Supabase nuevo y un proyecto Vercel propio. Copiar `.env.example` a `.env.local` y completar las claves del proyecto. La clave de servicio es exclusiva del servidor. El script de instalación aplica las migraciones y el seed, crea los usuarios con contraseñas aleatorias, guarda las credenciales en un archivo local excluido de Git y configura las variables de producción en el proyecto Vercel enlazado.
 
 ```sh
 pnpm install --frozen-lockfile
+pnpm exec supabase login
+pnpm exec vercel login
+pnpm exec vercel link
 pnpm setup:remote
-pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm exec vercel --prod --yes
+pnpm setup:verify
+pnpm verify
+pnpm exec vercel --prod --yes
 ```
+
+El traspaso completo, incluida la ubicación de cada clave y las comprobaciones posteriores, está en [DANIELA_SETUP.md](DANIELA_SETUP.md). Usa un proyecto Supabase exclusivo para este refugio; no compartas una base usada por otras aplicaciones.
 
 Para desarrollar: `pnpm dev`.
 
